@@ -1,0 +1,52 @@
+{
+  "scenes": {
+    "vlm_inside_001": {
+      "persons": [
+        {
+          "position": "一排主驾",
+          "sex": "男",
+          "age": "成人",
+          "expression": "忧郁",
+          "seat_belt_status": "没系上",
+          "appearance": {
+            "hair_style": "普通长发",
+            "hair_color": "黄色"
+          },
+          "clothes": {
+            "color": "蓝色",
+            "kind": "外套"
+          },
+          "accessories": ["普通眼镜"],
+          "action": ""
+        },
+        {
+          "position": "一排副驾",
+          "sex": "男",
+          "age": "成人",
+          "expression": "中性",
+          "seat_belt_status": "没系上",
+          "appearance": {
+            "hair_style": "普通短发",
+            "hair_color": "黑色"
+          },
+          "clothes": {
+            "color": "黑色",
+            "kind": "外套"
+          },
+          "accessories": ["普通眼镜"],
+          "action": ""
+        }
+      ],
+      "child_seat": {
+        "exists": "无",
+        "occupy": "无儿童"
+      },
+      "pet": {
+        "category": "无",
+        "behavior": "无",
+        "breed": "无"
+      }
+    }
+  },
+  "other_state": null
+}

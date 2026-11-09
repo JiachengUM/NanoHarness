@@ -1,0 +1,345 @@
+{
+  "description": "POI agent comparison cases grouped by whether the user query needs multi-hop relation search and/or criteria filtering.",
+  "cases": [
+    {
+      "case_id": "indoor_pet_shop_mall_floor",
+      "query": "上海万象城商场里面有没有宠物店？在几楼？",
+      "expected_mode": "indoor_detail",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["inside_venue", "indoor", "floor", "mall", "pet_shop"],
+      "notes": "商场内店铺与楼层字段，主要考察 indoor/show_fields 与商场内筛选，不是 nearby 二跳。"
+    },
+    {
+      "case_id": "hongqiao_pickup_entrance",
+      "query": "虹桥火车站从哪里进去接人方便",
+      "expected_mode": "access_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["entrance", "pickup", "transport_hub", "navi"],
+      "notes": "需要先定位火车站，再结合入口/接人便利性筛选，当前 multi-hop nearby 不一定覆盖。"
+    },
+    {
+      "case_id": "nearest_mall_with_restroom",
+      "query": "最近的商场里有洗手间的",
+      "expected_mode": "indoor_facility_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["mall", "restroom", "indoor", "nearest"],
+      "notes": "商场内部设施筛选，更偏 indoor/criteria，而不是目标周边 nearby。"
+    },
+    {
+      "case_id": "nearby_mall_with_parking",
+      "query": "附近有停车场的商场",
+      "expected_mode": "nearby_relation",
+      "expect_structured_relation": true,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["nearby", "mall", "parking"],
+      "notes": "主目标是商场，周边条件是停车场，适合 current nearby criteria。"
+    },
+    {
+      "case_id": "anchor_hotpot_rating_parking",
+      "query": "我在上海市闵行区平金中心，找一家附近的火锅店，4分以上，有停车场的",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["anchor_search", "restaurant", "hotpot", "rating", "parking"],
+      "notes": "地址锚点附近召回 + 评分/停车普通 criteria；停车可能来自 business 字段或语义筛选。"
+    },
+    {
+      "case_id": "parking_entrance_convenience",
+      "query": "哪个入口进停车场更方便",
+      "expected_mode": "access_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["parking", "entrance", "navi", "convenience"],
+      "notes": "需要已知上下文或先找停车场，再比较入口；不属于 nearby 关系。"
+    },
+    {
+      "case_id": "nearby_mall_nearest_entrance",
+      "query": "帮我找个附近的商场，找到最近的入口是哪个",
+      "expected_mode": "access_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["mall", "entrance", "nearest", "navi"],
+      "notes": "先找商场再取最近入口，属于导航点二阶段详情，不是 nearby criteria。"
+    },
+    {
+      "case_id": "scenic_spot_with_restroom",
+      "query": "我们一家人现在在外面玩，帮我找个附近适合逛逛的景点，最好附近有卫生间",
+      "expected_mode": "nearby_relation",
+      "expect_structured_relation": true,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["nearby", "scenic_spot", "family", "restroom", "semantic_filter"],
+      "notes": "景点是主目标，卫生间是周边配套，同时还有适合逛逛的语义筛选。"
+    },
+    {
+      "case_id": "hospital_easy_parking",
+      "query": "帮我找一家离我近一点、停车别太麻烦的医院",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["hospital", "parking", "nearest", "semantic_filter"],
+      "notes": "医院召回 + 停车便利性筛选，当前更适合普通 criteria。"
+    },
+    {
+      "case_id": "business_area_charging_food",
+      "query": "我车快没电了，帮我找个附近的商圈，最好能充电，等充电的时候旁边还能吃个饭",
+      "expected_mode": "nearby_relation",
+      "expect_structured_relation": true,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["nearby", "business_area", "charging", "restaurant"],
+      "notes": "主目标商圈，周边同时需要充电和吃饭，是复合 nearby 条件。"
+    },
+    {
+      "case_id": "hongqiao_underground_parking_pickup",
+      "query": "去虹桥接人，找个停车方便的地下停车场",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["parking", "underground", "pickup", "transport_hub"],
+      "notes": "停车场类型和接人便利性筛选，偏 business/navi 字段和语义判断。"
+    },
+    {
+      "case_id": "nearest_underground_parking",
+      "query": "附近最近的地下停车场",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["parking", "underground", "nearest"],
+      "notes": "单跳停车场召回 + 地下类型筛选。"
+    },
+    {
+      "case_id": "panlong_rating_phone",
+      "query": "蟠龙天地景点的评分是多少？联系电话有吗？",
+      "expected_mode": "detail_lookup",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["exact_poi", "scenic_spot", "rating", "phone"],
+      "notes": "精确 POI 详情查询，重复样例已去重。"
+    },
+    {
+      "case_id": "hotpot_hours_cost",
+      "query": "找一家火锅店，告诉我营业时间和人均消费",
+      "expected_mode": "detail_lookup",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["restaurant", "hotpot", "business_hours", "cost"],
+      "notes": "餐饮详情字段查询。"
+    },
+    {
+      "case_id": "coucou_features",
+      "query": "湊湊火锅·茶憩(莘庄维璟印象城店)的特色有哪些？",
+      "expected_mode": "detail_lookup",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["exact_poi", "restaurant", "features"],
+      "notes": "精确门店的特色内容查询。"
+    },
+    {
+      "case_id": "nearby_hotpot_rating_parking",
+      "query": "找一家附近的火锅店，4分以上，有停车场的",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["restaurant", "hotpot", "rating", "parking", "nearby_user"],
+      "notes": "附近餐饮召回 + 评分/停车筛选。"
+    },
+    {
+      "case_id": "harley_putuo_rating_cost",
+      "query": "哈雷摩托车普陀店的评分和人均消费多少",
+      "expected_mode": "detail_lookup",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["exact_poi", "rating", "cost"],
+      "notes": "精确 POI 详情字段查询。"
+    },
+    {
+      "case_id": "nearby_hotpot_hours_cost",
+      "query": "找一家附近的火锅店，告诉我营业时间和人均消费",
+      "expected_mode": "detail_lookup",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["restaurant", "hotpot", "business_hours", "cost", "nearby_user"],
+      "notes": "附近餐饮召回后返回详情字段。"
+    },
+    {
+      "case_id": "hema_mall_floor",
+      "query": "盒马鲜生(莘庄维璟印象城店）在几楼？",
+      "expected_mode": "indoor_detail",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["exact_poi", "indoor", "floor", "supermarket"],
+      "notes": "精确门店楼层信息。"
+    },
+    {
+      "case_id": "hongqiao_security_floor",
+      "query": "上海虹桥火车站安检口在哪个楼层？",
+      "expected_mode": "indoor_detail",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["transport_hub", "security_check", "indoor", "floor"],
+      "notes": "交通枢纽内设施楼层，可能不完全是标准 POI。"
+    },
+    {
+      "case_id": "shanghai_museum_restroom_map",
+      "query": "上海博物馆的洗手间分布图有吗？",
+      "expected_mode": "indoor_facility_detail",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["museum", "restroom", "indoor", "map"],
+      "notes": "室内设施分布信息，POI 工具可能只能给相关设施线索。"
+    },
+    {
+      "case_id": "route_nanjing_east_to_museum_entrance",
+      "query": "怎么从上海南京东路地铁站走到上海国家博物馆入口？",
+      "expected_mode": "route_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["route", "subway_station", "museum", "entrance", "walking"],
+      "notes": "起终点解析 + 入口定位 + 路线，不是 nearby 二跳。"
+    },
+    {
+      "case_id": "minhang_hospital_er_coordinate",
+      "query": "给我闵行中心医院急诊部的精确坐标",
+      "expected_mode": "detail_lookup",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["hospital", "emergency", "coordinate", "exact_poi"],
+      "notes": "医院子设施坐标查询。"
+    },
+    {
+      "case_id": "minhang_mixc_parking_entrance",
+      "query": "闵行万象城附近最方便的停车场入口在哪？",
+      "expected_mode": "access_navigation",
+      "expect_structured_relation": true,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["nearby", "mall", "parking", "entrance", "navi"],
+      "notes": "先基于商场附近找停车场，再取入口/便利性，包含 nearby 与 navi 两类能力。"
+    },
+    {
+      "case_id": "nearest_haidilao_navigate",
+      "query": "看看附近最近的海底捞然后导航过去",
+      "expected_mode": "single_hop_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["restaurant", "brand", "nearest", "navigate"],
+      "notes": "品牌 POI 最近召回 + 导航意图。"
+    },
+    {
+      "case_id": "hongqiao_pickup_parking_navigate",
+      "query": "看看去虹桥火车站那个停车场接人方便，马上帮我导航过去",
+      "expected_mode": "access_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["parking", "pickup", "transport_hub", "navigate"],
+      "notes": "停车场候选 + 接人便利性 + 导航。"
+    },
+    {
+      "case_id": "nearest_flower_shop_navigate",
+      "query": "附近最近的买花的地方帮我导航过去",
+      "expected_mode": "single_hop_navigation",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": false,
+      "tags": ["flower_shop", "nearest", "navigate"],
+      "notes": "普通最近 POI 召回 + 导航意图。"
+    },
+    {
+      "case_id": "cost_effective_sichuan_3km_navigate",
+      "query": "找个附近3公里以内性价比最高的川菜馆，帮我导航过去",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["restaurant", "sichuan", "radius", "cost_effective", "navigate"],
+      "notes": "半径约束 + 性价比语义筛选 + 导航。"
+    },
+    {
+      "case_id": "xuhui_cigar_shop",
+      "query": "我想抽雪茄，徐汇区帮我找一个",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["cigar", "district", "semantic_query"],
+      "notes": "用户意图需要映射为雪茄吧/烟草店等 POI 类别。"
+    },
+    {
+      "case_id": "business_cantonese_for_four_navigate",
+      "query": "有没有适合4个人的商务一点的粤菜，推荐几个看看再导航过去",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["restaurant", "cantonese", "business", "group_size", "navigate"],
+      "notes": "餐饮召回 + 商务/人数语义筛选。"
+    },
+    {
+      "case_id": "kid_friendly_wooded_park",
+      "query": "有没有适合带小朋友去的公园，树木多一点的",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["park", "kids", "trees", "semantic_filter"],
+      "notes": "公园召回 + 亲子/树木多语义筛选。"
+    },
+    {
+      "case_id": "driving_scenic_place",
+      "query": "我想出去开车兜兜风，有没有比较好的地方推荐啊",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["drive", "scenic_spot", "recommendation", "semantic_query"],
+      "notes": "开放式推荐，需要把兜风意图映射到景点/道路/观景点。"
+    },
+    {
+      "case_id": "company_nearby_hotel_500",
+      "query": "有没有公司附近的酒店，有个朋友要过来，推荐一个500元左右的",
+      "expected_mode": "semantic_filter",
+      "expect_structured_relation": false,
+      "requires_multi_hop": false,
+      "requires_filtering": true,
+      "tags": ["anchor_context", "hotel", "budget", "recommendation"],
+      "notes": "公司位置依赖上下文，酒店预算筛选。"
+    },
+    {
+      "case_id": "multi_stop_landmark_route",
+      "query": "先带我去浦东那个圆圆的湖，再去有尼克狐尼克的公园，然后去有高达雕像的那个地方，最后带我去能看见三件套的那个桥。",
+      "expected_mode": "multi_target_route",
+      "expect_structured_relation": false,
+      "requires_multi_hop": true,
+      "requires_filtering": true,
+      "tags": ["multi_stop", "landmark_resolution", "route", "semantic_query"],
+      "notes": "多个模糊地标解析 + 顺序路线，超出当前 nearby-only multi-hop，但适合作为能力边界 case。"
+    }
+  ]
+}

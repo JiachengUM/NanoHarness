@@ -1,0 +1,128 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 52px;
+    z-index: 10;
+    background: white;
+    // transition: background-color 0.1s ease-in-out;
+
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      font-size: 18px;
+
+      .icon {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .contentLayout {
+    padding: 0 16px 16px;
+    background: rgba(243, 244, 246, 1);
+    // transition: background-color 0.1s ease-in-out;
+  }
+
+  .content {
+    padding: 20px;
+    overflow: auto;
+    background: white;
+  }
+}
+
+.navigation {
+  display: flex;
+  font-size: 12px;
+  padding: 12px 0;
+  align-items: center;
+
+  .breadcrumb {
+    flex: 1;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    display: inline-block;
+  }
+}
+
+.menu {
+  border-inline-end: none !important;
+}
+
+.trigger {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  padding: 0 24px;
+}
+
+:global(.dark-theme) {
+  .header {
+    background: #243352;
+    color: #fafafa;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+  }
+
+  .contentLayout {
+    background: #1d2a44;
+  }
+
+  .content {
+    background: linear-gradient(60deg, #001529, #001529, #2a2e56);
+  }
+
+  background: #243352;
+
+  /* 整个滚动条区域 */
+  ::-webkit-scrollbar {
+    width: 12px;
+    /* 垂直滚动条宽度 */
+    height: 12px;
+    /* 水平滚动条高度 */
+  }
+
+  /* 滚动条轨道 */
+  ::-webkit-scrollbar-track {
+    background: #172136;
+    // border-radius: 6px;
+  }
+
+  /* 滚动条滑块 */
+  ::-webkit-scrollbar-thumb {
+    background: #2d3a59;
+    border-radius: 6px;
+    border: 3px solid #172136;
+    /* 创建内边距效果 */
+  }
+
+  /* 滚动条滑块悬停状态 */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3f4b67;
+  }
+}
+
+:global(.light-theme) {
+  .header {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+  }
+
+  .content {
+    background: white;
+  }
+}

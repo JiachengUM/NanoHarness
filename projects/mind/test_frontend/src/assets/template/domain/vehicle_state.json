@@ -1,0 +1,511 @@
+{
+  "adsd": {
+    "adaptive_cruise": {
+      "abnormal_cause": "",
+      "switch": "未选择"
+    },
+    "full_speed_driving_assist": {
+      "abnormal_cause": "",
+      "switch": "选择"
+    },
+    "pilot_assist": {
+      "switch": "on"
+    },
+    "lane_change_confirm": {
+      "abnormal_cause": "",
+      "switch": "off"
+    },
+    "trust_enhance": {
+      "abnormal_cause": "",
+      "switch": "off"
+    },
+    "open_road_noa": {
+      "switch": "on"
+    },
+    "pilot_full_speed": {
+      "switch": "on"
+    },
+    "calc_lane_change": {
+      "switch": "on"
+    },
+    "driving_style": {
+      "abnormal_cause": "",
+      "switch": "标准"
+    },
+    "start_reminder": {
+      "switch": "on"
+    },
+    "speed_limit_range": {
+      "abnormal_cause": "",
+      "switch": "100km/h"
+    },
+    "speed_limit_fixed": {
+      "abnormal_cause": ""
+    },
+    "speed_limit_percent": {
+      "abnormal_cause": "",
+      "switch": "0.9"
+    },
+    "speed_limit_alarm": {
+      "switch": "on"
+    },
+    "forward_collision_warning": {
+      "switch": "on"
+    },
+    "fcw_sensitivity": {
+      "abnormal_cause": "",
+      "switch": "低"
+    },
+    "aeb": {
+      "switch": "on"
+    },
+    "rear_collision_warning": {
+      "switch": "on"
+    },
+    "blind_spot_warning": {
+      "switch": "on"
+    },
+    "rear_cross_traffic": {
+      "abnormal_cause": "",
+      "switch": "警示"
+    },
+    "door_open_warning": {
+      "switch": "on"
+    },
+    "lane_departure_assist": {
+      "abnormal_cause": "",
+      "switch": "警示"
+    },
+    "lda_sensitivity": {
+      "abnormal_cause": "",
+      "states": "低"
+    },
+    "ldw_alert_mode": {
+      "abnormal_cause": "",
+      "switch": "声音"
+    },
+    "lane_keep": {
+      "abnormal_cause": "",
+      "switch": "on"
+    }
+  },
+  "media": {
+    "audio_signal": {
+      "album_name": "改变自己",
+      "app_name": "qq音乐",
+      "audio_artist": "王力宏",
+      "audio_name": "改变自己",
+      "audio_type": "音乐"
+    },
+    "video_signal": {
+      "artist": "",
+      "director": "EricaHayes",
+      "episode": "2",
+      "media_source": "人人视频",
+      "season": "4",
+      "video_name": "rickandmorty",
+      "video_tag": "科幻",
+      "video_type": "动画片"
+    }
+  },
+  "navigation": {
+    "navigation_status": {
+      "status": "导航中"
+    },
+    "destination": {
+      "address": "平金中心"
+    },
+    "destination_type": {
+      "address": "漕河泾中心",
+      "type": "公司"
+    },
+    "destination_info": {
+      "address": "人民广场",
+      "capacity": "6%",
+      "distance": "22km",
+      "duration": "15min",
+      "time": "2024-07-1012:00:00"
+    },
+    "road_condition": {
+      "road_condition": "拥堵"
+    },
+    "heavy_traffic": {
+      "road_condition": "非常拥堵"
+    },
+    "waypoint": {
+      "address": "人民广场",
+      "capacity": "6%",
+      "distance": "22km",
+      "duration": "15min",
+      "index": "2",
+      "time": "2024-07-1012:00:00"
+    },
+    "service_area": {
+      "address": "人民广场",
+      "capacity": "6%",
+      "distance": "22km",
+      "duration": "15min",
+      "index": "2",
+      "time": "2024-07-1012:00:00"
+    }
+  },
+  "signal_light": {
+    "low_beam": {
+      "states": "显示绿色"
+    },
+    "high_beam": {
+      "states": "显示蓝色"
+    },
+    "high_beam_switch": {
+      "switch": "on"
+    },
+    "rear_fog_light": {
+      "states": "显示黄色"
+    },
+    "position_light": {
+      "states": "关闭"
+    },
+    "left_turn_signal": {
+      "flash": "2.5Hz",
+      "states": "显示绿色"
+    },
+    "right_turn_signal": {
+      "flash": "2.5Hz",
+      "states": "显示绿色"
+    },
+    "intelligent_headlight": {
+      "states": "显示绿色"
+    },
+    "afs_fault": {
+      "states": "显示黄色"
+    },
+    "abs_fault": {
+      "states": "关闭"
+    },
+    "brake_fault": {
+      "states": "显示红色"
+    },
+    "esp_fault": {
+      "states": "关闭"
+    },
+    "esp_working": {
+      "states": "显示黄色"
+    },
+    "tcs_fault": {
+      "states": "显示黄色"
+    },
+    "autohold_active": {
+      "states": "关闭"
+    },
+    "autohold_ready": {
+      "states": "显示白色"
+    },
+    "autohold_fault": {
+      "states": "显示黄色"
+    },
+    "four_wheel_drive": {
+      "states": "关闭"
+    },
+    "tire_pressure_warning": {
+      "states": "显示黄色"
+    },
+    "tire_pressure_fault": {
+      "flash": "常亮",
+      "states": "显示黄色"
+    },
+    "charging_fault": {
+      "states": "关闭"
+    },
+    "auxiliary_power_fault": {
+      "states": "关闭"
+    },
+    "airbag_fault": {
+      "states": "显示红色"
+    },
+    "airbag_uncalibrated": {
+      "flash": "常亮",
+      "states": "显示红色"
+    },
+    "front_seatbelt_warning": {
+      "states": "显示红色"
+    },
+    "rear_seatbelt_warning": {
+      "states": "关闭"
+    },
+    "pedestrian_protection_warning": {
+      "states": "显示红色"
+    },
+    "steering_fault": {
+      "flash": "常亮",
+      "states": "显示红色"
+    },
+    "steering_angle_fault": {
+      "states": "显示红色"
+    },
+    "escl_fault": {
+      "states": "关闭"
+    },
+    "steering_reduced": {
+      "states": "显示黄色"
+    },
+    "epb_indicator": {
+      "states": "关闭"
+    },
+    "epb_not_released": {
+      "flash": "2Hz",
+      "states": "显示红色"
+    },
+    "epb_fault": {
+      "flash": "2Hz",
+      "states": "显示黄色"
+    },
+    "key_warning": {
+      "states": "显示红色"
+    },
+    "power_battery_fault": {
+      "states": "显示绿色"
+    },
+    "power_battery_level": {
+      "states": "关闭"
+    },
+    "power_battery_low": {
+      "flash": "常亮",
+      "states": "显示黄色"
+    },
+    "charge_gun_connected": {
+      "states": "显示红色"
+    },
+    "charging": {
+      "states": "显示绿色"
+    },
+    "charge_discharge_fault": {
+      "flash": "常亮",
+      "states": "显示黄色"
+    },
+    "discharging": {
+      "states": "显示蓝色"
+    },
+    "gear_invalid": {
+      "colour": "白色"
+    },
+    "system_ready": {
+      "states": "显示绿色"
+    },
+    "system_fault": {
+      "states": "显示红色"
+    },
+    "power_limited": {
+      "states": "关闭"
+    },
+    "motor_fault": {
+      "flash": "常亮",
+      "states": "显示红色"
+    },
+    "air_suspension_fault": {
+      "states": "显示红色"
+    },
+    "ecall_status": {
+      "states": "关闭"
+    },
+    "rear_wheel_steering_fault": {
+      "states": "显示红色"
+    },
+    "hazard_warning": {
+      "switch": "on"
+    },
+    "ambient_light": {
+      "states": "显示橙色",
+      "switch": "音乐随动模式"
+    },
+    "reading_light": {
+      "position": "副驾",
+      "switch": "on"
+    }
+  },
+  "system_control": {
+    "maintenance_info": {
+      "date": "2024-07-0800:00:00",
+      "day": "30天",
+      "distance": "300km"
+    },
+    "display_mode": {
+      "abnormal_cause": "",
+      "switch": "详细"
+    },
+    "passenger_info": [
+      {
+        "face_id": "face_wu26001",
+        "name": "王五",
+        "position": "主驾"
+      }
+    ]
+  },
+  "vehicle_control": {
+    "driving_mode": {
+      "states": "D",
+      "switch": "经济模式"
+    },
+    "vehicle_speed": {
+      "velocity": "80km/h"
+    },
+    "energy_recovery": {
+      "switch": "高"
+    },
+    "gear": {
+      "states": "1档"
+    },
+    "regenerative_braking": {
+      "states": "高"
+    },
+    "tire_info": [
+      {
+        "position": "左前",
+        "pressure": "2.2bar",
+        "temperature": "50度"
+      }
+    ],
+    "charging_port": {
+      "switch": "on",
+      "type": "慢充"
+    },
+    "charging_status": {
+      "duration": "35min",
+      "status": "未充电",
+      "type": "慢充"
+    },
+    "charging_limit": {
+      "capacity": "0.1",
+      "limit": "80%"
+    },
+    "battery_info": {
+      "mileage": "40km",
+      "percentage": "10%"
+    },
+    "air_condition": [
+      {
+        "mode": "自动",
+        "position": "前排",
+        "states": "1档",
+        "switch": "on",
+        "temperature": "25度"
+      }
+    ],
+    "air_direction": {
+      "position": "前排",
+      "switch": "吹脚"
+    },
+    "air_circulation": {
+      "switch": "内循环"
+    },
+    "air_cooling": {
+      "switch": "on"
+    },
+    "defrost_defog": [],
+    "air_purification": {
+      "switch": "off"
+    },
+    "fan_speed_front": {
+      "states": "2档"
+    },
+    "fan_speed_rear": {
+      "states": "2档"
+    },
+    "interior_temperature": [
+      {
+        "position": "车内",
+        "temperature": "25度"
+      }
+    ],
+    "seat_position": [
+      {
+        "horizontal_movement": "20",
+        "position": "主驾",
+        "rotary_movement": "0",
+        "vertical_movement": "100"
+      }
+    ],
+    "seat_ventilation": [
+      {
+        "position": "主驾",
+        "states": "关闭"
+      }
+    ],
+    "seat_heating": [
+      {
+        "position": "副驾",
+        "states": "关闭"
+      }
+    ],
+    "seat_massage": [
+      {
+        "mode": "向上舒展",
+        "position": "主驾",
+        "states": "关闭"
+      }
+    ],
+    "seat_belt_status": {
+      "position": "副驾",
+      "status": "未扣好"
+    },
+    "window_status": [
+      {
+        "position": "右后",
+        "switch": "off",
+        "transparency": "1"
+      }
+    ],
+    "door_status": [
+      {
+        "degree": "0.3",
+        "position": "主驾",
+        "switch": "on"
+      }
+    ],
+    "sunshade_left_rear": {
+      "position": "左后",
+      "switch": "on"
+    },
+    "sunshade_right_rear": {
+      "position": "右后",
+      "switch": "off"
+    },
+    "rearview_mirror": {
+      "fold_switch": "on",
+      "heat_status": "off"
+    },
+    "wiper_status": {
+      "states": "关闭"
+    },
+    "steering_wheel_heating": {
+      "states": "关闭"
+    },
+    "fragrance_system": [
+      {
+        "states": "关闭"
+      }
+    ],
+    "volume_status": {
+      "object": "导航",
+      "states": "mid"
+    },
+    "sunroof_status": {
+      "switch": "on"
+    },
+    "tailgate_status": {
+      "switch": "off"
+    },
+    "radar_status": {
+      "distance": "2档"
+    },
+    "panoramic_camera": {
+      "velocity": "无"
+    },
+    "calendar_time": {
+      "date": "2024-07-1012:00:00"
+    },
+    "auto_parking": {
+      "switch": "关闭"
+    }
+  },
+  "more_states": null
+}

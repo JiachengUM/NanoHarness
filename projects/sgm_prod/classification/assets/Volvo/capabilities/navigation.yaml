@@ -1,0 +1,116 @@
+executor: 导航
+description: 导航规则只直接覆盖无开放实体的会话控制；开放 POI、地址和路线诉求交给 LLM fallback 判断。
+capabilities:
+  - id: navigation.result.control
+    name: 导航结果选择和翻页
+    required_slots:
+      - action
+    actions:
+      - 第一个
+      - 最后一个
+      - 上一页
+      - 下一页
+      - 翻页
+      - 确定
+      - 取消
+      - 选第一条路线
+      - 按价格排序
+      - 按价格从高到低排序
+      - 按价格从低到高排序
+      - 按评分排序
+      - 按评分从高到低排序
+      - 按评分从低到高排序
+      - 按距离排序
+      - 按距离从高到低排序
+      - 按距离从低到高排序
+    residue_policy: strict
+  - id: navigation.waypoint.set
+    name: 导航途经点设置
+    required_slots:
+      - action
+      - target
+    targets:
+      - 服务区为途经点
+      - 加油站为途经点
+      - 途经点
+      - 途径点
+      - 服务区
+      - 加油站
+    actions:
+      - 添加
+      - 删除
+    residue_policy: safe_modifier
+  - id: navigation.favorite.set
+    name: 导航常用地点设置
+    required_slots:
+      - action
+      - target
+    targets:
+      - xxx为常用地点
+      - 常用地点
+      - 当前位置
+      - 目的地
+      - xxx
+    actions:
+      - 添加
+      - 收藏
+    residue_policy: safe_modifier
+  - id: navigation.waypoint.distance.query
+    name: 途经点距离查询
+    required_slots:
+      - action
+      - target
+    targets:
+      - 下个途经点
+      - 下个途径点
+      - 途经点
+      - 途径点
+    actions:
+      - 有多远
+      - 多远
+    residue_policy: safe_modifier
+  - id: navigation.session.control
+    name: 导航会话控制
+    required_slots:
+      - action
+    targets:
+      - 地图
+      - 导航
+    actions:
+      - 开始导航
+      - 发起导航
+      - 启动导航
+      - 继续导航
+      - 结束导航
+      - 关闭导航
+      - 导航关闭
+      - 打开导航
+      - 导航
+      - 导航到
+      - 导航去
+    residue_policy: strict
+  - id: navigation.route.preference
+    name: 导航路线偏好
+    required_slots:
+      - target
+    targets:
+      - 高速
+      - 充电
+    actions:
+      - 走
+      - 不走
+      - 避开
+    route_policy: llm_fallback
+    intent_markers:
+      - 导航
+      - 帮我导航
+      - 给我导航
+      - 带我去
+      - 前往
+      - 直达
+      - 开车去
+      - 重新导航
+      - 回家
+      - 回公司
+      - 去
+    residue_policy: strict

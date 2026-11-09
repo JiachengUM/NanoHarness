@@ -1,0 +1,51 @@
+executor: 天气
+description: 天气工具可直接回答的高精度 simple 白名单能力，只覆盖天气要素查询。
+capabilities:
+  - id: open_domain.weather.query
+    name: 天气查询
+    required_slots:
+      - target
+    targets:
+      - 天气
+      - 下雨
+      - 刮风
+      - 多少度
+      - 气温
+      - 冷不冷
+      - 热不热
+      - 空气质量
+      - 雾霾
+      - 湿度
+      - 太阳
+      - 带伞
+      - 穿外套
+      - 外套
+      - 降水概率
+      - 紫外线
+      - 紫外线指数
+      - 防晒
+      - 防晒霜
+      - 气压
+      - 大气压
+      - 风速
+      - 风力
+      - 大风
+      - 刮大风
+      - 能见度
+      - 适合出门
+      - 臭氧
+      - 臭氧污染
+      - 沙尘暴
+      - 花粉
+      - 花粉浓度
+      - 戴口罩
+      - 返潮
+      - 晒被子
+      - 天气预报
+      - 天气预告
+    actions:
+      - 查询
+      - 查
+      - 看
+      - 问
+    residue_policy: safe_modifier

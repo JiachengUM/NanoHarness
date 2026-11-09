@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: eval-mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ai-mind-test
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: eval-backend
+    ports:
+      - '8100:8100'
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ai-mind-test
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:

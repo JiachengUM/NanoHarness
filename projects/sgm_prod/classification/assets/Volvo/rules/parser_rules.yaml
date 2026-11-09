@@ -1,0 +1,184 @@
+# Parser 级共享规则：只放解析流程需要的横向信号，不放具体执行能力。
+#
+# 归属原则：
+# - 能被某个工具执行的 action/target/value：放 capabilities/*.yaml。
+# - 多张 card 共享的同义词：放 lexicon.yaml。
+# - 未消费文本命中后应降级复杂链路的风险词：放 global_risks.yaml。
+# - parser 流程需要、但不属于某个执行器能力的填充词/疑问词/场景辅助词：放这里。
+
+harmless_fillers:
+  - 把
+  - 请
+  - 帮我
+  - 给我
+  - 你
+  - 好
+  - 我要
+  - 我想
+  - 我有点
+  - 有点
+  - 太
+  - 我
+  - 一下
+  - 一点
+  - 一首
+  - 首
+  - 听听
+  - 功能
+  - 那个
+  - 的
+  - 了
+  - 吧
+  - 吗
+  - 呢
+  - 啊
+  - 然后
+  - 就
+  - 要
+  - 想
+  - 沃尔沃
+  - XC40
+  - XC60
+  - XC90
+  - S60
+  - S90
+  - V60
+  - V90
+  - EX30
+  - EX90
+  - EM90
+  - 是多少
+  - 怎么样
+
+# 用于识别“未被当前 card 消费的额外取值信号”，辅助多意图 veto。
+# 具体能力可接受的值仍应写在 card.values.patterns。
+generic_value_patterns:
+  - '\d+(?:度|%|档)'
+  - '[零一二两三四五六七八九十百]+(?:度|档|挡)'
+
+# 这些 canonical 只是维护分组，不代表同一真实目标。
+# 例如“灯光”组里同时出现近光/远光时，不能被折叠成一个 target。
+broad_target_canonicals:
+  - 通用车控
+  - 座椅舒适
+  - 灯光
+  - 车窗
+
+# 这些能力本身就是状态/查询，不因普通疑问句自动复杂。
+query_like_capabilities:
+  - open_domain.weather.query
+  - vehicle.status.query
+  - vehicle.lock.status
+  - system.location.status
+
+question_or_condition_markers:
+  - 是多少
+  - 是否
+  - 历史
+  - 下次
+  - 剩余
+  - 平均
+  - 累计
+  - 自启动
+  - 手动归零
+  - 开了吗
+  - 开了么
+  - 要开吗
+  - 要不要
+  - 是不是
+  - 正常不
+  - 强不强
+  - 晒不晒
+  - 几档
+  - 档位是多少
+  - 什么状态
+  - 怎么样
+  - 怎样
+  - 啥
+  - 吗
+
+conditional_markers:
+  - 没开的话
+  - 有问题的话
+  - 的话
+  - 如果
+
+# 场景化辅助词不是独立能力，只能在对应 card 完整命中后解释残留。
+# 例：“屁股好热，开通风”里“屁股/好热”只辅助座椅通风，不应成为宽泛 simple 证据。
+scenario_capability_aux:
+  vehicle.temperature.set:
+    - 太冷
+    - 太热
+    - 有点冷
+    - 有点热
+    - 有一点冷
+    - 有一点热
+    - 我冷
+    - 我热
+    - 我好冷
+    - 我好热
+    - 好冷
+    - 好热
+    - 冷了
+    - 热了
+    - 冷死
+    - 热死
+    - 很冷
+    - 很热
+    - 冷啊
+    - 热啊
+    - 冷一点
+    - 热一点
+    - 暖和
+    - 晒
+    - 燥热
+  vehicle.temperature.comfort:
+    - 空调
+    - 温度
+    - 冷气
+    - 暖风
+  vehicle.seat.comfort.set:
+    - 屁股
+    - 腰
+    - 肩
+    - 脚
+    - 颈
+    - 脖子
+    - 太冷
+    - 太热
+    - 好冷
+    - 好热
+    - 冷了
+    - 热了
+    - 冷死
+    - 热死
+    - 凉
+    - 燥热
+  vehicle.circulation.set:
+    - 异味
+    - 都是汗
+    - 汗
+    - 燥热
+    - 闷
+  climate.defog_air.set:
+    - 车窗
+    - 玻璃
+    - 前玻璃
+    - 前挡玻璃
+    - 起雾
+    - 哈气
+    - 雾
+  vehicle.light.set:
+    - 大雾
+    - 雾
+    - 天气
+    - 下雨
+  vehicle.mirror.set:
+    - 下雨
+    - 雨
+    - 起雾
+    - 有霜
+    - 结霜
+
+scenario_friendly_risks:
+  - emotion_scene

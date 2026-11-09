@@ -1,0 +1,48 @@
+executor: 导航
+description: 导航规则只直接覆盖无开放实体的会话控制；开放 POI、地址和路线诉求交给 LLM fallback 判断。
+capabilities:
+  - id: navigation.session.control
+    name: 导航会话控制
+    required_slots:
+      - action
+    targets:
+      - 地图
+      - 导航
+    actions:
+      - 开始导航
+      - 发起导航
+      - 启动导航
+      - 继续导航
+      - 结束导航
+      - 关闭导航
+      - 导航关闭
+      - 打开导航
+      - 导航
+      - 导航到
+      - 导航去
+    residue_policy: strict
+  - id: navigation.route.preference
+    name: 导航路线偏好
+    required_slots:
+      - target
+    targets:
+      - 高速
+      - 充电
+    actions:
+      - 走
+      - 不走
+      - 避开
+    route_policy: llm_fallback
+    intent_markers:
+      - 导航
+      - 帮我导航
+      - 给我导航
+      - 带我去
+      - 前往
+      - 直达
+      - 开车去
+      - 重新导航
+      - 回家
+      - 回公司
+      - 去
+    residue_policy: strict

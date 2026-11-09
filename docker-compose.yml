@@ -1,0 +1,38 @@
+services:
+  sgm-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sgm-api:latest
+    container_name: sgm-api
+    ports:
+      - "8007:8007"
+    environment:
+      - PORT=8007
+      - PYTHONUNBUFFERED=1
+      # Redis 配置
+      - SGM_REDIS_HOST=${SGM_REDIS_HOST:-}
+      - SGM_REDIS_PORT=${SGM_REDIS_PORT:-6379}
+      - SGM_REDIS_DB=${SGM_REDIS_DB:-0}
+      - SGM_REDIS_PASSWORD=${SGM_REDIS_PASSWORD:-}
+      - SGM_AGENT_REDIS_PREFIX=${SGM_AGENT_REDIS_PREFIX:-sgm:agent}
+      # 以下均有代码默认值，按需覆盖
+      - VOLC_AK=${VOLC_AK:-}
+      - VOLC_SK=${VOLC_SK:-}
+      - AMAP_API_KEY=${AMAP_API_KEY:-}
+      - WEBSEARCH_BOT_API_KEY=${WEBSEARCH_BOT_API_KEY:-}
+      - WEBSEARCH_BOT_MODEL=${WEBSEARCH_BOT_MODEL:-}
+      - WEATHER_API_URL=${WEATHER_API_URL:-}
+      - QQ_MUSIC_APP_ID=${QQ_MUSIC_APP_ID:-}
+      - QQ_MUSIC_APP_KEY=${QQ_MUSIC_APP_KEY:-}
+      - QQ_MUSIC_BASE_URL=${QQ_MUSIC_BASE_URL:-}
+      - QQ_MUSIC_DEVICE_ID=${QQ_MUSIC_DEVICE_ID:-}
+    command: ["python3", "-m", "uvicorn", "projects.sgm_prod.api:app", "--host", "0.0.0.0", "--port", "8007"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8007/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+

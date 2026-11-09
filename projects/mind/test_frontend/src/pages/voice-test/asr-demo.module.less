@@ -1,0 +1,90 @@
+// 默认跟随平台浅色内容区；dark-theme 下再覆盖变量（与 index.module.less 约定一致）
+.root {
+  --v-surface: #ffffff;
+  --v-border-strong: #d9d9d9;
+  --v-text: rgba(0, 0, 0, 0.88);
+  --v-text-muted: rgba(0, 0, 0, 0.45);
+  --v-accent: #1677ff;
+  --v-error-bg: #fff2f0;
+  --v-error-border: #ffccc7;
+  --v-error-text: #cf1322;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.error {
+  color: var(--v-error-text);
+  background: var(--v-error-bg);
+  border: 1px solid var(--v-error-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  word-break: break-all;
+}
+
+.audioBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--v-border-strong);
+  border-radius: 6px;
+  background: var(--v-surface);
+
+  audio {
+    width: 100%;
+  }
+}
+
+.audioLabel {
+  font-size: 12px;
+  color: var(--v-text-muted);
+}
+
+.body {
+  height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--v-border-strong);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--v-surface);
+  color: var(--v-text);
+}
+
+.line {
+  padding: 6px 8px;
+  border-bottom: 1px dashed var(--v-border-strong);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.current {
+  color: var(--v-accent);
+  font-weight: 600;
+  border-bottom: none;
+}
+
+.empty {
+  color: var(--v-text-muted);
+  text-align: center;
+  padding-top: 40px;
+}
+
+:global(.dark-theme) {
+  .root {
+    --v-surface: #243352;
+    --v-border-strong: rgba(63, 75, 103, 0.65);
+    --v-text: #dce4f0;
+    --v-text-muted: #8c9ab3;
+    --v-accent: #177ddc;
+    --v-error-bg: rgba(255, 77, 79, 0.12);
+    --v-error-border: rgba(255, 77, 79, 0.35);
+    --v-error-text: #ff9c99;
+  }
+}

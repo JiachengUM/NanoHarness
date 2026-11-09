@@ -1,0 +1,79 @@
+=== DUPLEX VOICE CASE LOG ===
+started_at=2026-08-12T22:48:19.401+08:00
+log_file=aicore/models/stream_model_api/duplex/canary_test_log/control.log
+=== EVENTS ===
+2026-08-12T22:48:19.401+08:00 +00000.000s [SESSION] {"model":"1.2.6.1","tool_call_mode":"canary:control","tools":[]}
+2026-08-12T22:48:19.401+08:00 +00000.000s [LOCAL RUNTIME] canary_expected mode=control marker=ZEBRA-7319 value=17.3
+2026-08-12T22:48:19.618+08:00 +00000.217s [UP -> DUPLEX] type=session.create bytes=1286 {"type":"session.create","event_id":"event_1","session":{"id":"b285cc6e-eca5-4c8f-9883-95ba6bdf0b04","model":"1.2.6.1","instructions":"你是上下文可见性实验助手。\n\n用户首先会说一句准备实验的话。此时只回复“准备好了”。\n之后会听到一段固定的本地激活音频，内容大意是工具已经完成、请根据新增结果回答。\n收到该激活音频后：\n\n1. 检查当前会话上下文是否明确包含“验证标记”和“结果数值”两个字段。\n2. 如果都能看到，只回复：“标记是 <原值>，数值是 <原值>”。必须逐字复述，不得猜测或改写。\n3. 如果任一字段看不到，只回复：“没有看到验证数据”。\n4. 不得调用工具，不得根据字段名猜测值，不得提及内部协议或实验实现。","audio":{"input":{"format":{"type":"pcm","rate":16000}},"output":{"format":{"type":"pcm_s16le","rate":24000},"voice":"zh_female_xiaohe_jupiter_bigtts"}},"tools":[]},"extension":{"asr":{"extra":{"end_smooth_window_ms":500,"enable_custom_vad":true}},"tts":{"extra":{}},"dialog":{"extra":{"audit_response":"抱歉，这个问题我无法回答，你可以换个其他话题，我会尽力为你提供帮助。","enable_loudness_norm":true,"enable_music":true}}}}
+2026-08-12T22:48:19.681+08:00 +00000.281s [DOWN <- DUPLEX] type=session.created bytes=103 {"type":"session.created","event_id":"event_1","session":{"id":"b285cc6e-eca5-4c8f-9883-95ba6bdf0b04"}}
+2026-08-12T22:48:37.441+08:00 +00018.041s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=113 {"item_id":"52110803151782402","type":"conversation.item.input_audio_transcription.started","event_id":"event_2"}
+2026-08-12T22:48:37.447+08:00 +00018.047s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=146 {"content_index":0,"delta":"准备","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_3"}
+2026-08-12T22:48:37.656+08:00 +00018.255s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=152 {"content_index":0,"delta":"准备开始","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_4"}
+2026-08-12T22:48:38.386+08:00 +00018.986s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=161 {"content_index":0,"delta":"准备开始上下文","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_5"}
+2026-08-12T22:48:38.722+08:00 +00019.321s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=167 {"content_index":0,"delta":"准备开始上下文实验","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_6"}
+2026-08-12T22:48:38.817+08:00 +00019.417s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=170 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_7","content_index":0,"delta":"准备开始上下文实验。"}
+2026-08-12T22:48:38.871+08:00 +00019.470s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=167 {"content_index":0,"delta":"准备开始上下文实验","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_8"}
+2026-08-12T22:48:39.533+08:00 +00020.132s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=170 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782402","event_id":"event_9","content_index":0,"delta":"准备开始上下文实验。"}
+2026-08-12T22:48:39.533+08:00 +00020.133s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=174 {"content_index":1,"text":"准备开始上下文实验。","event_id":"event_10","type":"conversation.item.input_audio_transcription.completed","item_id":"52110803151782402"}
+2026-08-12T22:48:39.654+08:00 +00020.253s [DOWN <- DUPLEX] type=response.output_text.done bytes=148 {"question_id":"52110803151782402","response_id":"52110803151782658","type":"response.output_text.done","text":"准备好了","event_id":"event_12"}
+2026-08-12T22:48:39.682+08:00 +00020.282s [DOWN <- DUPLEX] type=response.output_audio.started bytes=151 {"question_id":"52110803151782402","response_id":"52110803151782658","tts_type":"default","type":"response.output_audio.started","event_id":"event_13"}
+2026-08-12T22:48:39.955+08:00 +00020.554s [DOWN <- DUPLEX] type=response.output_audio.done bytes=127 {"question_id":"52110803151782402","response_id":"52110803151782658","type":"response.output_audio.done","event_id":"event_17"}
+2026-08-12T22:48:40.528+08:00 +00021.127s [LOCAL RUNTIME] canary_injected mode=control question_id=52110803151782402 marker=ZEBRA-7319 value=17.3 text_chars=25
+2026-08-12T22:48:40.529+08:00 +00021.128s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_2",
+                                            "items": []
+                                          }
+2026-08-12T22:48:40.596+08:00 +00021.195s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=339
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52110803151782402",
+                                                "role": "user",
+                                                "timestamp": 1786546119582,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "准备开始上下文实验。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "role": "assistant",
+                                                "timestamp": 1786546119700,
+                                                "content": [
+                                                  {
+                                                    "text": "准备好了",
+                                                    "type": "input_text"
+                                                  }
+                                                ],
+                                                "id": "52110803151782658"
+                                              }
+                                            ],
+                                            "event_id": "event_18"
+                                          }
+2026-08-12T22:48:40.801+08:00 +00021.400s [DOWN <- DUPLEX] type=response.done bytes=352 {"type":"response.done","event_id":"event_19","response":{"usage":{"total_tokens":51,"input_tokens":32,"output_tokens":19,"input_token_details":{"text_tokens":0,"audio_tokens":32,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":19}}}}
+2026-08-12T22:48:42.361+08:00 +00022.960s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=114 {"item_id":"52110803151782914","type":"conversation.item.input_audio_transcription.started","event_id":"event_20"}
+2026-08-12T22:48:42.367+08:00 +00022.967s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=147 {"content_index":0,"delta":"工具","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_21"}
+2026-08-12T22:48:42.700+08:00 +00023.299s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=153 {"event_id":"event_22","content_index":0,"delta":"工具执行","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914"}
+2026-08-12T22:48:42.857+08:00 +00023.456s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=159 {"content_index":0,"delta":"工具执行完成","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_23"}
+2026-08-12T22:48:43.050+08:00 +00023.649s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=162 {"content_index":0,"delta":"工具执行完成。","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_24"}
+2026-08-12T22:48:43.115+08:00 +00023.714s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=159 {"content_index":0,"delta":"工具执行完成","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_25"}
+2026-08-12T22:48:43.536+08:00 +00024.136s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=162 {"delta":"工具执行完成请","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_26","content_index":0}
+2026-08-12T22:48:43.798+08:00 +00024.398s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=168 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_27","content_index":0,"delta":"工具执行完成请根据"}
+2026-08-12T22:48:44.388+08:00 +00024.987s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=174 {"content_index":0,"delta":"工具执行完成请根据新增","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_28"}
+2026-08-12T22:48:44.633+08:00 +00025.232s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=180 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_29","content_index":0,"delta":"工具执行完成请根据新增结果"}
+2026-08-12T22:48:44.836+08:00 +00025.435s [UP -> DUPLEX] type=input_audio_buffer.commit bytes=57 {"type":"input_audio_buffer.commit","event_id":"event_3"}
+2026-08-12T22:48:44.907+08:00 +00025.507s [DOWN <- DUPLEX] type=input_audio_buffer.committed bytes=61 {"type":"input_audio_buffer.committed","event_id":"event_30"}
+2026-08-12T22:48:44.979+08:00 +00025.578s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=186 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_31","content_index":0,"delta":"工具执行完成请根据新增结果回答"}
+2026-08-12T22:48:45.091+08:00 +00025.690s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=192 {"content_index":0,"delta":"工具执行完成，请根据新增结果回答。","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_32"}
+2026-08-12T22:48:45.121+08:00 +00025.721s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=186 {"delta":"工具执行完成请根据新增结果回答","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_33","content_index":0}
+2026-08-12T22:48:45.199+08:00 +00025.798s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=192 {"delta":"工具执行完成，请根据新增结果回答。","type":"conversation.item.input_audio_transcription.delta","item_id":"52110803151782914","event_id":"event_34","content_index":0}
+2026-08-12T22:48:45.199+08:00 +00025.798s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=195 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52110803151782914","content_index":1,"text":"工具执行完成，请根据新增结果回答。","event_id":"event_35"}
+2026-08-12T22:48:45.266+08:00 +00025.865s [DOWN <- DUPLEX] type=response.output_text.done bytes=160 {"question_id":"52110803151782914","response_id":"52110803151783938","type":"response.output_text.done","text":"没有看到验证数据","event_id":"event_38"}
+2026-08-12T22:48:45.279+08:00 +00025.878s [DOWN <- DUPLEX] type=response.output_audio.started bytes=151 {"tts_type":"default","type":"response.output_audio.started","event_id":"event_39","question_id":"52110803151782914","response_id":"52110803151783938"}
+2026-08-12T22:48:45.602+08:00 +00026.202s [DOWN <- DUPLEX] type=response.output_audio.done bytes=127 {"question_id":"52110803151782914","response_id":"52110803151783938","type":"response.output_audio.done","event_id":"event_45"}
+2026-08-12T22:48:47.400+08:00 +00027.999s [DOWN <- DUPLEX] type=response.done bytes=352 {"type":"response.done","event_id":"event_46","response":{"usage":{"total_tokens":79,"input_tokens":40,"output_tokens":39,"input_token_details":{"text_tokens":0,"audio_tokens":40,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":39}}}}
+2026-08-12T22:48:49.149+08:00 +00029.748s === DUPLEX VOICE CASE END ===

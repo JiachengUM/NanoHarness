@@ -1,0 +1,138 @@
+[
+  {
+    "id": "criteria_L1",
+    "dimension": "criteria_complexity",
+    "level": 1,
+    "goal": "上海找一家火锅店",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一家火锅店",
+        "包含店名",
+        "包含地址或位置信息"
+      ],
+      "description": "返回至少一个上海火锅店，含基本信息即可"
+    }
+  },
+  {
+    "id": "criteria_L2",
+    "dimension": "criteria_complexity",
+    "level": 2,
+    "goal": "上海找一家火锅店，人均100元左右，评分4分以上，有停车场",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一家火锅店",
+        "提及人均价格约100元",
+        "提及评分4分以上",
+        "提及有停车场或停车方便"
+      ],
+      "description": "必须同时体现价格、评分、停车三个条件，缺一不可"
+    }
+  },
+  {
+    "id": "criteria_L3",
+    "dimension": "criteria_complexity",
+    "level": 3,
+    "goal": "上海找一家适合带老人的火锅店，要求不辣但口味丰富，位于市中心，价格实惠",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一家店",
+        "说明该店适合老人或口味不辣",
+        "说明位于市中心或繁华地带",
+        "说明价格实惠或人均较低"
+      ],
+      "description": "需处理'不辣但口味丰富'的语义张力，同时满足位置和价格要求"
+    }
+  },
+  {
+    "id": "planning_L1",
+    "dimension": "planning",
+    "level": 1,
+    "goal": "推荐上海一家亲子餐厅",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一家餐厅",
+        "说明适合亲子或有儿童相关设施/服务",
+        "包含店名和地址"
+      ],
+      "description": "基准case，返回一个亲子餐厅含基本信息即可"
+    }
+  },
+  {
+    "id": "planning_L2",
+    "dimension": "planning",
+    "level": 2,
+    "goal": "上海找一个下午茶地点和一个晚餐地点，两者步行可达（距离1公里以内）",
+    "expected": {
+      "must_contain": [
+        "推荐了一个下午茶地点",
+        "推荐了一个晚餐地点",
+        "说明两个地点之间距离近或步行可达",
+        "两个地点都包含名称和位置"
+      ],
+      "description": "需搜索两类POI并验证两者的空间关系"
+    }
+  },
+  {
+    "id": "planning_L3",
+    "dimension": "planning",
+    "level": 3,
+    "goal": "帮我规划上海亲子一日游：上午景区、午餐、下午景区、晚餐，要求相邻地点之间距离合理，不要跨城区折返",
+    "expected": {
+      "must_contain": [
+        "推荐了上午景区",
+        "推荐了午餐地点",
+        "推荐了下午景区",
+        "推荐了晚餐地点",
+        "说明各地点之间距离合理或位于同一区域",
+        "所有推荐地点适合亲子"
+      ],
+      "description": "需协调4个POI的时空一致性，不能各自推荐却相互矛盾"
+    }
+  },
+  {
+    "id": "error_recovery_L1",
+    "dimension": "error_recovery",
+    "level": 1,
+    "goal": "找一个适合商务宴请的日本料理餐厅，要有包厢，环境安静，上海市内",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一家日本料理餐厅",
+        "说明有包厢或私密就餐空间",
+        "说明环境安静或适合商务宴请",
+        "位于上海"
+      ],
+      "description": "关键词精准度影响召回，需找到满足商务宴请氛围的日料"
+    }
+  },
+  {
+    "id": "error_recovery_L2",
+    "dimension": "error_recovery",
+    "level": 2,
+    "goal": "浦东新区找一家人均50元以内、大众点评评分4.8分以上的粤菜餐厅",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一家粤菜餐厅",
+        "位于浦东新区",
+        "人均50元以内",
+        "评分4.8分以上"
+      ],
+      "description": "极严苛条件，第一次搜索大概率无满足结果，需调整策略重试"
+    }
+  },
+  {
+    "id": "error_recovery_L3",
+    "dimension": "error_recovery",
+    "level": 3,
+    "goal": "上海找一个购物中心内的餐厅，要求同时提供正餐和儿童游乐区，适合家庭聚餐",
+    "expected": {
+      "must_contain": [
+        "推荐了至少一个具体餐厅或地点",
+        "位于购物中心内",
+        "有儿童游乐或亲子设施",
+        "提供正餐服务",
+        "适合家庭聚餐"
+      ],
+      "description": "复合POI类型（餐厅+游乐设施），单次搜索难以同时命中"
+    }
+  }
+]

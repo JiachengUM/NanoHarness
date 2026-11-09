@@ -1,0 +1,881 @@
+=== DUPLEX VOICE CASE LOG ===
+started_at=2026-08-12T16:51:59.398+08:00
+log_file=aicore/models/stream_model_api/duplex/sync_test_case_log/case12.log
+=== EVENTS ===
+2026-08-12T16:51:59.398+08:00 +00000.000s [SESSION] {"model":"1.2.6.1","tool_call_mode":"sync","tools":["car_control","navigation","QQ音乐单曲搜索","QQ音乐歌单搜索","QQ音乐专辑搜索","地点搜索工具","websearch"]}
+2026-08-12T16:51:59.576+08:00 +00000.178s [UP -> DUPLEX] type=session.create bytes=5597 {"type":"session.create","event_id":"event_1","session":{"id":"a4b76098-0c0a-48ab-a14e-3e4da59d28f6","model":"1.2.6.1","instructions":"你是车载语音助手，准确执行用户要求，并用适合语音播报的简短表达回复。\n\n基本信息：我在上海市徐汇滨江城开中心 T2 楼，今天是 2026 年 8 月 6 日。\n\n先完整理解用户输入，再判断是否需要调用工具。简单问题直接回答；多个彼此独立的需求，\n应在同一次响应中发出全部必要的工具调用，让它们并行执行。缺少无法从上下文确定的必要\n参数时，用一个短句向用户澄清，不要暴露工具名、参数名或内部实现。\n\n工具返回的是本轮调用的真实结果。收到结果后，应结合用户原始请求自然作答，不要重复调用\n已经完成的工具。回复先说结论，再补充最必要的信息；除非用户明确要求，不使用长列表，\n不复述工具执行过程，也不解释内部推理。","audio":{"input":{"format":{"type":"pcm","rate":16000}},"output":{"format":{"type":"pcm_s16le","rate":24000},"voice":"zh_female_xiaohe_jupiter_bigtts"}},"tools":[{"type":"function","name":"car_control","description":"车控指令执行","parameters":{"properties":{"command":{"description":"车控指令描述","title":"Command","type":"string"}},"required":["command"],"title":"CarControlInput","type":"object"}},{"type":"function","name":"navigation","description":"通过导航指令执行导航任务，指定目的地导航、添加途径点、路线偏好","parameters":{"properties":{"command":{"description":"导航任务指令","title":"Command","type":"string"}},"required":["command"],"title":"NavigateInput","type":"object"}},{"type":"function","name":"QQ音乐单曲搜索","description":"单曲搜索工具，支持按歌曲名搜索歌曲信息；必须按criteria筛选，criteria是除了query之外的包括个人偏好等任何其它信息。","parameters":{"properties":{"query":{"description":"支持搜索单曲名、歌手名、专辑名","title":"Query","type":"string"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"音乐搜索条件列表，每条是一个自然语言约束","title":"Criteria"}},"required":["query"],"title":"MusicSearchInput","type":"object"}},{"type":"function","name":"QQ音乐歌单搜索","description":"歌单搜索工具，支持按主题、歌单名搜索歌单信息；必须按criteria筛选，criteria是除了query之外的包括个人偏好等任何其它信息。","parameters":{"properties":{"query":{"description":"支持搜索单曲名、歌手名、专辑名","title":"Query","type":"string"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"音乐搜索条件列表，每条是一个自然语言约束","title":"Criteria"}},"required":["query"],"title":"MusicSearchInput","type":"object"}},{"type":"function","name":"QQ音乐专辑搜索","description":"专辑搜索工具，支持按专辑名、歌手名搜索专辑信息；必须按criteria筛选，criteria是除了query之外的包括个人偏好等任何其它信息。","parameters":{"properties":{"query":{"description":"支持搜索单曲名、歌手名、专辑名","title":"Query","type":"string"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"音乐搜索条件列表，每条是一个自然语言约束","title":"Criteria"}},"required":["query"],"title":"MusicSearchInput","type":"object"}},{"type":"function","name":"地点搜索工具","description":"完全遵循用户要求搜索poi，必须按criteria筛选，criteria是除了query之外的任何其它信息；business：poi所属商圈、营业时间、联系电话、特色内容、停车场类型、评分和人均消费；indoor：楼层索引、所在楼层；navi：导航引导点坐标包括各类poi出入口；返回的结果列表默认按距离从近到远排序。","parameters":{"properties":{"query":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"description":"根据内容自动映射至高德API的types或keywords","title":"Query"},"city":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"description":"搜索城市名称","title":"City"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"criteria是除了query之外的任何其它信息","title":"Criteria"},"address":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"description":"地址或地点，周边搜索必填","title":"Address"},"radius":{"default":3000,"description":"周边搜索半径，周边搜必填，单位米","maximum":50000,"minimum":0,"title":"Radius","type":"integer"},"show_fields":{"default":"children,business,indoor,navi","description":"children、business、indoor、navi，可以多选用逗号分割","title":"Show Fields","type":"string"}},"title":"PoiSearchInput","type":"object"}},{"type":"function","name":"websearch","description":"通用联网搜索","parameters":{"properties":{"query":{"description":"搜索关键词","title":"Query","type":"string"}},"required":["query"],"title":"WebsearchInput","type":"object"}}]},"extension":{"asr":{"extra":{"end_smooth_window_ms":500,"enable_custom_vad":true}},"tts":{"extra":{}},"dialog":{"extra":{"audit_response":"抱歉，这个问题我无法回答，你可以换个其他话题，我会尽力为你提供帮助。","enable_loudness_norm":true,"enable_music":true}}}}
+2026-08-12T16:51:59.650+08:00 +00000.252s [DOWN <- DUPLEX] type=session.created bytes=103 {"type":"session.created","event_id":"event_1","session":{"id":"a4b76098-0c0a-48ab-a14e-3e4da59d28f6"}}
+2026-08-12T16:52:04.443+08:00 +00005.045s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=113 {"item_id":"52426579787642370","type":"conversation.item.input_audio_transcription.started","event_id":"event_2"}
+2026-08-12T16:52:04.449+08:00 +00005.052s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=143 {"content_index":0,"delta":"呃","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_3"}
+2026-08-12T16:52:04.686+08:00 +00005.288s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=146 {"event_id":"event_4","content_index":0,"delta":"呃你","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370"}
+2026-08-12T16:52:04.850+08:00 +00005.452s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=152 {"delta":"呃你可以","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_5","content_index":0}
+2026-08-12T16:52:05.005+08:00 +00005.607s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=155 {"content_index":0,"delta":"呃你可以用","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_6"}
+2026-08-12T16:52:05.329+08:00 +00005.932s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=161 {"content_index":0,"delta":"呃你可以用贵阳","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_7"}
+2026-08-12T16:52:05.575+08:00 +00006.178s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=164 {"content_index":0,"delta":"呃你可以用贵阳话","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_8"}
+2026-08-12T16:52:05.637+08:00 +00006.239s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=170 {"content_index":0,"delta":"呃你可以用贵阳话或者","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_9"}
+2026-08-12T16:52:06.035+08:00 +00006.638s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=177 {"content_index":0,"delta":"呃你可以用贵阳话或者四川","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_10"}
+2026-08-12T16:52:06.363+08:00 +00006.965s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=180 {"delta":"呃你可以用贵阳话或者四川话","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_11","content_index":0}
+2026-08-12T16:52:06.504+08:00 +00007.106s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=183 {"content_index":0,"delta":"呃你可以用贵阳话或者四川话和","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_12"}
+2026-08-12T16:52:06.669+08:00 +00007.272s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=186 {"content_index":0,"delta":"呃你可以用贵阳话或者四川话和我","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_13"}
+2026-08-12T16:52:06.769+08:00 +00007.371s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=192 {"content_index":0,"delta":"呃你可以用贵阳话或者四川话和我交流","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_14"}
+2026-08-12T16:52:06.910+08:00 +00007.512s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=195 {"content_index":0,"delta":"呃你可以用贵阳话或者四川话和我交流吗","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_15"}
+2026-08-12T16:52:07.015+08:00 +00007.618s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=195 {"delta":"你可以用贵阳话或者四川话和我交流吗？","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_16","content_index":0}
+2026-08-12T16:52:07.065+08:00 +00007.668s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=195 {"content_index":0,"delta":"呃你可以用贵阳话或者四川话和我交流吗","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_17"}
+2026-08-12T16:52:07.564+08:00 +00008.167s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=195 {"content_index":0,"delta":"你可以用贵阳话或者四川话和我交流吗？","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787642370","event_id":"event_18"}
+2026-08-12T16:52:07.568+08:00 +00008.170s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=198 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787642370","content_index":1,"text":"你可以用贵阳话或者四川话和我交流吗？","event_id":"event_19"}
+2026-08-12T16:52:08.083+08:00 +00008.686s [DOWN <- DUPLEX] type=response.output_audio.started bytes=151 {"question_id":"52426579787642370","response_id":"52426579787643394","tts_type":"default","type":"response.output_audio.started","event_id":"event_27"}
+2026-08-12T16:52:08.206+08:00 +00008.808s [DOWN <- DUPLEX] type=response.output_text.done bytes=190 {"event_id":"event_28","question_id":"52426579787642370","response_id":"52426579787643394","type":"response.output_text.done","text":"可以嘞，你想先听贵阳话还是四川话嘛？"}
+2026-08-12T16:52:08.709+08:00 +00009.311s [DOWN <- DUPLEX] type=response.output_audio.done bytes=127 {"event_id":"event_39","question_id":"52426579787642370","response_id":"52426579787643394","type":"response.output_audio.done"}
+2026-08-12T16:52:08.709+08:00 +00009.311s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_2",
+                                            "items": []
+                                          }
+2026-08-12T16:52:08.778+08:00 +00009.381s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=405
+                                          {
+                                            "event_id": "event_40",
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52426579787642370",
+                                                "role": "user",
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ],
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343
+                                              }
+                                            ]
+                                          }
+2026-08-12T16:52:12.060+08:00 +00012.662s [DOWN <- DUPLEX] type=response.done bytes=359 {"type":"response.done","event_id":"event_41","response":{"usage":{"total_tokens":4534,"input_tokens":4445,"output_tokens":89,"input_token_details":{"text_tokens":4373,"audio_tokens":72,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":89}}}}
+2026-08-12T16:52:12.060+08:00 +00012.662s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=114 {"item_id":"52426579787644162","type":"conversation.item.input_audio_transcription.started","event_id":"event_42"}
+2026-08-12T16:52:12.253+08:00 +00012.856s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=147 {"delta":"四川","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787644162","event_id":"event_43","content_index":0}
+2026-08-12T16:52:12.393+08:00 +00012.995s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=150 {"content_index":0,"delta":"四川话","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787644162","event_id":"event_44"}
+2026-08-12T16:52:12.576+08:00 +00013.178s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=153 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787644162","event_id":"event_45","content_index":0,"delta":"四川话。"}
+2026-08-12T16:52:12.636+08:00 +00013.239s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=150 {"delta":"四川话","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787644162","event_id":"event_46","content_index":0}
+2026-08-12T16:52:13.022+08:00 +00013.624s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=153 {"content_index":0,"delta":"四川话。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787644162","event_id":"event_47"}
+2026-08-12T16:52:13.024+08:00 +00013.626s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=156 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787644162","content_index":1,"text":"四川话。","event_id":"event_48"}
+2026-08-12T16:52:13.395+08:00 +00013.998s [DOWN <- DUPLEX] type=response.output_audio.started bytes=151 {"question_id":"52426579787644162","response_id":"52426579787644418","tts_type":"default","type":"response.output_audio.started","event_id":"event_52"}
+2026-08-12T16:52:14.066+08:00 +00014.669s [DOWN <- DUPLEX] type=response.output_text.done bytes=220 {"type":"response.output_text.done","text":"要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？","event_id":"event_70","question_id":"52426579787644162","response_id":"52426579787644418"}
+2026-08-12T16:52:14.666+08:00 +00015.268s [DOWN <- DUPLEX] type=response.output_audio.done bytes=127 {"question_id":"52426579787644162","response_id":"52426579787644418","type":"response.output_audio.done","event_id":"event_83"}
+2026-08-12T16:52:14.666+08:00 +00015.269s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_3",
+                                            "items": []
+                                          }
+2026-08-12T16:52:14.720+08:00 +00015.322s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=728
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52426579787642370",
+                                                "role": "user",
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ],
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343
+                                              },
+                                              {
+                                                "id": "52426579787644162",
+                                                "role": "user",
+                                                "timestamp": 1786524735165,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "四川话。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "role": "assistant",
+                                                "timestamp": 1786524736194,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？"
+                                                  }
+                                                ],
+                                                "id": "52426579787644418"
+                                              }
+                                            ],
+                                            "event_id": "event_84"
+                                          }
+2026-08-12T16:52:20.688+08:00 +00021.290s [DOWN <- DUPLEX] type=response.done bytes=355 {"type":"response.done","event_id":"event_85","response":{"usage":{"total_tokens":209,"input_tokens":54,"output_tokens":155,"input_token_details":{"text_tokens":0,"audio_tokens":54,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":155}}}}
+2026-08-12T16:52:20.688+08:00 +00021.290s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=114 {"type":"conversation.item.input_audio_transcription.started","event_id":"event_86","item_id":"52426579787645698"}
+2026-08-12T16:52:20.773+08:00 +00021.375s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=144 {"content_index":0,"delta":"呃","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_87"}
+2026-08-12T16:52:20.977+08:00 +00021.579s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=147 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_88","content_index":0,"delta":"呃我"}
+2026-08-12T16:52:21.157+08:00 +00021.759s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=150 {"item_id":"52426579787645698","event_id":"event_89","content_index":0,"delta":"呃我想","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T16:52:21.388+08:00 +00021.990s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=156 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_90","content_index":0,"delta":"呃我想看看"}
+2026-08-12T16:52:21.794+08:00 +00022.397s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=162 {"content_index":0,"delta":"呃我想看看明天","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_91"}
+2026-08-12T16:52:22.182+08:00 +00022.784s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=168 {"event_id":"event_92","content_index":0,"delta":"呃我想看看明天成都","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698"}
+2026-08-12T16:52:22.447+08:00 +00023.050s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=171 {"content_index":0,"delta":"呃我想看看明天成都的","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_93"}
+2026-08-12T16:52:22.777+08:00 +00023.379s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=177 {"content_index":0,"delta":"呃我想看看明天成都的天气","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_94"}
+2026-08-12T16:52:22.865+08:00 +00023.468s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=177 {"event_id":"event_95","content_index":0,"delta":"我想看看明天成都的天气。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698"}
+2026-08-12T16:52:22.928+08:00 +00023.531s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=177 {"content_index":0,"delta":"呃我想看看明天成都的天气","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_96"}
+2026-08-12T16:52:23.550+08:00 +00024.153s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=177 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787645698","event_id":"event_97","content_index":0,"delta":"我想看看明天成都的天气。"}
+2026-08-12T16:52:23.560+08:00 +00024.163s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=180 {"event_id":"event_98","type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787645698","content_index":1,"text":"我想看看明天成都的天气。"}
+2026-08-12T16:52:24.580+08:00 +00025.182s [DOWN <- DUPLEX] type=response.function_call_arguments.done bytes=209 {"items":[{"name":"websearch","arguments":"{\"query\":\"2026年8月13日成都天气\"}","call_id":"77bd71cf-d35f-45eb-9a96-4894b26b4efe"}],"type":"response.function_call_arguments.done","event_id":"event_99"}
+2026-08-12T16:52:24.581+08:00 +00025.183s [LOCAL TASK] event_id='51c9059e-4b3d-416e-8ede-16f1451173ec' timestamp=datetime.datetime(2026, 8, 12, 16, 52, 24, 580963) type='task.start' task_id='77bd71cf-d35f-45eb-9a96-4894b26b4efe'
+2026-08-12T16:52:36.697+08:00 +00037.300s [LOCAL TASK] event_id='2d137630-0bd2-455f-8f09-1ff447a237f1' timestamp=datetime.datetime(2026, 8, 12, 16, 52, 36, 696465) type='task.success' task_id='77bd71cf-d35f-45eb-9a96-4894b26b4efe' result=WebsearchToolOutput(query='2026年8月13日成都天气', references=[WebsearchReference(site_name='中国天气网', title='【成都天气预报15天_成都天气预报15天查询】-中国天气网', publish_time='2026年08月12日 07:56:15(CST) 星期三', summary='成都\n2026/08/12 ~ 2026/08/26\n今天\n08/12\n晴转多云\n36/25℃\n无持续风向<3级\n周四\n08/13\n晴\n37/23℃\n无持续风向<3级\n周五\n08/14\n晴\n36/25℃\n无持续风向<3级\n周六\n08/15\n多云\n34/25℃\n无持续风向<3级\n周日\n08/16\n小雨\n31/21℃\n无持续风向<3级\n周一\n08/17\n小雨转阴\n26/21℃\n无持续风向<3级\n周二\n08/18\n小雨\n30/23℃\n无持续风向<3级\n周三\n08/19\n多云转晴\n33/24℃\n西南风<3级\n周四\n08/20\n雨转多云\n35/25℃\n东南风<3级\n西风<3级\n周五\n08/21\n雨\n34/23℃\n南风<3级\n西北风<3级\n周六\n08/22\n雨\n34/23℃\n东风<3级\n西北风<3级\n周日\n08/23\n雨\n34/24℃\n东南风<3级\n西北风<3级\n周一\n08/24\n雨\n34/23℃\n东'), WebsearchReference(site_name='天气二四网', title='成都天气预报24小时', publish_time='2026年08月12日 13:54:00(CST) 星期三', summary='成都天气预报24小时\n成都  [切换] 2026-08-12 13:54   更新\n2026年08月12日 星期三 马年六月三十\n36°C\n晴 / 晴 24~36°C\n湿度 47% 南风 2级 空气：优 35 紫外线 中等\n2026-08-12 10:06\n成都市气象台更新高温橙色预警信号[II级/严重]\n成都市气象台2026年08月12日10时06分继续发布金牛区高温橙色预警信号：金牛区（荷花池街道、驷马桥街道、茶店子街道、营门口街道、九里堤街道、西安路街道、抚琴街道、五块石街道、金泉街道、沙河源街道、天回镇街道、西华街道、凤凰山街道）未来24小时内最高气温将升至35℃以上。请注意防范。\n成都市24小时天气预报详情\n时间 图标  天气  温度  降雨\n13时  晴  36℃  —\n14时 - 16时  晴  36℃  —\n17时 - 20时  多云  32 - 36℃  —\n21时 - 明天11点  晴  26 - 32℃  —\n成都市降雨量单位为毫米(mm) 最后更新时间: 13:54\n成都市天气未来十五天走势图\n高温\n低温\n成都天气预报未来15天查询\n日期\n一周\n白天 晚上\n白天\n/ 晚上\n低温/高温\n08月12日\n(今天)\n晴  24°C / 36°C\n08月13日\n星期四\n晴  27°C / 36°C\n08月14日\n星期五\n晴转阴  26°C / 35°C\n08月15日\n星期六\n多云转阴  27°C / 35°C\n08月16日\n星期日\n阴转多云  27°C / 34°C\n08月17日\n星期一\n晴转多云  24°C / 28°C\n08月18日\n星期二\n多云\n/ 阴\n24°C / 29°C\n08月19日\n星期三\n多云转阴  24°C / 30°C\n第二周\n日期\n第二周\n白天 晚上\n白天\n/ 晚上\n低温/高温\n08月20日\n星期四\n多云转阴  25°C / 31°C\n08月21日\n星期五\n小雨  25°C / 32°C\n08月22日\n星期六\n中雨  26°C / 34°C\n08月23日\n星期日\n中雨  25°C / 31°C\n08月24日\n星期一\n大雨转中雨  25°C / 32°C\n08月25日\n星期二\n小雨转中雨  25°C / 32°C\n08月26日\n星期三\n小雨  25°C / 32°C\n成都市未来一周和十五天（白天/晚上）天气预报 - 更新时间: 13:54\n成都天气实时\n体感温度： 39.1 °C\n短时最大降水量： 0.08 mm\n能见度： 31.72 km\n风速： 7.45 km/h\nPM25： 16\nAQI： 35\n气压： 94.6 kPa\n日出： 06:28\n日落： 19:49\n成都天气预报一周\n平均温度：25 ~ 33°C'), WebsearchReference(site_name='天气十二网', title='2026年8月天气预报 成都未来30天天气预报表', publish_time='2026年08月12日 00:49:28(CST) 星期三', summary='2026年8月天气预报 成都未来30天天气预报表\n更新时间： 2026-08-12 00:49:28\n2026年8月天气预报\n2026年8月3日，周一，多云转晴，20℃~29℃，无持续风向转西风，风力<3级\n2026年8月4日，周二，多云转雨，24℃~36℃，南风转北风，风力<3级\n2026年8月5日，周三，多云转晴，24℃~22℃，无持续风向转，风力<3级\n2026年8月6日，周四，多云转晴，24℃~31℃，无持续风向转西风，风力<3级\n2026年8月7日，周五，多云，23℃~22℃，无持续风向转，风力<3级\n2026年8月8日，周六，多云，24℃~29℃，无持续风向转，风力<3级\n2026年8月9日，周日，多云转雨，24℃~36℃，南风转北风，风力<3级\n2026年8月10日，周一，雨，24℃~22℃，南风转北风，风力3-4级转<3级\n2026年8月11日，周二，雨转晴，25℃~31℃，无\n持续风向转，风力<3级\n2026年8月12日，周三，多云，20℃~34℃，无持续风向转西风，风力<3级\n2026年8月13日，周四，雨转晴，23℃~35℃，南风转北风，风力<3级\n2026年8月14日，周五，晴转雨，26℃~22℃，南风转北风，风力<3级\n2026年8月15日，周六，雨，26℃~31℃，南风转北风，风力<3级\n2026年8月16日，周日，多云转晴，24℃~27℃，无持续风向转西风，风力<3级\n2026年8月17日，周一，雨转晴，25℃~27℃，南风转北风，风力<3级\n2026年8月18日，周二，雨，20℃~29℃，无持续风向转，风力<3级\n2026年8月19日，周三，多云转晴，24℃~35℃，南风转北风，风力<3级\n2026年8月20日，周四，多云转晴，26℃~35℃，东北风转西北风，风力<3级\n2026年8月21日，周五，多云，24℃~29℃，南风转北风，风力<3级\n2026\n年8月22日，周六，多云，24℃~36℃，南风转北风，风力<3级\n2026年8月23日，周日，多云，24℃~36℃，无持续风向转西风，风力<3级\n2026年8月24日，周一，雨转晴，20℃~27℃，无持续风向，风力<3级\n2026年8月25日，周二，多云，24℃~36℃，无持续风向，风力<3级\n2026年8月26日，周三，多云，25℃~22℃，南风转北风，风力<3级\n2026年8月27日，周四，雨，26℃~35℃，无持续风向转，风力<3级\n2026年8月28日，周五，多云转晴，24℃~31℃，无持续风向转，风力<3级\n2026年8月29日，周六，雨转多云，25℃~29℃，南风转北风，风力<3级\n2026年8月30日，周日，多云转晴，20℃~22℃，南风转北风，风力<3级\n2026年8月31日，周一，多云转阴，25℃~27℃，南风，风力<3级\n2026年9月1日，周二，多云转晴，24℃~27℃，'), WebsearchReference(site_name='IP.cn', title='四川省 成都市 今日天气', publish_time='2026年08月12日 10:52:02(CST) 星期三', summary='四川省 成都市 今日天气\n35°  晴  17 优\n南风 <3级   湿度 50%   气压 948 Pa 更新时间：2026-08-12 10:52:02\n成都天气\n最新四川省成都市天气，包含每天最高气温、最低气温、天气状况及风向等天气信息\n成都天气：2026-08-12 天气预报\n成都今天24小时天气趋势\n12时\n南风\n<3级\n13时\n南风\n<3级\n14时\n西南风\n<3级\n15时\n南风\n<3级\n16时\n东南风\n<3级\n17时\n北风\n<3级\n18时\n东南风\n<3级\n19时\n西南风\n<3级\n20时\n西北风\n<3级\n21时\n西风\n3-4级\n22时\n西风\n3-4级\n23时\n西风\n<3级\n00时\n西北风\n<3级\n01时\n西北风\n<3级\n02时\n西北风\n<3级\n03时\n西南风\n<3级\n04时\n西南风\n<3级\n05时\n西北风\n<3级\n06时\n东南风\n<3级\n07时\n东风\n<3级\n08时\n东北风\n<3级\n\n8月12日\n12\n晴转多云\n25℃  ～ 36℃\n日出06:28\n日落19:49\n08月13日\n13\n晴\n23℃  ～ 37℃\n日出06:29\n日落19:48\n08月14日\n14\n晴\n25℃  ～ 36℃\n日出06:29\n日落19:47\n08月15日\n15\n多云\n25℃   ～ 34℃\n日出06:30\n日落19:46\n08月16日\n16\n小雨\n21℃   ～ 31℃\n日出06:30\n日落19:45\n日期 天气 气温 风力 日出日落时间\n星期三\n2026-08-12 天气  \n晴转多云\n25℃ ～ 36℃\n微风\n<3级\n日出06:28\n日落19:49\n星期四\n2026-08-13 天气 \n晴\n23℃ ～ 37℃\n微风\n<3级\n日出06:29\n日落19:48\n星期五\n2026-08-14 天气 \n晴\n25℃ ～ 36℃\n微风\n<3级\n日出06:29\n日落19:47\n星期六\n2026-08-15 天\n气 \n多云\n25℃ ～ 34℃\n微风\n<3级\n日出06:30\n日落19:46\n星期日\n2026-08-16 天气 \n小雨\n21℃ ～ 31℃\n微风\n<3级\n日出06:30\n日落19:45\n'), WebsearchReference(site_name='IP.cn', title='成都7天天气', publish_time='2026年08月12日 10:52:02(CST) 星期三', summary='四川省 成都市 今日天气\n35°  晴  17 优\n南风 <3级   湿度 50%   气压 948 Pa 更新时间：2026-08-12 10:52:02\n成都7天天气\n最新四川省成都市7天天气，包含每天最高气温、最低气温、天气状况及风向等天气信息\n成都天气：2026-08-12至2026-08-18 天气预报\n一\n二\n三\n四\n五\n六\n日\n08月12日\n12\n晴转多云\n25℃  ～ 36℃\n日出06:28\n日落19:49\n08月13日\n13\n晴\n23℃   ～ 37℃\n日出06:29\n日落19:48\n08月14日\n14\n晴\n25℃   ～ 36℃\n日出06:29\n日落19:47\n08月15日\n15\n多云\n25℃   ～ 34℃\n日出06:30\n日落19:46\n08月16日\n16\n小雨\n21℃  ～ 31℃\n日出06:30\n日落19:45\n08月17日\n17\n小雨转阴\n21℃  ～ 26℃\n日出06:31\n日落19:44\n08月18日\n18\n小雨\n23℃  ～ 30℃\n日出06:32\n日落19:43\n日期 天气 气温 风力 日出日落时间\n星期三\n2026-08-12 天气  \n晴转多云\n25℃ ～ 36℃\n微风\n<3级\n日出06:28\n日落19:49\n星期四\n2026-08-13 天气 \n晴\n23℃ ～ 37℃\n微风\n<3级\n日出06:29\n日落19:48\n星期五\n2026-08-14 天气 \n晴\n25℃ ～ 36℃\n微风\n<3级\n日出06:29\n日落19:47\n星期六\n2026-08-15 天气 \n多云\n25℃ ～ 34℃\n微风\n<3级\n日出06:30\n日落19:46\n星期日\n2026-08-16 天气 \n小雨\n21℃ ～ 31℃\n微风\n<3级\n日出06:30\n日落19:45\n星期一\n2026-08-17 天气  \n小雨转阴\n21℃ ～ 26℃\n微风\n<3级\n日出06:31\n日落19:44\n星期二\n2026-08-18 天气 \n小雨\n23℃ ～ 30℃\n微风\n<3级\n日出06:32\n')], message='共 5 条参考')
+2026-08-12T16:52:36.698+08:00 +00037.300s [UP -> DUPLEX] type=conversation.item.create bytes=9760 {"type":"conversation.item.create","event_id":"event_4","items":[{"role":"tool","call_id":"77bd71cf-d35f-45eb-9a96-4894b26b4efe","content":[{"type":"input_text","text":"2026年8月13日成都天气\n\n1. 中国天气网\n【成都天气预报15天_成都天气预报15天查询】-中国天气网\n2026年08月12日 07:56:15(CST) 星期三\n成都\n2026/08/12 ~ 2026/08/26\n今天\n08/12\n晴转多云\n36/25℃\n无持续风向<3级\n周四\n08/13\n晴\n37/23℃\n无持续风向<3级\n周五\n08/14\n晴\n36/25℃\n无持续风向<3级\n周六\n08/15\n多云\n34/25℃\n无持续风向<3级\n周日\n08/16\n小雨\n31/21℃\n无持续风向<3级\n周一\n08/17\n小雨转阴\n26/21℃\n无持续风向<3级\n周二\n08/18\n小雨\n30/23℃\n无持续风向<3级\n周三\n08/19\n多云转晴\n33/24℃\n西南风<3级\n周四\n08/20\n雨转多云\n35/25℃\n东南风<3级\n西风<3级\n周五\n08/21\n雨\n34/23℃\n南风<3级\n西北风<3级\n周六\n08/22\n雨\n34/23℃\n东风<3级\n西北风<3级\n周日\n08/23\n雨\n34/24℃\n东南风<3级\n西北风<3级\n周一\n08/24\n雨\n34/23℃\n东\n2. 天气二四网\n成都天气预报24小时\n2026年08月12日 13:54:00(CST) 星期三\n成都天气预报24小时\n成都  [切换] 2026-08-12 13:54   更新\n2026年08月12日 星期三 马年六月三十\n36°C\n晴 / 晴 24~36°C\n湿度 47% 南风 2级 空气：优 35 紫外线 中等\n2026-08-12 10:06\n成都市气象台更新高温橙色预警信号[II级/严重]\n成都市气象台2026年08月12日10时06分继续发布金牛区高温橙色预警信号：金牛区（荷花池街道、驷马桥街道、茶店子街道、营门口街道、九里堤街道、西安路街道、抚琴街道、五块石街道、金泉街道、沙河源街道、天回镇街道、西华街道、凤凰山街道）未来24小时内最高气温将升至35℃以上。请注意防范。\n成都市24小时天气预报详情\n时间 图标  天气  温度  降雨\n13时  晴  36℃  —\n14时 - 16时  晴  36℃  —\n17时 - 20时  多云  32 - 36℃  —\n21时 - 明天11点  晴  26 - 32℃  —\n成都市降雨量单位为毫米(mm) 最后更新时间: 13:54\n成都市天气未来十五天走势图\n高温\n低温\n成都天气预报未来15天查询\n日期\n一周\n白天 晚上\n白天\n/ 晚上\n低温/高温\n08月12日\n(今天)\n晴  24°C / 36°C\n08月13日\n星期四\n晴  27°C / 36°C\n08月14日\n星期五\n晴转阴  26°C / 35°C\n08月15日\n星期六\n多云转阴  27°C / 35°C\n08月16日\n星期日\n阴转多云  27°C / 34°C\n08月17日\n星期一\n晴转多云  24°C / 28°C\n08月18日\n星期二\n多云\n/ 阴\n24°C / 29°C\n08月19日\n星期三\n多云转阴  24°C / 30°C\n第二周\n日期\n第二周\n白天 晚上\n白天\n/ 晚上\n低温/高温\n08月20日\n星期四\n多云转阴  25°C / 31°C\n08月21日\n星期五\n小雨  25°C / 32°C\n08月22日\n星期六\n中雨  26°C / 34°C\n08月23日\n星期日\n中雨  25°C / 31°C\n08月24日\n星期一\n大雨转中雨  25°C / 32°C\n08月25日\n星期二\n小雨转中雨  25°C / 32°C\n08月26日\n星期三\n小雨  25°C / 32°C\n成都市未来一周和十五天（白天/晚上）天气预报 - 更新时间: 13:54\n成都天气实时\n体感温度： 39.1 °C\n短时最大降水量： 0.08 mm\n能见度： 31.72 km\n风速： 7.45 km/h\nPM25： 16\nAQI： 35\n气压： 94.6 kPa\n日出： 06:28\n日落： 19:49\n成都天气预报一周\n平均温度：25 ~ 33°C\n3. 天气十二网\n2026年8月天气预报 成都未来30天天气预报表\n2026年08月12日 00:49:28(CST) 星期三\n2026年8月天气预报 成都未来30天天气预报表\n更新时间： 2026-08-12 00:49:28\n2026年8月天气预报\n2026年8月3日，周一，多云转晴，20℃~29℃，无持续风向转西风，风力<3级\n2026年8月4日，周二，多云转雨，24℃~36℃，南风转北风，风力<3级\n2026年8月5日，周三，多云转晴，24℃~22℃，无持续风向转，风力<3级\n2026年8月6日，周四，多云转晴，24℃~31℃，无持续风向转西风，风力<3级\n2026年8月7日，周五，多云，23℃~22℃，无持续风向转，风力<3级\n2026年8月8日，周六，多云，24℃~29℃，无持续风向转，风力<3级\n2026年8月9日，周日，多云转雨，24℃~36℃，南风转北风，风力<3级\n2026年8月10日，周一，雨，24℃~22℃，南风转北风，风力3-4级转<3级\n2026年8月11日，周二，雨转晴，25℃~31℃，无\n持续风向转，风力<3级\n2026年8月12日，周三，多云，20℃~34℃，无持续风向转西风，风力<3级\n2026年8月13日，周四，雨转晴，23℃~35℃，南风转北风，风力<3级\n2026年8月14日，周五，晴转雨，26℃~22℃，南风转北风，风力<3级\n2026年8月15日，周六，雨，26℃~31℃，南风转北风，风力<3级\n2026年8月16日，周日，多云转晴，24℃~27℃，无持续风向转西风，风力<3级\n2026年8月17日，周一，雨转晴，25℃~27℃，南风转北风，风力<3级\n2026年8月18日，周二，雨，20℃~29℃，无持续风向转，风力<3级\n2026年8月19日，周三，多云转晴，24℃~35℃，南风转北风，风力<3级\n2026年8月20日，周四，多云转晴，26℃~35℃，东北风转西北风，风力<3级\n2026年8月21日，周五，多云，24℃~29℃，南风转北风，风力<3级\n2026\n年8月22日，周六，多云，24℃~36℃，南风转北风，风力<3级\n2026年8月23日，周日，多云，24℃~36℃，无持续风向转西风，风力<3级\n2026年8月24日，周一，雨转晴，20℃~27℃，无持续风向，风力<3级\n2026年8月25日，周二，多云，24℃~36℃，无持续风向，风力<3级\n2026年8月26日，周三，多云，25℃~22℃，南风转北风，风力<3级\n2026年8月27日，周四，雨，26℃~35℃，无持续风向转，风力<3级\n2026年8月28日，周五，多云转晴，24℃~31℃，无持续风向转，风力<3级\n2026年8月29日，周六，雨转多云，25℃~29℃，南风转北风，风力<3级\n2026年8月30日，周日，多云转晴，20℃~22℃，南风转北风，风力<3级\n2026年8月31日，周一，多云转阴，25℃~27℃，南风，风力<3级\n2026年9月1日，周二，多云转晴，24℃~27℃，\n4. IP.cn\n四川省 成都市 今日天气\n2026年08月12日 10:52:02(CST) 星期三\n四川省 成都市 今日天气\n35°  晴  17 优\n南风 <3级   湿度 50%   气压 948 Pa 更新时间：2026-08-12 10:52:02\n成都天气\n最新四川省成都市天气，包含每天最高气温、最低气温、天气状况及风向等天气信息\n成都天气：2026-08-12 天气预报\n成都今天24小时天气趋势\n12时\n南风\n<3级\n13时\n南风\n<3级\n14时\n西南风\n<3级\n15时\n南风\n<3级\n16时\n东南风\n<3级\n17时\n北风\n<3级\n18时\n东南风\n<3级\n19时\n西南风\n<3级\n20时\n西北风\n<3级\n21时\n西风\n3-4级\n22时\n西风\n3-4级\n23时\n西风\n<3级\n00时\n西北风\n<3级\n01时\n西北风\n<3级\n02时\n西北风\n<3级\n03时\n西南风\n<3级\n04时\n西南风\n<3级\n05时\n西北风\n<3级\n06时\n东南风\n<3级\n07时\n东风\n<3级\n08时\n东北风\n<3级\n\n8月12日\n12\n晴转多云\n25℃  ～ 36℃\n日出06:28\n日落19:49\n08月13日\n13\n晴\n23℃  ～ 37℃\n日出06:29\n日落19:48\n08月14日\n14\n晴\n25℃  ～ 36℃\n日出06:29\n日落19:47\n08月15日\n15\n多云\n25℃   ～ 34℃\n日出06:30\n日落19:46\n08月16日\n16\n小雨\n21℃   ～ 31℃\n日出06:30\n日落19:45\n日期 天气 气温 风力 日出日落时间\n星期三\n2026-08-12 天气  \n晴转多云\n25℃ ～ 36℃\n微风\n<3级\n日出06:28\n日落19:49\n星期四\n2026-08-13 天气 \n晴\n23℃ ～ 37℃\n微风\n<3级\n日出06:29\n日落19:48\n星期五\n2026-08-14 天气 \n晴\n25℃ ～ 36℃\n微风\n<3级\n日出06:29\n日落19:47\n星期六\n2026-08-15 天\n气 \n多云\n25℃ ～ 34℃\n微风\n<3级\n日出06:30\n日落19:46\n星期日\n2026-08-16 天气 \n小雨\n21℃ ～ 31℃\n微风\n<3级\n日出06:30\n日落19:45\n\n5. IP.cn\n成都7天天气\n2026年08月12日 10:52:02(CST) 星期三\n四川省 成都市 今日天气\n35°  晴  17 优\n南风 <3级   湿度 50%   气压 948 Pa 更新时间：2026-08-12 10:52:02\n成都7天天气\n最新四川省成都市7天天气，包含每天最高气温、最低气温、天气状况及风向等天气信息\n成都天气：2026-08-12至2026-08-18 天气预报\n一\n二\n三\n四\n五\n六\n日\n08月12日\n12\n晴转多云\n25℃  ～ 36℃\n日出06:28\n日落19:49\n08月13日\n13\n晴\n23℃   ～ 37℃\n日出06:29\n日落19:48\n08月14日\n14\n晴\n25℃   ～ 36℃\n日出06:29\n日落19:47\n08月15日\n15\n多云\n25℃   ～ 34℃\n日出06:30\n日落19:46\n08月16日\n16\n小雨\n21℃  ～ 31℃\n日出06:30\n日落19:45\n08月17日\n17\n小雨转阴\n21℃  ～ 26℃\n日出06:31\n日落19:44\n08月18日\n18\n小雨\n23℃  ～ 30℃\n日出06:32\n日落19:43\n日期 天气 气温 风力 日出日落时间\n星期三\n2026-08-12 天气  \n晴转多云\n25℃ ～ 36℃\n微风\n<3级\n日出06:28\n日落19:49\n星期四\n2026-08-13 天气 \n晴\n23℃ ～ 37℃\n微风\n<3级\n日出06:29\n日落19:48\n星期五\n2026-08-14 天气 \n晴\n25℃ ～ 36℃\n微风\n<3级\n日出06:29\n日落19:47\n星期六\n2026-08-15 天气 \n多云\n25℃ ～ 34℃\n微风\n<3级\n日出06:30\n日落19:46\n星期日\n2026-08-16 天气 \n小雨\n21℃ ～ 31℃\n微风\n<3级\n日出06:30\n日落19:45\n星期一\n2026-08-17 天气  \n小雨转阴\n21℃ ～ 26℃\n微风\n<3级\n日出06:31\n日落19:44\n星期二\n2026-08-18 天气 \n小雨\n23℃ ～ 30℃\n微风\n<3级\n日出06:32\n\n共 5 条参考"}]}]}
+2026-08-12T16:52:37.728+08:00 +00038.331s [DOWN <- DUPLEX] type=response.output_audio.started bytes=152 {"question_id":"52426579787645698","response_id":"52426579787646466","tts_type":"default","type":"response.output_audio.started","event_id":"event_106"}
+2026-08-12T16:52:39.318+08:00 +00039.920s [DOWN <- DUPLEX] type=response.output_text.done bytes=351 {"question_id":"52426579787645698","response_id":"52426579787646466","type":"response.output_text.done","text":"明天成都大晴天哦，最高温要到37度，最低23度，风不大还是有点烤人哈。出门记得把防晒做好，多喝水防到中暑，要是在外头待久了，找得到阴凉地方就多歇哈。","event_id":"event_159"}
+2026-08-12T16:52:40.095+08:00 +00040.698s [DOWN <- DUPLEX] type=response.output_audio.done bytes=128 {"response_id":"52426579787646466","type":"response.output_audio.done","event_id":"event_175","question_id":"52426579787645698"}
+2026-08-12T16:52:40.096+08:00 +00040.698s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_5",
+                                            "items": []
+                                          }
+2026-08-12T16:52:40.148+08:00 +00040.751s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=1206
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52426579787642370",
+                                                "role": "user",
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787644162",
+                                                "role": "user",
+                                                "timestamp": 1786524735165,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "四川话。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787644418",
+                                                "role": "assistant",
+                                                "timestamp": 1786524736194,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787645698",
+                                                "role": "user",
+                                                "timestamp": 1786524745698,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "我想看看明天成都的天气。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787646466",
+                                                "role": "assistant",
+                                                "timestamp": 1786524761459,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "明天成都大晴天哦，最高温要到37度，最低23度，风不大还是有点烤人哈。出门记得把防晒做好，多喝水防到中暑，要是在外头待久了，找得到阴凉地方就多歇哈。"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "event_id": "event_176"
+                                          }
+2026-08-12T16:52:52.459+08:00 +00053.061s [DOWN <- DUPLEX] type=response.done bytes=363 {"type":"response.done","event_id":"event_177","response":{"usage":{"total_tokens":9269,"input_tokens":8875,"output_tokens":394,"input_token_details":{"text_tokens":8451,"audio_tokens":424,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":394}}}}
+2026-08-12T16:52:52.459+08:00 +00053.061s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=115 {"item_id":"52426579787650562","type":"conversation.item.input_audio_transcription.started","event_id":"event_178"}
+2026-08-12T16:52:52.459+08:00 +00053.062s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=148 {"content_index":0,"delta":"那你","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_179"}
+2026-08-12T16:52:52.510+08:00 +00053.112s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=151 {"content_index":0,"delta":"那你看","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_180"}
+2026-08-12T16:52:52.765+08:00 +00053.367s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=154 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_181","content_index":0,"delta":"那你看哈"}
+2026-08-12T16:52:52.981+08:00 +00053.583s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=160 {"event_id":"event_182","content_index":0,"delta":"那你看哈成都","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562"}
+2026-08-12T16:52:53.226+08:00 +00053.829s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=163 {"delta":"那你看哈成都这","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_183","content_index":0}
+2026-08-12T16:52:53.477+08:00 +00054.080s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_184","content_index":0,"delta":"那你看哈成都这这"}
+2026-08-12T16:52:53.647+08:00 +00054.249s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=172 {"event_id":"event_185","content_index":0,"delta":"那你看哈成都这这两天","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562"}
+2026-08-12T16:52:53.890+08:00 +00054.492s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=175 {"content_index":0,"delta":"那你看哈成都这这两天有","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_186"}
+2026-08-12T16:52:54.100+08:00 +00054.702s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=178 {"event_id":"event_187","content_index":0,"delta":"那你看哈成都这这两天有哪","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562"}
+2026-08-12T16:52:54.206+08:00 +00054.809s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=181 {"content_index":0,"delta":"那你看哈成都这这两天有哪样","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_188"}
+2026-08-12T16:52:54.273+08:00 +00054.876s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=187 {"delta":"那你看哈成都这这两天有哪样好看","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_189","content_index":0}
+2026-08-12T16:52:54.425+08:00 +00055.028s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=190 {"content_index":0,"delta":"那你看哈成都这这两天有哪样好看的","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_190"}
+2026-08-12T16:52:54.577+08:00 +00055.179s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=196 {"content_index":0,"delta":"那你看哈成都这这两天有哪样好看的电影","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_191"}
+2026-08-12T16:52:54.684+08:00 +00055.287s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=199 {"event_id":"event_192","content_index":0,"delta":"那你看哈成都这这两天有哪样好看的电影？","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562"}
+2026-08-12T16:52:54.739+08:00 +00055.341s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=196 {"content_index":0,"delta":"那你看哈成都这这两天有哪样好看的电影","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_193"}
+2026-08-12T16:52:55.340+08:00 +00055.942s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=199 {"delta":"那你看哈成都这这两天有哪样好看的电影？","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787650562","event_id":"event_194","content_index":0}
+2026-08-12T16:52:55.342+08:00 +00055.945s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=202 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787650562","content_index":1,"text":"那你看哈成都这这两天有哪样好看的电影？","event_id":"event_195"}
+2026-08-12T16:52:56.130+08:00 +00056.732s [DOWN <- DUPLEX] type=response.function_call_arguments.done bytes=217 {"items":[{"call_id":"7c60ced6-3c06-420b-a005-eaac3744daaa","name":"websearch","arguments":"{\"query\":\"2026年8月成都上映电影推荐\"}"}],"type":"response.function_call_arguments.done","event_id":"event_196"}
+2026-08-12T16:52:56.131+08:00 +00056.733s [LOCAL TASK] event_id='140cf4d8-c0b2-4c31-a636-46d92ca132bd' timestamp=datetime.datetime(2026, 8, 12, 16, 52, 56, 130835) type='task.start' task_id='7c60ced6-3c06-420b-a005-eaac3744daaa'
+2026-08-12T16:53:08.194+08:00 +00068.796s [LOCAL TASK] event_id='d2498f69-3383-42a0-af71-effdc9112a1c' timestamp=datetime.datetime(2026, 8, 12, 16, 53, 8, 193564) type='task.success' task_id='7c60ced6-3c06-420b-a005-eaac3744daaa' result=WebsearchToolOutput(query='2026年8月成都上映电影推荐', references=[WebsearchReference(site_name='猫眼电影', title='猫眼电影 - 娱乐看猫眼', publish_time='2026年08月08日 00:00:00(CST) 星期六', summary='猫眼电影\n成都\n热映\n影院\n待映\n最受好评电影\n观众评分 9.7\n八仙！\n观众评分 9.7\n奥德赛\n观众评分 9.6\n年会不能停！2\n观众评分 9.5\n蜘蛛侠：崭新之日\n观众评分 9.4\n功夫女足\n观众评分 9\n痴迷\n观众评分 9\n小黄人与大怪兽\n观众评分 8.9\n想你了\n去你的岛\n汪汪队立大功大电影3：勇闯恐龙岛\n大唐妖探\n欢迎来龙餐馆\n蜘蛛侠：崭新之日\n观众评 9.5\n主演: 汤姆·赫兰德,赞达亚·科尔曼,萨迪·辛克\n今天282家影院放映3312场\n八仙！\n观众评 9.7\n主演: 李绍哲,陈浩,立冬\n今天279家影院放映2621场\n功夫女足\n观众评 9.4\n主演: 张小斐,迪丽热巴,张艺兴\n今天278家影院放映1128场\n年会不能停！2\n观众评 9.6\n主演: 张若昀,白客,高叶\n今天244家影院放映733场\n去你的岛\n暂无评分\n主演: 夏天,张福正\n今天269家影院放映1233场\n奥德赛\n\n点映评 9.7\n主演: 马特·达蒙,汤姆·赫兰德,安妮·海瑟薇\n2026-08-14 下周五上映\n预售\n痴迷\n观众评 9.0\n主演: 迈克尔·约翰斯顿,印达·纳瓦雷特,库珀·汤姆林森\n今天227家影院放映673场\n汪汪队立大功大电影3：勇闯恐龙岛\n主演: 阿奇,毛毛,天天\n今天146家影院放映222场\n大唐妖探\n主演: 雷淞然,张呈,蔡海婷\n2026-08-22上映\n预售\n欢迎来龙餐馆\n主演: 沈腾,蒋奇明,奥马尔·谢里夫\n2026-08-11 下周二上映\n预售\n想你了\n观众评 8.9\n主演: 章若楠,金靖,任彬\n今天60家影院放映93场\n小黄人与大怪兽\n观众评 9.0\n主演: 詹姆斯,皮埃尔·柯芬,艾莉森·珍妮\n今天64家影院放映92场\n热门影人\n白客\n高叶\n李晨\n王耀庆\n李乃文\n迪丽热巴\n张艺兴\n汤姆·赫兰德\n潘斌龙\n张小斐\n娱乐热点\n1. 惊悚冒险大片《逃出绝命街》预售开启 安妮海瑟薇\n直面恐龙围猎\n2. 《欢迎来龙餐馆》释出美食特辑与海报 烟火气中见人情温暖\n3. 《重器》看片会在京举行 以法治精神致敬时代守护者\n4. 动画电影《八仙！》曝配音特辑 欢乐声线鲜活塑造凡人八仙群像\n5. 电影《大唐妖探》北京首映礼 欢乐探案获观众盛赞：“夯！”\n6. 观影福利 |《欢迎来龙餐馆》8月8日，沈腾蒋奇明带中餐闯中东！\n7. 观影福利 |《去你的岛》8月7日，提前登岛，祝你美梦成真！\n8. 现实影片《有你真好1》直面民企传承之困\n9. 战火硝烟遇上人间烟火 《欢迎来龙餐馆》8月11日IMAX“开门营业”\n10. 《汪汪队立大功大电影3》发布“暖心相伴”预告暑假亲子观影首选\n大地开元影城33.9元起\n简阳市新民街108号王府景熙园B座2楼\n1301.4km\n退\n改签\n小吃\n太平洋影城（简阳德盛店）31.9元起\n简阳市雄州大道德盛广场百伦百货9楼\n1302.8km\n退\n改签\n小吃\n折扣卡'), WebsearchReference(site_name='川观新闻', title='青春音乐电影《校歌英雄》在蓉首映 用校歌串起一代人的青春记忆', publish_time='2026年08月08日 20:04:00(CST) 星期六', summary='青春音乐电影《校歌英雄》在蓉首映 用校歌串起一代人的青春记忆\n川观新闻2026-08-08 20:04\n川观新闻 | 记者 陈云鸽\n2026-08-08 20:04\n川观新闻记者 陈云鸽\n8月8日，青春音乐电影《校歌英雄》成都首映式举行。《校歌英雄》由西昌学院师生牵头策划、自筹资金拍摄，云南善为传媒负责出品制作，云南工商学院、昆明城市学院等多所高校学子共同参与创作，是一部兼具学生原创力量与专业制作支撑的青春音乐院线电影。\n青春音乐电影《校歌英雄》首映式在成都举行（主办方供图）\n故事扎根大学校园，用十余首原创歌曲串联完整剧情，将校歌底蕴、音乐理想与青春成长故事相融，生动刻画当代大学生的精神面貌，也为校园题材影片打造了新颖的叙事范本。\n首映礼上，西昌学院成都校友会会长钟家全作为1985级校友，回忆了母校的校训精神，并表示影片以校歌为线索讲述当代大学生的追梦故事，既是一次青春影像的表达，也是校园文化与电影艺术的一次融合尝试。\n青春音乐电影《校歌英雄》首映式在成都举行（主办方供图）\n一级编剧刘宁从专业角度分享了对影片的看法。他坦言，最初对学生团队加音乐剧类型的组合不抱高期待，但成片效果令人改观。他特别提到开篇一镜到底的执行难度，以及剧本结构的巧妙设计。全片十余首原创歌曲风格多元，主要人声采用AI演唱，为低成本音乐制作提供了新的思路。\n来自中国戏剧文学学会、四川省舞蹈家协会、成都艺术职业大学的专家在映后交流中对影片在类型探索和校歌文化表达上的尝试给予肯定。主创团队也与现场观众分享了拍摄过程中的幕后故事。\n据悉，《校歌英雄》已正式登陆爱奇艺。\n陈云鸽\n川观记者\n编辑：杜馥利  校对：刘宇男 屈杉杉\n责编：邓强  审核：颜婧\n'), WebsearchReference(site_name='手机搜狐网', title='国产动画电影《去你的岛》宣布提档至8月7日上映 刘宇宁倾情献唱主题曲', publish_time='2026年08月03日 10:54:00(CST) 星期一', summary='国产动画电影《去你的岛》宣布提档至8月7日上映 刘宇宁倾情献唱主题曲\n搜狐电影\n编辑于 2026-08-03 10:54\n搜狐娱乐讯 近日，动画电影《去你的岛》正式宣布提档至8月7日并官宣预售开启。影片发布由刘宇宁演唱的主题曲《来我的岛》MV，这支主题曲以“遗憾”为情感锚点，承载着男主殷显困在幻境中的执念，也唱尽了相爱却走散的遗憾，让影片细腻戳心的情感表达更有分量。\n电影改编自番大王同名原著小说，由周浩然执导，梅琼宇、番大王编剧，成都光线动画有限公司、北京光线动画有限公司、北京光线影业有限公司、北京光线传媒股份有限公司出品。影片预售已开启，8月7日全国上映。\n刘宇宁演唱动画电影《去你的岛》主题曲 温柔声线倾诉男主深藏心底的偏爱与愧疚\n幻境现实双线交织 刘宇宁唱尽执念与遗憾\n动画电影《去你的岛》发布由刘宇宁演唱的主题曲《来我的岛》MV，刘宇宁以极具分辨度的音色，温柔唱出殷显视角的遗憾，一首歌曲结束却是回味悠长的治愈。MV以一段治疗室的独白开篇，心理医生的诊断字字戳破岛屿的本质——殷显的心因性失忆与重度抑郁症，才是这座永夜之岛的真正源头。变成兔子的他、散落在岛上的一座座房子，全部都是他潜意识里的创伤投射。MV在两条时空线之间来回切换：幻境线中，殷显兔困在岛上无法离开，王结香的出现像一束光劈开黑暗，也一点点撬开了他封死的记忆；现实线中，躺在病床上的殷显反复念着同一句话，把所有放不下的情绪都装进了“来我的岛”这四个字里。\n王结香与殷显的一段对话穿插在MV中段——“人死后，如果灵魂不舍得人间呢？”“心有遗憾的灵魂，会游走于另一个地方，直到了却遗憾。”一问一答之间，整部电影的情感底色已然铺就。最后一句“如果人生能重来一次，爱你我会大声说出口”，把所有没说出口的遗憾与不甘尽数倾倒，字字戳心，余味悠长。\n影片预售已开启，8月7日全国上映。电影改编自番大王同名原著小说，由周浩然执导，梅琼宇、番大王编剧，成都光线动画有限公司、北京光线动画有限公司、北京光线影业有限公司、北京光线传媒股份有限公司出品。\n'), WebsearchReference(site_name='手机搜狐网', title='成都8月免费电影来了！多区可免费看！', publish_time='2026年08月04日 09:58:00(CST) 星期二', summary='成都8月免费电影来了！多区可免费看！\n成都本地宝\n2026-08-04 09:58\n进入8月了\n小编还是照例给大家汇总了\n成都8月部分区的免费电影\n一起来看看有没有你家附近的吧~\n成华区8月公益电影\n✅放映时间：每周三、周五下午15:00-17:00\n✅放映地点：成华区群团服务中心4楼影音室\n✅放映安排：\n①8月5日：《决胜时刻》\n②8月7日：《金刚川》\n③8月12日：《铁道英雄》\n④8月14日：《万里归途》\n⑤8月19日：《蛟龙行动》\n⑥8月21日：《战狼》\n⑦8月26日：《长空之王》\n⑧8月28日：《战狼2》\n✅观影方式：需在成华区群团服务中心官微提前预约，每天早上十点半后才能预约\n✅成华区免费电影预约入口：成华区群团服务中心微信公众号，或者扫描下方二维码，进入【成都周末去哪】公众号，在对话框回复【免费电影】获取预约入口和放映影片片单。\n金牛区8月免费电影\n✅放映时间：每周一19:00\n✅放映地点：金牛区图书馆6楼学术报告厅\n✅放映安排：\n①8月3日：《寻秦记》\n②8月10日：《野孩子》\n③8月17日：《长安的荔枝》\n④8月24日：《狂野时代》\n✅观影须知：无需领票，直接观看。座位有限，先到先坐。影片开始前5分钟方可进场。\n新都区免费电影\n✅放映时间：2026年8月2日-8月27日\n✅放映地点：\n图源：成都金沙院线（上下）\n✅温馨提醒：\n1、受天气、现场场地等因素影响，放映计划可动态调整，具体放映时间、点位及影片以当日现场为准。\n2、8月为多雨季节，户外观影请留意天气变化，遇到雷雨、大风等恶劣天气，请及时有序撤离、注意出行安全。\n彭州市免费电影\n✅放映时间：2026年8月1日-8月30日\n✅放映地点：\n图源：成都金沙院线\n崇州市免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n天府新区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n✅菜单式选片放映节目单：\n图源：成都金沙院线，以下几个区相同\n温江区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n郫都区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n新津区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n双流区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n本文由成都周末去哪编辑整理发布\n素材来源：成都市成华区群团服务中心、成都市金牛区图书馆、本地宝综合\n编辑：橘子（吴菊）\n插图：见图片下方备注、摄图网\n'), WebsearchReference(site_name='新浪看点', title='新浪电影热点小时报丨2026年08月09日21时_今日实时电影热点速递', publish_time='2026年08月09日 21:00:00(CST) 星期日', summary='# 据灯塔专业版实时数据，截至8月9日，影片《欢迎来龙餐馆》点映及预售总票房突破1亿。\nhttp://k.sina.com.cn/article_1623886424_60ca8a5804001mure.html\n2、文牧野新片《欢迎来龙餐馆》讲述什么故事？\n文牧野执导、沈腾主演的《欢迎来龙餐馆》将于2026年8月11日全国上映，这部以2003年伊拉克战争为背景的影片，讲述了一个中国厨师在战火中开设中餐馆、最终从自保者蜕变为拯救当地儿童的普通英雄的故事。一、故事框架：中国厨师的异国求生到乱世守护主角设定：沈腾饰演的徐福是为养家还债远赴中东某国首都巴哈塔的中餐厨师，在“龙餐馆”担任主厨，与蒋奇明饰演\n的前台经理马俊生共同经营战前经营：徐福凭借扎实厨艺和市井智慧将餐馆经营得红红火火，前半段呈现了热闹的餐馆日常与跨文化碰撞的喜剧桥段战争转折：战争骤然爆发，平静生活被彻底打破。\nhttp://k.sina.com.cn/article_7879849292_1d5acf54c06801dtni.html\n3、一个被“改写”的英雄故事 诺兰版《奥德赛》失去了什么？｜文化观察\n封面新闻记者 边雪8月8日，电影《奥德赛》二轮点映在成都举行，记者在现场注意到，除了第一排的位置，几乎爆满。《奥德赛》本身，已经成为一个文化事件。作为继《奥本海默》之后的全新力作，《奥德赛》被视为诺兰职业生涯“迄今为止最具野心的电\n影”。它是影史首部全程使用IMAX胶片摄影机拍摄的故事长片，拍摄横跨摩洛哥、希腊、意大利、冰岛、苏格兰、美国，消耗超过210万英尺（超640公里）胶片。诺兰与摄影指导霍伊特·范·霍特玛携手IMAX研发的新一代胶片摄影机“凯利”，将胶片电影的技术边界再次向前推进。“在拍摄《奥德赛》时，我确实非常清楚地感受到，自己正身处应该在的地方，我就在家里。”诺兰说。\nhttp://k.sina.com.cn/article_1496814565_593793e5020023wm8.html\n4、龙餐馆海报舞龙与子弹意象耐人寻味，沈腾蒋奇明撑起厚重质感\n#龙餐馆海报 看过电影的才懂#龙餐馆海报细思极恐，舞龙与子弹\n的意象耐人寻味，只有看完电影才能领会其中内核。影片伏笔满满，沈腾蒋奇明的表演撑起故事厚重质感。\nhttp://k.sina.com.cn/article_5601366052_14dde102404001m8uy.html\n5、香港苦等一个月《功夫女足》终上映，星爷一句久等了真心还是客套\n2026年8月8日晚，香港尖沙咀某戏院，灯光暗下来又亮起来，周星驰站在台上，接过话筒，第一句话是：“不好意思，（让你们）等了一段时间。”台下掌声与欢呼声混在一起，有人喊“星仔”，有人举起红色横额，上面写着“星仔你最帅 我们永远爱你”，周星驰看了一眼，笑了笑。一个在喜剧片场说一不二的人，站在自己起家的地方，说了句软')], message='共 5 条参考')
+2026-08-12T16:53:08.194+08:00 +00068.797s [UP -> DUPLEX] type=conversation.item.create bytes=14330 {"type":"conversation.item.create","event_id":"event_6","items":[{"role":"tool","call_id":"7c60ced6-3c06-420b-a005-eaac3744daaa","content":[{"type":"input_text","text":"2026年8月成都上映电影推荐\n\n1. 猫眼电影\n猫眼电影 - 娱乐看猫眼\n2026年08月08日 00:00:00(CST) 星期六\n猫眼电影\n成都\n热映\n影院\n待映\n最受好评电影\n观众评分 9.7\n八仙！\n观众评分 9.7\n奥德赛\n观众评分 9.6\n年会不能停！2\n观众评分 9.5\n蜘蛛侠：崭新之日\n观众评分 9.4\n功夫女足\n观众评分 9\n痴迷\n观众评分 9\n小黄人与大怪兽\n观众评分 8.9\n想你了\n去你的岛\n汪汪队立大功大电影3：勇闯恐龙岛\n大唐妖探\n欢迎来龙餐馆\n蜘蛛侠：崭新之日\n观众评 9.5\n主演: 汤姆·赫兰德,赞达亚·科尔曼,萨迪·辛克\n今天282家影院放映3312场\n八仙！\n观众评 9.7\n主演: 李绍哲,陈浩,立冬\n今天279家影院放映2621场\n功夫女足\n观众评 9.4\n主演: 张小斐,迪丽热巴,张艺兴\n今天278家影院放映1128场\n年会不能停！2\n观众评 9.6\n主演: 张若昀,白客,高叶\n今天244家影院放映733场\n去你的岛\n暂无评分\n主演: 夏天,张福正\n今天269家影院放映1233场\n奥德赛\n\n点映评 9.7\n主演: 马特·达蒙,汤姆·赫兰德,安妮·海瑟薇\n2026-08-14 下周五上映\n预售\n痴迷\n观众评 9.0\n主演: 迈克尔·约翰斯顿,印达·纳瓦雷特,库珀·汤姆林森\n今天227家影院放映673场\n汪汪队立大功大电影3：勇闯恐龙岛\n主演: 阿奇,毛毛,天天\n今天146家影院放映222场\n大唐妖探\n主演: 雷淞然,张呈,蔡海婷\n2026-08-22上映\n预售\n欢迎来龙餐馆\n主演: 沈腾,蒋奇明,奥马尔·谢里夫\n2026-08-11 下周二上映\n预售\n想你了\n观众评 8.9\n主演: 章若楠,金靖,任彬\n今天60家影院放映93场\n小黄人与大怪兽\n观众评 9.0\n主演: 詹姆斯,皮埃尔·柯芬,艾莉森·珍妮\n今天64家影院放映92场\n热门影人\n白客\n高叶\n李晨\n王耀庆\n李乃文\n迪丽热巴\n张艺兴\n汤姆·赫兰德\n潘斌龙\n张小斐\n娱乐热点\n1. 惊悚冒险大片《逃出绝命街》预售开启 安妮海瑟薇\n直面恐龙围猎\n2. 《欢迎来龙餐馆》释出美食特辑与海报 烟火气中见人情温暖\n3. 《重器》看片会在京举行 以法治精神致敬时代守护者\n4. 动画电影《八仙！》曝配音特辑 欢乐声线鲜活塑造凡人八仙群像\n5. 电影《大唐妖探》北京首映礼 欢乐探案获观众盛赞：“夯！”\n6. 观影福利 |《欢迎来龙餐馆》8月8日，沈腾蒋奇明带中餐闯中东！\n7. 观影福利 |《去你的岛》8月7日，提前登岛，祝你美梦成真！\n8. 现实影片《有你真好1》直面民企传承之困\n9. 战火硝烟遇上人间烟火 《欢迎来龙餐馆》8月11日IMAX“开门营业”\n10. 《汪汪队立大功大电影3》发布“暖心相伴”预告暑假亲子观影首选\n大地开元影城33.9元起\n简阳市新民街108号王府景熙园B座2楼\n1301.4km\n退\n改签\n小吃\n太平洋影城（简阳德盛店）31.9元起\n简阳市雄州大道德盛广场百伦百货9楼\n1302.8km\n退\n改签\n小吃\n折扣卡\n2. 川观新闻\n青春音乐电影《校歌英雄》在蓉首映 用校歌串起一代人的青春记忆\n2026年08月08日 20:04:00(CST) 星期六\n青春音乐电影《校歌英雄》在蓉首映 用校歌串起一代人的青春记忆\n川观新闻2026-08-08 20:04\n川观新闻 | 记者 陈云鸽\n2026-08-08 20:04\n川观新闻记者 陈云鸽\n8月8日，青春音乐电影《校歌英雄》成都首映式举行。《校歌英雄》由西昌学院师生牵头策划、自筹资金拍摄，云南善为传媒负责出品制作，云南工商学院、昆明城市学院等多所高校学子共同参与创作，是一部兼具学生原创力量与专业制作支撑的青春音乐院线电影。\n青春音乐电影《校歌英雄》首映式在成都举行（主办方供图）\n故事扎根大学校园，用十余首原创歌曲串联完整剧情，将校歌底蕴、音乐理想与青春成长故事相融，生动刻画当代大学生的精神面貌，也为校园题材影片打造了新颖的叙事范本。\n首映礼上，西昌学院成都校友会会长钟家全作为1985级校友，回忆了母校的校训精神，并表示影片以校歌为线索讲述当代大学生的追梦故事，既是一次青春影像的表达，也是校园文化与电影艺术的一次融合尝试。\n青春音乐电影《校歌英雄》首映式在成都举行（主办方供图）\n一级编剧刘宁从专业角度分享了对影片的看法。他坦言，最初对学生团队加音乐剧类型的组合不抱高期待，但成片效果令人改观。他特别提到开篇一镜到底的执行难度，以及剧本结构的巧妙设计。全片十余首原创歌曲风格多元，主要人声采用AI演唱，为低成本音乐制作提供了新的思路。\n来自中国戏剧文学学会、四川省舞蹈家协会、成都艺术职业大学的专家在映后交流中对影片在类型探索和校歌文化表达上的尝试给予肯定。主创团队也与现场观众分享了拍摄过程中的幕后故事。\n据悉，《校歌英雄》已正式登陆爱奇艺。\n陈云鸽\n川观记者\n编辑：杜馥利  校对：刘宇男 屈杉杉\n责编：邓强  审核：颜婧\n\n3. 手机搜狐网\n国产动画电影《去你的岛》宣布提档至8月7日上映 刘宇宁倾情献唱主题曲\n2026年08月03日 10:54:00(CST) 星期一\n国产动画电影《去你的岛》宣布提档至8月7日上映 刘宇宁倾情献唱主题曲\n搜狐电影\n编辑于 2026-08-03 10:54\n搜狐娱乐讯 近日，动画电影《去你的岛》正式宣布提档至8月7日并官宣预售开启。影片发布由刘宇宁演唱的主题曲《来我的岛》MV，这支主题曲以“遗憾”为情感锚点，承载着男主殷显困在幻境中的执念，也唱尽了相爱却走散的遗憾，让影片细腻戳心的情感表达更有分量。\n电影改编自番大王同名原著小说，由周浩然执导，梅琼宇、番大王编剧，成都光线动画有限公司、北京光线动画有限公司、北京光线影业有限公司、北京光线传媒股份有限公司出品。影片预售已开启，8月7日全国上映。\n刘宇宁演唱动画电影《去你的岛》主题曲 温柔声线倾诉男主深藏心底的偏爱与愧疚\n幻境现实双线交织 刘宇宁唱尽执念与遗憾\n动画电影《去你的岛》发布由刘宇宁演唱的主题曲《来我的岛》MV，刘宇宁以极具分辨度的音色，温柔唱出殷显视角的遗憾，一首歌曲结束却是回味悠长的治愈。MV以一段治疗室的独白开篇，心理医生的诊断字字戳破岛屿的本质——殷显的心因性失忆与重度抑郁症，才是这座永夜之岛的真正源头。变成兔子的他、散落在岛上的一座座房子，全部都是他潜意识里的创伤投射。MV在两条时空线之间来回切换：幻境线中，殷显兔困在岛上无法离开，王结香的出现像一束光劈开黑暗，也一点点撬开了他封死的记忆；现实线中，躺在病床上的殷显反复念着同一句话，把所有放不下的情绪都装进了“来我的岛”这四个字里。\n王结香与殷显的一段对话穿插在MV中段——“人死后，如果灵魂不舍得人间呢？”“心有遗憾的灵魂，会游走于另一个地方，直到了却遗憾。”一问一答之间，整部电影的情感底色已然铺就。最后一句“如果人生能重来一次，爱你我会大声说出口”，把所有没说出口的遗憾与不甘尽数倾倒，字字戳心，余味悠长。\n影片预售已开启，8月7日全国上映。电影改编自番大王同名原著小说，由周浩然执导，梅琼宇、番大王编剧，成都光线动画有限公司、北京光线动画有限公司、北京光线影业有限公司、北京光线传媒股份有限公司出品。\n\n4. 手机搜狐网\n成都8月免费电影来了！多区可免费看！\n2026年08月04日 09:58:00(CST) 星期二\n成都8月免费电影来了！多区可免费看！\n成都本地宝\n2026-08-04 09:58\n进入8月了\n小编还是照例给大家汇总了\n成都8月部分区的免费电影\n一起来看看有没有你家附近的吧~\n成华区8月公益电影\n✅放映时间：每周三、周五下午15:00-17:00\n✅放映地点：成华区群团服务中心4楼影音室\n✅放映安排：\n①8月5日：《决胜时刻》\n②8月7日：《金刚川》\n③8月12日：《铁道英雄》\n④8月14日：《万里归途》\n⑤8月19日：《蛟龙行动》\n⑥8月21日：《战狼》\n⑦8月26日：《长空之王》\n⑧8月28日：《战狼2》\n✅观影方式：需在成华区群团服务中心官微提前预约，每天早上十点半后才能预约\n✅成华区免费电影预约入口：成华区群团服务中心微信公众号，或者扫描下方二维码，进入【成都周末去哪】公众号，在对话框回复【免费电影】获取预约入口和放映影片片单。\n金牛区8月免费电影\n✅放映时间：每周一19:00\n✅放映地点：金牛区图书馆6楼学术报告厅\n✅放映安排：\n①8月3日：《寻秦记》\n②8月10日：《野孩子》\n③8月17日：《长安的荔枝》\n④8月24日：《狂野时代》\n✅观影须知：无需领票，直接观看。座位有限，先到先坐。影片开始前5分钟方可进场。\n新都区免费电影\n✅放映时间：2026年8月2日-8月27日\n✅放映地点：\n图源：成都金沙院线（上下）\n✅温馨提醒：\n1、受天气、现场场地等因素影响，放映计划可动态调整，具体放映时间、点位及影片以当日现场为准。\n2、8月为多雨季节，户外观影请留意天气变化，遇到雷雨、大风等恶劣天气，请及时有序撤离、注意出行安全。\n彭州市免费电影\n✅放映时间：2026年8月1日-8月30日\n✅放映地点：\n图源：成都金沙院线\n崇州市免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n天府新区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n✅菜单式选片放映节目单：\n图源：成都金沙院线，以下几个区相同\n温江区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n郫都区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n新津区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n双流区免费电影\n✅放映时间：2026年8月1日-8月31日\n✅放映地点：\n图源：成都金沙院线\n本文由成都周末去哪编辑整理发布\n素材来源：成都市成华区群团服务中心、成都市金牛区图书馆、本地宝综合\n编辑：橘子（吴菊）\n插图：见图片下方备注、摄图网\n\n5. 新浪看点\n新浪电影热点小时报丨2026年08月09日21时_今日实时电影热点速递\n2026年08月09日 21:00:00(CST) 星期日\n# 据灯塔专业版实时数据，截至8月9日，影片《欢迎来龙餐馆》点映及预售总票房突破1亿。\nhttp://k.sina.com.cn/article_1623886424_60ca8a5804001mure.html\n2、文牧野新片《欢迎来龙餐馆》讲述什么故事？\n文牧野执导、沈腾主演的《欢迎来龙餐馆》将于2026年8月11日全国上映，这部以2003年伊拉克战争为背景的影片，讲述了一个中国厨师在战火中开设中餐馆、最终从自保者蜕变为拯救当地儿童的普通英雄的故事。一、故事框架：中国厨师的异国求生到乱世守护主角设定：沈腾饰演的徐福是为养家还债远赴中东某国首都巴哈塔的中餐厨师，在“龙餐馆”担任主厨，与蒋奇明饰演\n的前台经理马俊生共同经营战前经营：徐福凭借扎实厨艺和市井智慧将餐馆经营得红红火火，前半段呈现了热闹的餐馆日常与跨文化碰撞的喜剧桥段战争转折：战争骤然爆发，平静生活被彻底打破。\nhttp://k.sina.com.cn/article_7879849292_1d5acf54c06801dtni.html\n3、一个被“改写”的英雄故事 诺兰版《奥德赛》失去了什么？｜文化观察\n封面新闻记者 边雪8月8日，电影《奥德赛》二轮点映在成都举行，记者在现场注意到，除了第一排的位置，几乎爆满。《奥德赛》本身，已经成为一个文化事件。作为继《奥本海默》之后的全新力作，《奥德赛》被视为诺兰职业生涯“迄今为止最具野心的电\n影”。它是影史首部全程使用IMAX胶片摄影机拍摄的故事长片，拍摄横跨摩洛哥、希腊、意大利、冰岛、苏格兰、美国，消耗超过210万英尺（超640公里）胶片。诺兰与摄影指导霍伊特·范·霍特玛携手IMAX研发的新一代胶片摄影机“凯利”，将胶片电影的技术边界再次向前推进。“在拍摄《奥德赛》时，我确实非常清楚地感受到，自己正身处应该在的地方，我就在家里。”诺兰说。\nhttp://k.sina.com.cn/article_1496814565_593793e5020023wm8.html\n4、龙餐馆海报舞龙与子弹意象耐人寻味，沈腾蒋奇明撑起厚重质感\n#龙餐馆海报 看过电影的才懂#龙餐馆海报细思极恐，舞龙与子弹\n的意象耐人寻味，只有看完电影才能领会其中内核。影片伏笔满满，沈腾蒋奇明的表演撑起故事厚重质感。\nhttp://k.sina.com.cn/article_5601366052_14dde102404001m8uy.html\n5、香港苦等一个月《功夫女足》终上映，星爷一句久等了真心还是客套\n2026年8月8日晚，香港尖沙咀某戏院，灯光暗下来又亮起来，周星驰站在台上，接过话筒，第一句话是：“不好意思，（让你们）等了一段时间。”台下掌声与欢呼声混在一起，有人喊“星仔”，有人举起红色横额，上面写着“星仔你最帅 我们永远爱你”，周星驰看了一眼，笑了笑。一个在喜剧片场说一不二的人，站在自己起家的地方，说了句软\n共 5 条参考"}]}]}
+2026-08-12T16:53:10.496+08:00 +00071.099s [DOWN <- DUPLEX] type=response.output_audio.started bytes=152 {"type":"response.output_audio.started","event_id":"event_223","question_id":"52426579787650562","response_id":"52426579787651074","tts_type":"default"}
+2026-08-12T16:53:12.438+08:00 +00073.041s [DOWN <- DUPLEX] type=response.output_text.done bytes=524 {"event_id":"event_271","question_id":"52426579787650562","response_id":"52426579787651074","type":"response.output_text.done","text":"这两天成都热映的还多哦，评分9.7的动画《八仙！》、沈腾主演刚上的《欢迎来龙餐馆》都值得看。还有《蜘蛛侠：崭新之日》《年会不能停！2》口碑也不错，要是想蹲点映，14号上的诺兰新片《奥德赛》可以先预售占位置。另外成华区、金牛区还有免费公益电影，想省钱也可以去凑哈热闹。"}
+2026-08-12T16:53:14.143+08:00 +00074.746s [DOWN <- DUPLEX] type=response.output_audio.done bytes=128 {"question_id":"52426579787650562","response_id":"52426579787651074","type":"response.output_audio.done","event_id":"event_311"}
+2026-08-12T16:53:14.143+08:00 +00074.746s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_7",
+                                            "items": []
+                                          }
+2026-08-12T16:53:14.201+08:00 +00074.804s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=1877
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52426579787642370",
+                                                "role": "user",
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787644162",
+                                                "role": "user",
+                                                "timestamp": 1786524735165,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "四川话。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787644418",
+                                                "role": "assistant",
+                                                "timestamp": 1786524736194,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787645698",
+                                                "role": "user",
+                                                "timestamp": 1786524745698,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "我想看看明天成都的天气。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "timestamp": 1786524761459,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "明天成都大晴天哦，最高温要到37度，最低23度，风不大还是有点烤人哈。出门记得把防晒做好，多喝水防到中暑，要是在外头待久了，找得到阴凉地方就多歇哈。"
+                                                  }
+                                                ],
+                                                "id": "52426579787646466",
+                                                "role": "assistant"
+                                              },
+                                              {
+                                                "id": "52426579787650562",
+                                                "role": "user",
+                                                "timestamp": 1786524777484,
+                                                "content": [
+                                                  {
+                                                    "text": "那你看哈成都这这两天有哪样好看的电影？",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "role": "assistant",
+                                                "timestamp": 1786524794580,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "这两天成都热映的还多哦，评分9.7的动画《八仙！》、沈腾主演刚上的《欢迎来龙餐馆》都值得看。还有《蜘蛛侠：崭新之日》《年会不能停！2》口碑也不错，要是想蹲点映，14号上的诺兰新片《奥德赛》可以先预售占位置。另外成华区、金牛区还有免费公益电影，想省钱也可以去凑哈热闹。"
+                                                  }
+                                                ],
+                                                "id": "52426579787651074"
+                                              }
+                                            ],
+                                            "event_id": "event_312"
+                                          }
+2026-08-12T16:53:32.452+08:00 +00093.055s [DOWN <- DUPLEX] type=response.done bytes=366 {"type":"response.done","event_id":"event_313","response":{"usage":{"total_tokens":13620,"input_tokens":13105,"output_tokens":515,"input_token_details":{"text_tokens":12433,"audio_tokens":672,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":515}}}}
+2026-08-12T16:53:32.455+08:00 +00093.058s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=115 {"item_id":"52426579787656962","type":"conversation.item.input_audio_transcription.started","event_id":"event_314"}
+2026-08-12T16:53:32.784+08:00 +00093.387s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=157 {"content_index":0,"delta":"你怎么不说","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962","event_id":"event_315"}
+2026-08-12T16:53:33.211+08:00 +00093.814s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=163 {"content_index":0,"delta":"你怎么不说成都","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962","event_id":"event_316"}
+2026-08-12T16:53:33.358+08:00 +00093.961s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"content_index":0,"delta":"你怎么不说成都话","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962","event_id":"event_317"}
+2026-08-12T16:53:33.520+08:00 +00094.123s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=169 {"delta":"你怎么不说成都话了","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962","event_id":"event_318","content_index":0}
+2026-08-12T16:53:33.707+08:00 +00094.310s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=172 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962","event_id":"event_319","content_index":0,"delta":"你怎么不说成都话了？"}
+2026-08-12T16:53:33.756+08:00 +00094.359s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=169 {"event_id":"event_320","content_index":0,"delta":"你怎么不说成都话了","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962"}
+2026-08-12T16:53:34.040+08:00 +00094.643s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=172 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787656962","event_id":"event_321","content_index":0,"delta":"你怎么不说成都话了？"}
+2026-08-12T16:53:34.044+08:00 +00094.646s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=175 {"text":"你怎么不说成都话了？","event_id":"event_322","type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787656962","content_index":1}
+2026-08-12T16:53:34.420+08:00 +00095.023s [DOWN <- DUPLEX] type=response.output_audio.started bytes=152 {"event_id":"event_327","question_id":"52426579787656962","response_id":"52426579787657218","tts_type":"default","type":"response.output_audio.started"}
+2026-08-12T16:53:35.315+08:00 +00095.918s [DOWN <- DUPLEX] type=response.output_text.done bytes=242 {"question_id":"52426579787656962","response_id":"52426579787657218","type":"response.output_text.done","text":"哎呀搞忘咯！刚刚一哈没转过来弯，马上给你扯成都话嘛，你想咋个摆都要得！","event_id":"event_357"}
+2026-08-12T16:53:35.692+08:00 +00096.295s [DOWN <- DUPLEX] type=response.output_audio.done bytes=128 {"question_id":"52426579787656962","response_id":"52426579787657218","type":"response.output_audio.done","event_id":"event_366"}
+2026-08-12T16:53:35.693+08:00 +00096.296s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_8",
+                                            "items": []
+                                          }
+2026-08-12T16:53:35.760+08:00 +00096.363s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=2239
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52426579787642370",
+                                                "role": "user",
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "role": "user",
+                                                "timestamp": 1786524735165,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "四川话。"
+                                                  }
+                                                ],
+                                                "id": "52426579787644162"
+                                              },
+                                              {
+                                                "id": "52426579787644418",
+                                                "role": "assistant",
+                                                "timestamp": 1786524736194,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "我想看看明天成都的天气。"
+                                                  }
+                                                ],
+                                                "id": "52426579787645698",
+                                                "role": "user",
+                                                "timestamp": 1786524745698
+                                              },
+                                              {
+                                                "role": "assistant",
+                                                "timestamp": 1786524761459,
+                                                "content": [
+                                                  {
+                                                    "text": "明天成都大晴天哦，最高温要到37度，最低23度，风不大还是有点烤人哈。出门记得把防晒做好，多喝水防到中暑，要是在外头待久了，找得到阴凉地方就多歇哈。",
+                                                    "type": "input_text"
+                                                  }
+                                                ],
+                                                "id": "52426579787646466"
+                                              },
+                                              {
+                                                "id": "52426579787650562",
+                                                "role": "user",
+                                                "timestamp": 1786524777484,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "那你看哈成都这这两天有哪样好看的电影？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787651074",
+                                                "role": "assistant",
+                                                "timestamp": 1786524794580,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "这两天成都热映的还多哦，评分9.7的动画《八仙！》、沈腾主演刚上的《欢迎来龙餐馆》都值得看。还有《蜘蛛侠：崭新之日》《年会不能停！2》口碑也不错，要是想蹲点映，14号上的诺兰新片《奥德赛》可以先预售占位置。另外成华区、金牛区还有免费公益电影，想省钱也可以去凑哈热闹。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787656962",
+                                                "role": "user",
+                                                "timestamp": 1786524816185,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你怎么不说成都话了？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787657218",
+                                                "role": "assistant",
+                                                "timestamp": 1786524817458,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "哎呀搞忘咯！刚刚一哈没转过来弯，马上给你扯成都话嘛，你想咋个摆都要得！"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "event_id": "event_367"
+                                          }
+2026-08-12T16:53:43.972+08:00 +00104.575s [DOWN <- DUPLEX] type=response.done bytes=356 {"type":"response.done","event_id":"event_368","response":{"usage":{"total_tokens":271,"input_tokens":72,"output_tokens":199,"input_token_details":{"text_tokens":0,"audio_tokens":72,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":199}}}}
+2026-08-12T16:53:44.072+08:00 +00104.675s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=115 {"event_id":"event_369","item_id":"52426579787659010","type":"conversation.item.input_audio_transcription.started"}
+2026-08-12T16:53:44.079+08:00 +00104.682s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=148 {"content_index":0,"delta":"呃帮","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_370"}
+2026-08-12T16:53:44.229+08:00 +00104.832s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=151 {"content_index":0,"delta":"呃帮我","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_371"}
+2026-08-12T16:53:44.647+08:00 +00105.250s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=154 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_372","content_index":0,"delta":"呃帮我在"}
+2026-08-12T16:53:44.892+08:00 +00105.495s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=160 {"content_index":0,"delta":"呃帮我在奢华","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_373"}
+2026-08-12T16:53:45.196+08:00 +00105.799s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"content_index":0,"delta":"呃帮我在奢华附近","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_374"}
+2026-08-12T16:53:45.512+08:00 +00106.115s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=169 {"content_index":0,"delta":"呃帮我在奢华附近的","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_375"}
+2026-08-12T16:53:45.847+08:00 +00106.450s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=178 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_376","content_index":0,"delta":"呃帮我在奢华附近的演唱会"}
+2026-08-12T16:53:46.025+08:00 +00106.628s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=178 {"event_id":"event_377","content_index":0,"delta":"帮我在奢华附近的演唱会。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010"}
+2026-08-12T16:53:46.074+08:00 +00106.677s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=178 {"content_index":0,"delta":"呃帮我在奢华附近的演唱会","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_378"}
+2026-08-12T16:53:46.215+08:00 +00106.818s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=178 {"content_index":0,"delta":"帮我在奢华附近的演唱会。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787659010","event_id":"event_379"}
+2026-08-12T16:53:46.219+08:00 +00106.822s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=181 {"text":"帮我在奢华附近的演唱会。","event_id":"event_380","type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787659010","content_index":1}
+2026-08-12T16:53:47.161+08:00 +00107.764s [DOWN <- DUPLEX] type=response.function_call_arguments.done bytes=220 {"event_id":"event_381","items":[{"name":"websearch","arguments":"{\"query\":\"2026年8月上海演唱会安排近期\"}","call_id":"1eafb4f8-b284-4700-8108-bcdb9bcaba1c"}],"type":"response.function_call_arguments.done"}
+2026-08-12T16:53:47.161+08:00 +00107.764s [LOCAL TASK] event_id='61b86dc8-580b-414e-aa41-2e97987c57a4' timestamp=datetime.datetime(2026, 8, 12, 16, 53, 47, 161665) type='task.start' task_id='1eafb4f8-b284-4700-8108-bcdb9bcaba1c'
+2026-08-12T16:53:51.975+08:00 +00112.578s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=115 {"item_id":"52426579787661314","type":"conversation.item.input_audio_transcription.started","event_id":"event_382"}
+2026-08-12T16:53:52.620+08:00 +00113.223s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=148 {"content_index":0,"delta":"同时","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787661314","event_id":"event_383"}
+2026-08-12T16:53:52.718+08:00 +00113.321s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=151 {"content_index":0,"delta":"同时帮","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787661314","event_id":"event_384"}
+2026-08-12T16:53:52.786+08:00 +00113.389s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=154 {"content_index":0,"delta":"同时帮我","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787661314","event_id":"event_385"}
+2026-08-12T16:53:53.020+08:00 +00113.623s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=160 {"event_id":"event_386","content_index":0,"delta":"同时帮我打开","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787661314"}
+2026-08-12T16:53:53.252+08:00 +00113.855s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"item_id":"52426579787661314","event_id":"event_387","content_index":0,"delta":"同时帮我打开空调","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T16:53:53.445+08:00 +00114.048s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=169 {"content_index":0,"delta":"同时帮我打开空调。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787661314","event_id":"event_388"}
+2026-08-12T16:53:53.494+08:00 +00114.097s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"content_index":0,"delta":"同时帮我打开空调","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787661314","event_id":"event_389"}
+2026-08-12T16:53:53.881+08:00 +00114.484s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=169 {"item_id":"52426579787661314","event_id":"event_390","content_index":0,"delta":"同时帮我打开空调。","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T16:53:53.884+08:00 +00114.487s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=172 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787661314","content_index":1,"text":"同时帮我打开空调。","event_id":"event_391"}
+2026-08-12T16:53:54.327+08:00 +00114.931s [DOWN <- DUPLEX] type=response.function_call_arguments.done bytes=204 {"items":[{"call_id":"dd372efe-e3d1-4ac4-a4a6-ae26e6c11908","name":"car_control","arguments":"{\"command\":\"打开车载空调\"}"}],"type":"response.function_call_arguments.done","event_id":"event_392"}
+2026-08-12T16:53:54.333+08:00 +00114.936s [LOCAL TASK] event_id='f2b09cf7-96c7-49f6-8670-22688f5d913b' timestamp=datetime.datetime(2026, 8, 12, 16, 53, 54, 328327) type='task.start' task_id='dd372efe-e3d1-4ac4-a4a6-ae26e6c11908'
+2026-08-12T16:53:55.636+08:00 +00116.239s [LOCAL TASK] event_id='58fe97c5-10f0-44d1-be9b-77544343d74b' timestamp=datetime.datetime(2026, 8, 12, 16, 53, 55, 636439) type='task.success' task_id='dd372efe-e3d1-4ac4-a4a6-ae26e6c11908' result=CarControlOutput(status=<CarControlStatus.SUCCESS: 'success'>, message='已执行车控', observation={'functions': [{'function_code': '空调开关', 'params': [{'action': '打开'}]}]}, error_msg='')
+2026-08-12T16:53:55.637+08:00 +00116.240s [UP -> DUPLEX] type=conversation.item.create bytes=271 {"type":"conversation.item.create","event_id":"event_9","items":[{"role":"tool","call_id":"dd372efe-e3d1-4ac4-a4a6-ae26e6c11908","content":[{"type":"input_text","text":"success\n已执行车控\nfunctions: 1. function_code: 空调开关\nparams: 1. action: 打开\n"}]}]}
+2026-08-12T16:53:56.301+08:00 +00116.904s [DOWN <- DUPLEX] type=response.output_audio.started bytes=152 {"tts_type":"default","type":"response.output_audio.started","event_id":"event_398","question_id":"52426579787661314","response_id":"52426579787661570"}
+2026-08-12T16:53:56.843+08:00 +00117.446s [DOWN <- DUPLEX] type=response.output_text.done bytes=230 {"question_id":"52426579787661314","response_id":"52426579787661570","type":"response.output_text.done","text":"要得嘛，空调已经给你打开咯，这么热的天，吹起凉风吹起才巴适嘛。","event_id":"event_417"}
+2026-08-12T16:53:57.449+08:00 +00118.053s [DOWN <- DUPLEX] type=response.output_audio.done bytes=128 {"event_id":"event_430","question_id":"52426579787661314","response_id":"52426579787661570","type":"response.output_audio.done"}
+2026-08-12T16:53:57.450+08:00 +00118.053s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=70
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_10",
+                                            "items": []
+                                          }
+2026-08-12T16:53:57.509+08:00 +00118.112s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=2733
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ],
+                                                "id": "52426579787642370",
+                                                "role": "user"
+                                              },
+                                              {
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ],
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343
+                                              },
+                                              {
+                                                "id": "52426579787644162",
+                                                "role": "user",
+                                                "timestamp": 1786524735165,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "四川话。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "role": "assistant",
+                                                "timestamp": 1786524736194,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？"
+                                                  }
+                                                ],
+                                                "id": "52426579787644418"
+                                              },
+                                              {
+                                                "timestamp": 1786524745698,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "我想看看明天成都的天气。"
+                                                  }
+                                                ],
+                                                "id": "52426579787645698",
+                                                "role": "user"
+                                              },
+                                              {
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "明天成都大晴天哦，最高温要到37度，最低23度，风不大还是有点烤人哈。出门记得把防晒做好，多喝水防到中暑，要是在外头待久了，找得到阴凉地方就多歇哈。"
+                                                  }
+                                                ],
+                                                "id": "52426579787646466",
+                                                "role": "assistant",
+                                                "timestamp": 1786524761459
+                                              },
+                                              {
+                                                "id": "52426579787650562",
+                                                "role": "user",
+                                                "timestamp": 1786524777484,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "那你看哈成都这这两天有哪样好看的电影？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787651074",
+                                                "role": "assistant",
+                                                "timestamp": 1786524794580,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "这两天成都热映的还多哦，评分9.7的动画《八仙！》、沈腾主演刚上的《欢迎来龙餐馆》都值得看。还有《蜘蛛侠：崭新之日》《年会不能停！2》口碑也不错，要是想蹲点映，14号上的诺兰新片《奥德赛》可以先预售占位置。另外成华区、金牛区还有免费公益电影，想省钱也可以去凑哈热闹。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787656962",
+                                                "role": "user",
+                                                "timestamp": 1786524816185,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你怎么不说成都话了？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "role": "assistant",
+                                                "timestamp": 1786524817458,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "哎呀搞忘咯！刚刚一哈没转过来弯，马上给你扯成都话嘛，你想咋个摆都要得！"
+                                                  }
+                                                ],
+                                                "id": "52426579787657218"
+                                              },
+                                              {
+                                                "timestamp": 1786524828360,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "帮我在奢华附近的演唱会。"
+                                                  }
+                                                ],
+                                                "id": "52426579787659010",
+                                                "role": "user"
+                                              },
+                                              {
+                                                "id": "52426579787661314",
+                                                "role": "user",
+                                                "timestamp": 1786524836020,
+                                                "content": [
+                                                  {
+                                                    "text": "同时帮我打开空调。",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787661570",
+                                                "role": "assistant",
+                                                "timestamp": 1786524838984,
+                                                "content": [
+                                                  {
+                                                    "text": "要得嘛，空调已经给你打开咯，这么热的天，吹起凉风吹起才巴适嘛。",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "event_id": "event_431"
+                                          }
+2026-08-12T16:54:00.172+08:00 +00120.775s [LOCAL TASK] event_id='671f01a0-5882-4d02-8251-873ee809c910' timestamp=datetime.datetime(2026, 8, 12, 16, 54, 0, 170953) type='task.success' task_id='1eafb4f8-b284-4700-8108-bcdb9bcaba1c' result=WebsearchToolOutput(query='2026年8月上海演唱会安排近期', references=[WebsearchReference(site_name='澎湃新闻', title='上海，又一批演唱会来了', publish_time='2026年08月11日 15:46:00(CST) 星期二', summary='上海，又一批演唱会来了\nShanghaiLOOK\n2026-08-11 15:46 上海\n李荣浩\n「黑马」巡回演唱会\n乾坤未定，你我皆黑马。「黑马」这一主题，出自李荣浩第八张个人创作专辑《黑马》。只要坚信自己，所有人都可以在纷繁世界里奔跑出自己的高光！黑色能量，包罗万象。\n本轮巡演在歌单筛选上更是下足功夫，编曲焕然一新，各类曲目倾情改编，为他人创作的“浩式情歌”更将亲自演绎。\ninfo\n「黑马」巡回演唱会\n「地址」\n上海体育场\n「票档」\n¥380-1280\n「时间」\n08.06 13:00开抢\n2026.09.25-09.26\n后台对话框回复：李荣浩\n即可进入购票通道\n潘玮柏\n“MAD LOVE:ULTRA”巡回演唱会\n经历化为盔甲，长出强韧的机械手臂，可以向外展示力量，也可以成为最诚恳的表白，带你一起畅游潘玮柏Mad Love的内心世界，在星空中伫立，在鲜花中盛放!\n这是MAD LOVE:ULTRA潘玮柏狂爱:终极巡回演唱会的奥义。这一次，狂爱之神降临邀你一起踏入由我们共同定义的绝对领域，共同完成这场终极进化。\ninfo\n“MADLOVE:ULTRA”\n巡回演唱会\n「地址」\n虹口足球场\n「票档」\n¥380-980\n「时间」\n未官宣开票时间\n2026.09.19 19:00\n后台对话框回复：潘玮柏\n即可进入购票通道\n周传雄\n「念念不忘·再遇见plus」\n巡回演唱会\n从金曲制作人到“情歌\n教父”，周传雄的名字烙印在无数称之经典的声音。《黄昏》、《寂寞沙洲冷》、《有没有一首歌会让你想起我》......他的音乐陪伴一代代青春共同生长。\n2026年，新一轮巡演「念念不忘·再遇见plus」升级启程，因为念念不忘，我们才会再遇见更盛大的风花雪月。\ninfo\n「念念不忘·再遇见plus」\n巡回演唱会\n「地址」\n上海体育场\n「票档」\n¥380-1180\n「时间」\n08.10 15:00开抢\n2026.09.05-09.06\n后台对话框回复：周传雄\n即可进入购票通道\n丁当Della\n《夜游 A Night Tour》\n上海夜未眠巡回演唱会\n有人在上海追梦，有人在上海失恋，有人把故事留在深夜。而丁当，要陪你把这座城市唱亮。当霓虹亮起，上海的夜才正要开始。\n从情歌天后到夜晚女王，丁当带着全面升级的《夜游ANight Tour》重返上海。夜游狂欢无限放大，打造最奇幻不眠派对。\ninfo\n《夜游 A Night Tour》\n上海夜未眠巡回演唱会\n「地址」\n徐家汇体育公园·上海体育馆\n「票档」\n¥380-680\n「时间」\n08.03 12:00开抢\n2026.09.05 19:00\n后台对话框回复：丁当\n即可进入购票通道\n歌者归来超级歌会-上海站\n(中秋特别场）\n2026年中秋，“歌者归来”超级歌会中秋特别场，登陆上海浦东足球场。在这个团圆的日子里，四位华语乐坛的经典之声同台集结。\n曹格、王心凌'), WebsearchReference(site_name='演出圈', title='上海2026演唱会时间表（王嘉尔、周传雄、林忆莲、杨千嬅、潘玮柏、李荣浩、伍佰、GAI周延、林宥嘉、张智霖、林志炫、张震岳、袁一琦）', publish_time='2026年08月10日 18:52:00(CST) 星期一', summary='00\n演出地点：梅赛德斯-奔驰文化中心\n备注：审批通过，票务信息待公布\n林忆莲「回响2.0」巡回演唱会-上海站\n演出时间：2026年10月6、7、10、11日 19:00\n演出地点：上海虹口足球场\n备注:审批通过，票务信息待公布\n杨千嬅 《Live MY LIVE》世界巡回演唱会-上海站\n演出时间：2026年8月29日（周六）19:00\n演出场馆：上海虹口足球场\n周传雄 《念念不忘·再遇见plus》巡回演唱会-上海站\n演出时间：2026年9月5、6日 19:00演出场馆：上海虹口足球场\n林宥嘉 《超级管家》巡回演唱会-上海站演出时间：2026年8月15、16日 19:00演出场馆：上海虹口足球场2026洛天依「无限共鸣-纯蓝幻乐」演唱会-上海站\n演出时间：2026年8月15日 周六 19：00\n演出地点：上海静安体育中心体育馆\n李荣浩「黑马」世界巡回演唱会-上海站\n演出时间：2026年9月25、26日 19:00\n演出地点：上海体育场\n歌者归来超级歌会-上海站（中秋特别场）\n演出时间:2026年9月25日 周五 19:00演出地点:上汽浦东足球场票价:¥380～1080演出阵容: 张信哲、王心凌、阿杜、曹格\n潘玮柏 《MAD LOVE: ULTRA》巡回演唱会-上海站演出时间：2026年9月19、20日 19:00演出场馆：上海虹口足球场\n2026 郭静「刚刚好的自己」巡回演唱会-上海站演出时间：2026年8月29日（周六）19:30演出场馆：上海国家会展中心（上海）虹馆EH\n2026 GAI 周延「Real G」巡回演唱会-上海站演出时间：2026年9月5日（周六）19:00演出场馆：上海虹口足球场\n2026丁当「上海夜未眠」巡回演唱会-上海站\n演出时间：2026年9月5日 周六 19:00\n演出地点：上海体育馆\n「UNKNOWN」袁一琦2026个人巡回演唱会-上海站\n演出时间：2026年9月12日 周六 19:00\n演出地点：上海体育馆\n2026张智霖「在」巡回演唱会-上海站\n演出时间：2026年9月19日 周六 19:00\n演出地点：上海浦发银行东方体育中心\n石凯《时空乐园》2026巡回演唱会-上海站演出时间：2026年9月12日（周六）19:00演出场馆：国家会展中心（上海）虹馆EH\n2026小柯「来-把你唱给我听」巡回演唱会-上海站\n演出时间：2026年9月12日 周六 19：00\n演出地点：上海静安体育中心体育馆\n齐豫 《风采依旧》巡回演唱会-上海站演出时间：2026年9月19日（周六）19:00演出场馆：上海体育馆\n2026李翊君《永远永远》世界巡回演唱会-上海站演出时间：2026年10月24日（周六）19:00演出场馆：国家会展中心（上海）虹馆EH\n2026游鸿明《敌不过想念》巡回演唱会-上海站\n演出时间：2026年10月11日 周日 19:'), WebsearchReference(site_name='上海热线', title='准备抢票！上海又一波演唱会即将开唱', publish_time='2026年08月11日 08:30:00(CST) 星期二', summary="准备抢票！上海又一波演唱会即将开唱\n乐游上海 2026-08-11 08:30:19\n盛夏的上海，\n演唱会热潮席卷全城。\n即将开票、最新推荐.....\n一波演唱会轮番登场。\n@所有歌迷们，准备开唱吧！\n即将开票\n1\nGAI周延\n“REAL G”巡回演唱会\n时间：9月5日\n地点：虹口足球场\n开票时间：8月10日11:00\n本次演唱会的舞台设计以全新形式呈现，搭建了超长GAI式延伸台，给歌迷带来超近距离的直观体验！音乐和舞美编排也全新升级，打造顶级听觉互动现场。\n2\n周传雄\n“念念不忘・再遇见 plus”上海站\n时间：9月5-6日\n地点：上海体育场\n开票时间：8月10日15:00\n情歌教父周传雄升级巡演即将登陆上海，全新旋转舞台、环场花车打造沉浸式视听体验，《黄昏》《记事本》等经典金曲悉数唱响。奔赴青春重逢之约，在晚风里重温藏在老歌里的回忆。\n3\nCharlie Puth\nWhatever's Clever! 世界巡回演唱会\n时间：10月31日\n地点：虹口足球场\n开票时间：8月11日12:00\n风靡全球的创作才子Charlie Puth，带着全新Whatever's Clever! 世界巡回演唱会重磅登陆上海虹口足球场！跨越山海的旋律，无数传唱全球的经典曲目，10月31日，在虹口足球场，与万千乐迷一起奔赴这场盛大的流行音乐现场。\n最新推荐\n1\n张智霖\n“在”巡回演唱会\n时间：9月19日\n地\n点：东方体育中心\n张智霖首场个人巡演登陆上海，融合粤语金曲、流行单曲与舞台剧情表演，兼顾唱功与舞台叙事，风格多元。\n2\n江美琪\n“伤心唱出来就没事了”演唱会\n时间：11月28日\n地点：上海LIVERSE音宇宙艺术中心\n2026年，江美琪继续带着专辑《圆的?圆的!》出发，以“伤心唱出来就没事了”为主题开启2.0版演唱会，用最质朴的情感、最纯粹的歌声，为听众带来一场治愈心事的音乐之约。\n3\n迈克学摇滚\n“爱之传奇”演唱会\n时间：9月23日\n地点：上海体育馆\n北欧经典摇滚乐队来华开演，重现传世金曲Take Me To Your Heart，摇滚编曲糅合温柔唱腔，掀起欧美复古怀旧浪潮，适配摇滚乐迷奔赴怀旧现场。\n4\n林忆莲\n“回响：终章”巡回演唱会\n时间：10月10-11日\n地点：虹口足球场\n此次巡演将以FINAL CHAPTER“最终章”为名，在原有《回响》的基础上全面升级，以全新内容、全新舞台表达开启巡演2.0。\n5\n袁一琦\nUNKNOWN（未知） 巡回演唱会\n时间：9月12日\n地点：上海体育馆\n十周年专属限定场次，围绕未知概念打造先锋光影舞台。巡演暗藏专属彩蛋与互动环节，解锁未知惊喜，赴一场冲破边界、奔赴无限可能性的音乐约会。\n近期看点\n1\n李荣浩\n“黑马”巡回演唱会\n时间：9月25-26日\n地点：上海体育场\n演唱会以“黑马”为主题，来源于李荣浩第八张个人创作专辑《黑马》。本轮巡演在歌单"), WebsearchReference(site_name='凤凰网海南频道', title='2026上海演唱会、话剧、脱口秀等多品类演出购票攻略，附演出信息', publish_time='2026年08月12日 11:53:00(CST) 星期三', summary='2026上海演唱会、话剧、脱口秀等多品类演出购票攻略，附演出信息\n商讯\n2026年08月12日 11:53:33\n2026上海演唱会、话剧、脱口秀等多品类演出购票攻略，附演出信息\n2026年8至9月上海演出市场热度高涨，林宥嘉、杨千嬅、李荣浩、GAI、周传雄、潘玮柏轮番开唱，洛天依、笑果脱口秀、相声专场、Livehouse巡演密集上演。面对海量场次，选对购票渠道、掌握抢票技巧、规避票务陷阱，才能顺利奔赴线下现场。本文重点解析大麦、猫眼、票牛APP三大主流平台，结合上海各大场馆演出特点，整理一套可直接使用的购票方案。\n近期上海重点演出一览\n一、流行歌手演唱会\n1. 林宥嘉《超级管家》巡回演唱会｜上海虹口足球场｜2026.08.15-08.16\n2. 洛天依2026「无限共鸣・纯蓝幻乐」｜静安体育中心-体育馆｜2026.08.15\n3. 2026郑艺彬「三十减一」生日会｜星在文化中心-梦想剧场｜2026.08.17 19:30\n4. 花生与葱花Hanser演唱会｜静安体育中心-体育馆｜2026.08.22-08.23\n5. 魔力sir家族演唱会｜国家会展中心（上海）虹馆EH｜2026.08.22 19:00\n6. 花开四季～心路歌者乌兰图雅演唱会专场｜东方艺术中心-音乐厅｜2026.08.22 19:30\n7. 杨千嬅Live MY LIVE 1.0巡回演唱会｜虹口足球场｜2026.08.\n29 19:00\n8. 周延GAI 2026「REAL G」巡回演唱会｜虹口足球场｜2026.09.05 19:00\n9. 丁当Della《夜游A Night Tour》巡回演唱会｜上海大舞台(上海体育馆)｜2026.09.05 19:00\n10. 周传雄「念念不忘・再遇见plus」巡回演唱会｜上海体育场｜2026.09.05-09.06\n11. 袁一琦UNKNOWN（未知）2026巡回演唱会｜上海大舞台(上海体育馆)｜2026.09.12 19:00\n12. 小柯「来・把你唱给我听」巡回演唱会｜上海静安体育中心-体育馆｜2026.09.12 19:00\n13. 潘玮柏“MADLOVE:ULTRA”巡回演唱会｜上海虹口足球场｜2026.09.19\n14. 齐豫风采依旧・在上海演唱会｜上海体育馆｜2026.09.19 19:00\n15. 张智霖2026“在”巡回演唱会｜浦发银行东方体育中心｜2026.09.19 19:00\n16. “爱之传奇”迈克学摇滚演唱会｜上海大舞台(上海体育馆)｜2026.09.23 19:30\n17. 歌者归来超级歌会（中秋特别场）｜上海上汽浦东足球场｜2026.09.25 19:00\n18. 李荣浩「黑马」巡回演唱会｜上海体育场｜2026.09.25-09.26\n二、Livehouse小型巡演\n1. Melo墨龙「神笔马良」巡演上海站｜MAO LiveHous'), WebsearchReference(site_name='手机新浪网', title='时代少年团演唱会上海站|时代少年团|复旦大学博物馆|加冠礼|上海体育场|外滩露台音乐季|bfc外滩金融中心|滨江草地啤酒音乐会|灯塔营地|遗珍永耀|馆藏精品文物展_新浪新闻', publish_time='2026年08月02日 11:07:00(CST) 星期日', summary='上海味道-新闻晨报\n26-08-02 11:07 微博认证：新闻晨报“上海味道”品牌栏目\n【魔都嗨玩日历·8月2日丨#时团再度叩响申城之约#；#复旦大学馆藏文物特展开放#】上海本地游玩资讯上新，跟着攻略解锁魔都多元玩法！#上海这么玩才够City#\n》》》时代少年团「加冠礼」演唱会-收官场上海站\n时间：8月2日/3日/5日/6日\n地点：上海体育场\n去年八月申城夏夜的灯光仍历历在目，今夏蝉鸣携着「加冠礼」再度叩响申城之约。8月2日至3日、8月5日至6日，时代少年团「加冠礼」演唱会收官场在上海体育场举办。这是拥有高人气的时代少年团连续第二年暑期在上海落地大型演唱会，预计吸引超过20万人次观众，近九成观众为跨城观演。\n》》》外滩露台音乐季\n时间：即日起至8月30日每周末\n地址：BFC外滩金融中心南区5F露台\n温馨提示：免费参与，须在官方小程序上预约\n8月的周末，BFC五楼江景露台继续化作城市最迷人的音乐现场之一。外滩露台音乐季集结10余个顶尖音乐厂牌与30多位DJ音乐人，横跨多元风格，为沪上乐迷呈现多场高品质、多元化的音乐体验。\n》》》2026滨江草地啤酒音乐会\n时间：即日起至9月20日（周日至周四17:00-22:00，周五、周六15:00-23:00）\n地址：宝山区吴淞口路318号灯塔营地\n参与方式：免费免预约\n2026滨江草地啤酒音乐会在宝山区灯塔营地正式拉开帷幕。多支本土乐队轮番登场，精酿、果味、无醇啤酒多种选择，现切羊肉串、烤鸡翅、烤鱿鱼、小龙虾、烤全羊香飘全场。亲子游乐区设有泡泡趴、水滑梯、沙池寻宝，每晚还有“开放麦专场”，上台高歌')], message='共 5 条参考')
+2026-08-12T16:54:00.173+08:00 +00120.776s [UP -> DUPLEX] type=conversation.item.create bytes=14328 {"type":"conversation.item.create","event_id":"event_11","items":[{"role":"tool","call_id":"1eafb4f8-b284-4700-8108-bcdb9bcaba1c","content":[{"type":"input_text","text":"2026年8月上海演唱会安排近期\n\n1. 澎湃新闻\n上海，又一批演唱会来了\n2026年08月11日 15:46:00(CST) 星期二\n上海，又一批演唱会来了\nShanghaiLOOK\n2026-08-11 15:46 上海\n李荣浩\n「黑马」巡回演唱会\n乾坤未定，你我皆黑马。「黑马」这一主题，出自李荣浩第八张个人创作专辑《黑马》。只要坚信自己，所有人都可以在纷繁世界里奔跑出自己的高光！黑色能量，包罗万象。\n本轮巡演在歌单筛选上更是下足功夫，编曲焕然一新，各类曲目倾情改编，为他人创作的“浩式情歌”更将亲自演绎。\ninfo\n「黑马」巡回演唱会\n「地址」\n上海体育场\n「票档」\n¥380-1280\n「时间」\n08.06 13:00开抢\n2026.09.25-09.26\n后台对话框回复：李荣浩\n即可进入购票通道\n潘玮柏\n“MAD LOVE:ULTRA”巡回演唱会\n经历化为盔甲，长出强韧的机械手臂，可以向外展示力量，也可以成为最诚恳的表白，带你一起畅游潘玮柏Mad Love的内心世界，在星空中伫立，在鲜花中盛放!\n这是MAD LOVE:ULTRA潘玮柏狂爱:终极巡回演唱会的奥义。这一次，狂爱之神降临邀你一起踏入由我们共同定义的绝对领域，共同完成这场终极进化。\ninfo\n“MADLOVE:ULTRA”\n巡回演唱会\n「地址」\n虹口足球场\n「票档」\n¥380-980\n「时间」\n未官宣开票时间\n2026.09.19 19:00\n后台对话框回复：潘玮柏\n即可进入购票通道\n周传雄\n「念念不忘·再遇见plus」\n巡回演唱会\n从金曲制作人到“情歌\n教父”，周传雄的名字烙印在无数称之经典的声音。《黄昏》、《寂寞沙洲冷》、《有没有一首歌会让你想起我》......他的音乐陪伴一代代青春共同生长。\n2026年，新一轮巡演「念念不忘·再遇见plus」升级启程，因为念念不忘，我们才会再遇见更盛大的风花雪月。\ninfo\n「念念不忘·再遇见plus」\n巡回演唱会\n「地址」\n上海体育场\n「票档」\n¥380-1180\n「时间」\n08.10 15:00开抢\n2026.09.05-09.06\n后台对话框回复：周传雄\n即可进入购票通道\n丁当Della\n《夜游 A Night Tour》\n上海夜未眠巡回演唱会\n有人在上海追梦，有人在上海失恋，有人把故事留在深夜。而丁当，要陪你把这座城市唱亮。当霓虹亮起，上海的夜才正要开始。\n从情歌天后到夜晚女王，丁当带着全面升级的《夜游ANight Tour》重返上海。夜游狂欢无限放大，打造最奇幻不眠派对。\ninfo\n《夜游 A Night Tour》\n上海夜未眠巡回演唱会\n「地址」\n徐家汇体育公园·上海体育馆\n「票档」\n¥380-680\n「时间」\n08.03 12:00开抢\n2026.09.05 19:00\n后台对话框回复：丁当\n即可进入购票通道\n歌者归来超级歌会-上海站\n(中秋特别场）\n2026年中秋，“歌者归来”超级歌会中秋特别场，登陆上海浦东足球场。在这个团圆的日子里，四位华语乐坛的经典之声同台集结。\n曹格、王心凌\n2. 演出圈\n上海2026演唱会时间表（王嘉尔、周传雄、林忆莲、杨千嬅、潘玮柏、李荣浩、伍佰、GAI周延、林宥嘉、张智霖、林志炫、张震岳、袁一琦）\n2026年08月10日 18:52:00(CST) 星期一\n00\n演出地点：梅赛德斯-奔驰文化中心\n备注：审批通过，票务信息待公布\n林忆莲「回响2.0」巡回演唱会-上海站\n演出时间：2026年10月6、7、10、11日 19:00\n演出地点：上海虹口足球场\n备注:审批通过，票务信息待公布\n杨千嬅 《Live MY LIVE》世界巡回演唱会-上海站\n演出时间：2026年8月29日（周六）19:00\n演出场馆：上海虹口足球场\n周传雄 《念念不忘·再遇见plus》巡回演唱会-上海站\n演出时间：2026年9月5、6日 19:00演出场馆：上海虹口足球场\n林宥嘉 《超级管家》巡回演唱会-上海站演出时间：2026年8月15、16日 19:00演出场馆：上海虹口足球场2026洛天依「无限共鸣-纯蓝幻乐」演唱会-上海站\n演出时间：2026年8月15日 周六 19：00\n演出地点：上海静安体育中心体育馆\n李荣浩「黑马」世界巡回演唱会-上海站\n演出时间：2026年9月25、26日 19:00\n演出地点：上海体育场\n歌者归来超级歌会-上海站（中秋特别场）\n演出时间:2026年9月25日 周五 19:00演出地点:上汽浦东足球场票价:¥380～1080演出阵容: 张信哲、王心凌、阿杜、曹格\n潘玮柏 《MAD LOVE: ULTRA》巡回演唱会-上海站演出时间：2026年9月19、20日 19:00演出场馆：上海虹口足球场\n2026 郭静「刚刚好的自己」巡回演唱会-上海站演出时间：2026年8月29日（周六）19:30演出场馆：上海国家会展中心（上海）虹馆EH\n2026 GAI 周延「Real G」巡回演唱会-上海站演出时间：2026年9月5日（周六）19:00演出场馆：上海虹口足球场\n2026丁当「上海夜未眠」巡回演唱会-上海站\n演出时间：2026年9月5日 周六 19:00\n演出地点：上海体育馆\n「UNKNOWN」袁一琦2026个人巡回演唱会-上海站\n演出时间：2026年9月12日 周六 19:00\n演出地点：上海体育馆\n2026张智霖「在」巡回演唱会-上海站\n演出时间：2026年9月19日 周六 19:00\n演出地点：上海浦发银行东方体育中心\n石凯《时空乐园》2026巡回演唱会-上海站演出时间：2026年9月12日（周六）19:00演出场馆：国家会展中心（上海）虹馆EH\n2026小柯「来-把你唱给我听」巡回演唱会-上海站\n演出时间：2026年9月12日 周六 19：00\n演出地点：上海静安体育中心体育馆\n齐豫 《风采依旧》巡回演唱会-上海站演出时间：2026年9月19日（周六）19:00演出场馆：上海体育馆\n2026李翊君《永远永远》世界巡回演唱会-上海站演出时间：2026年10月24日（周六）19:00演出场馆：国家会展中心（上海）虹馆EH\n2026游鸿明《敌不过想念》巡回演唱会-上海站\n演出时间：2026年10月11日 周日 19:\n3. 上海热线\n准备抢票！上海又一波演唱会即将开唱\n2026年08月11日 08:30:00(CST) 星期二\n准备抢票！上海又一波演唱会即将开唱\n乐游上海 2026-08-11 08:30:19\n盛夏的上海，\n演唱会热潮席卷全城。\n即将开票、最新推荐.....\n一波演唱会轮番登场。\n@所有歌迷们，准备开唱吧！\n即将开票\n1\nGAI周延\n“REAL G”巡回演唱会\n时间：9月5日\n地点：虹口足球场\n开票时间：8月10日11:00\n本次演唱会的舞台设计以全新形式呈现，搭建了超长GAI式延伸台，给歌迷带来超近距离的直观体验！音乐和舞美编排也全新升级，打造顶级听觉互动现场。\n2\n周传雄\n“念念不忘・再遇见 plus”上海站\n时间：9月5-6日\n地点：上海体育场\n开票时间：8月10日15:00\n情歌教父周传雄升级巡演即将登陆上海，全新旋转舞台、环场花车打造沉浸式视听体验，《黄昏》《记事本》等经典金曲悉数唱响。奔赴青春重逢之约，在晚风里重温藏在老歌里的回忆。\n3\nCharlie Puth\nWhatever's Clever! 世界巡回演唱会\n时间：10月31日\n地点：虹口足球场\n开票时间：8月11日12:00\n风靡全球的创作才子Charlie Puth，带着全新Whatever's Clever! 世界巡回演唱会重磅登陆上海虹口足球场！跨越山海的旋律，无数传唱全球的经典曲目，10月31日，在虹口足球场，与万千乐迷一起奔赴这场盛大的流行音乐现场。\n最新推荐\n1\n张智霖\n“在”巡回演唱会\n时间：9月19日\n地\n点：东方体育中心\n张智霖首场个人巡演登陆上海，融合粤语金曲、流行单曲与舞台剧情表演，兼顾唱功与舞台叙事，风格多元。\n2\n江美琪\n“伤心唱出来就没事了”演唱会\n时间：11月28日\n地点：上海LIVERSE音宇宙艺术中心\n2026年，江美琪继续带着专辑《圆的?圆的!》出发，以“伤心唱出来就没事了”为主题开启2.0版演唱会，用最质朴的情感、最纯粹的歌声，为听众带来一场治愈心事的音乐之约。\n3\n迈克学摇滚\n“爱之传奇”演唱会\n时间：9月23日\n地点：上海体育馆\n北欧经典摇滚乐队来华开演，重现传世金曲Take Me To Your Heart，摇滚编曲糅合温柔唱腔，掀起欧美复古怀旧浪潮，适配摇滚乐迷奔赴怀旧现场。\n4\n林忆莲\n“回响：终章”巡回演唱会\n时间：10月10-11日\n地点：虹口足球场\n此次巡演将以FINAL CHAPTER“最终章”为名，在原有《回响》的基础上全面升级，以全新内容、全新舞台表达开启巡演2.0。\n5\n袁一琦\nUNKNOWN（未知） 巡回演唱会\n时间：9月12日\n地点：上海体育馆\n十周年专属限定场次，围绕未知概念打造先锋光影舞台。巡演暗藏专属彩蛋与互动环节，解锁未知惊喜，赴一场冲破边界、奔赴无限可能性的音乐约会。\n近期看点\n1\n李荣浩\n“黑马”巡回演唱会\n时间：9月25-26日\n地点：上海体育场\n演唱会以“黑马”为主题，来源于李荣浩第八张个人创作专辑《黑马》。本轮巡演在歌单\n4. 凤凰网海南频道\n2026上海演唱会、话剧、脱口秀等多品类演出购票攻略，附演出信息\n2026年08月12日 11:53:00(CST) 星期三\n2026上海演唱会、话剧、脱口秀等多品类演出购票攻略，附演出信息\n商讯\n2026年08月12日 11:53:33\n2026上海演唱会、话剧、脱口秀等多品类演出购票攻略，附演出信息\n2026年8至9月上海演出市场热度高涨，林宥嘉、杨千嬅、李荣浩、GAI、周传雄、潘玮柏轮番开唱，洛天依、笑果脱口秀、相声专场、Livehouse巡演密集上演。面对海量场次，选对购票渠道、掌握抢票技巧、规避票务陷阱，才能顺利奔赴线下现场。本文重点解析大麦、猫眼、票牛APP三大主流平台，结合上海各大场馆演出特点，整理一套可直接使用的购票方案。\n近期上海重点演出一览\n一、流行歌手演唱会\n1. 林宥嘉《超级管家》巡回演唱会｜上海虹口足球场｜2026.08.15-08.16\n2. 洛天依2026「无限共鸣・纯蓝幻乐」｜静安体育中心-体育馆｜2026.08.15\n3. 2026郑艺彬「三十减一」生日会｜星在文化中心-梦想剧场｜2026.08.17 19:30\n4. 花生与葱花Hanser演唱会｜静安体育中心-体育馆｜2026.08.22-08.23\n5. 魔力sir家族演唱会｜国家会展中心（上海）虹馆EH｜2026.08.22 19:00\n6. 花开四季～心路歌者乌兰图雅演唱会专场｜东方艺术中心-音乐厅｜2026.08.22 19:30\n7. 杨千嬅Live MY LIVE 1.0巡回演唱会｜虹口足球场｜2026.08.\n29 19:00\n8. 周延GAI 2026「REAL G」巡回演唱会｜虹口足球场｜2026.09.05 19:00\n9. 丁当Della《夜游A Night Tour》巡回演唱会｜上海大舞台(上海体育馆)｜2026.09.05 19:00\n10. 周传雄「念念不忘・再遇见plus」巡回演唱会｜上海体育场｜2026.09.05-09.06\n11. 袁一琦UNKNOWN（未知）2026巡回演唱会｜上海大舞台(上海体育馆)｜2026.09.12 19:00\n12. 小柯「来・把你唱给我听」巡回演唱会｜上海静安体育中心-体育馆｜2026.09.12 19:00\n13. 潘玮柏“MADLOVE:ULTRA”巡回演唱会｜上海虹口足球场｜2026.09.19\n14. 齐豫风采依旧・在上海演唱会｜上海体育馆｜2026.09.19 19:00\n15. 张智霖2026“在”巡回演唱会｜浦发银行东方体育中心｜2026.09.19 19:00\n16. “爱之传奇”迈克学摇滚演唱会｜上海大舞台(上海体育馆)｜2026.09.23 19:30\n17. 歌者归来超级歌会（中秋特别场）｜上海上汽浦东足球场｜2026.09.25 19:00\n18. 李荣浩「黑马」巡回演唱会｜上海体育场｜2026.09.25-09.26\n二、Livehouse小型巡演\n1. Melo墨龙「神笔马良」巡演上海站｜MAO LiveHous\n5. 手机新浪网\n时代少年团演唱会上海站|时代少年团|复旦大学博物馆|加冠礼|上海体育场|外滩露台音乐季|bfc外滩金融中心|滨江草地啤酒音乐会|灯塔营地|遗珍永耀|馆藏精品文物展_新浪新闻\n2026年08月02日 11:07:00(CST) 星期日\n上海味道-新闻晨报\n26-08-02 11:07 微博认证：新闻晨报“上海味道”品牌栏目\n【魔都嗨玩日历·8月2日丨#时团再度叩响申城之约#；#复旦大学馆藏文物特展开放#】上海本地游玩资讯上新，跟着攻略解锁魔都多元玩法！#上海这么玩才够City#\n》》》时代少年团「加冠礼」演唱会-收官场上海站\n时间：8月2日/3日/5日/6日\n地点：上海体育场\n去年八月申城夏夜的灯光仍历历在目，今夏蝉鸣携着「加冠礼」再度叩响申城之约。8月2日至3日、8月5日至6日，时代少年团「加冠礼」演唱会收官场在上海体育场举办。这是拥有高人气的时代少年团连续第二年暑期在上海落地大型演唱会，预计吸引超过20万人次观众，近九成观众为跨城观演。\n》》》外滩露台音乐季\n时间：即日起至8月30日每周末\n地址：BFC外滩金融中心南区5F露台\n温馨提示：免费参与，须在官方小程序上预约\n8月的周末，BFC五楼江景露台继续化作城市最迷人的音乐现场之一。外滩露台音乐季集结10余个顶尖音乐厂牌与30多位DJ音乐人，横跨多元风格，为沪上乐迷呈现多场高品质、多元化的音乐体验。\n》》》2026滨江草地啤酒音乐会\n时间：即日起至9月20日（周日至周四17:00-22:00，周五、周六15:00-23:00）\n地址：宝山区吴淞口路318号灯塔营地\n参与方式：免费免预约\n2026滨江草地啤酒音乐会在宝山区灯塔营地正式拉开帷幕。多支本土乐队轮番登场，精酿、果味、无醇啤酒多种选择，现切羊肉串、烤鸡翅、烤鱿鱼、小龙虾、烤全羊香飘全场。亲子游乐区设有泡泡趴、水滑梯、沙池寻宝，每晚还有“开放麦专场”，上台高歌\n共 5 条参考"}]}]}
+2026-08-12T16:54:04.769+08:00 +00125.372s [DOWN <- DUPLEX] type=response.done bytes=366 {"type":"response.done","event_id":"event_432","response":{"usage":{"total_tokens":13546,"input_tokens":13368,"output_tokens":178,"input_token_details":{"text_tokens":12620,"audio_tokens":748,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":178}}}}
+2026-08-12T16:54:10.606+08:00 +00131.209s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=115 {"item_id":"52426579787664130","type":"conversation.item.input_audio_transcription.started","event_id":"event_433"}
+2026-08-12T16:54:10.616+08:00 +00131.220s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=148 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787664130","event_id":"event_434","content_index":0,"delta":"烟草"}
+2026-08-12T16:54:10.919+08:00 +00131.522s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=154 {"content_index":0,"delta":"烟草环节","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787664130","event_id":"event_435"}
+2026-08-12T16:54:11.159+08:00 +00131.763s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=160 {"content_index":0,"delta":"烟草环节信息","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787664130","event_id":"event_436"}
+2026-08-12T16:54:11.252+08:00 +00131.855s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=163 {"content_index":0,"delta":"烟草环节信息。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787664130","event_id":"event_437"}
+2026-08-12T16:54:11.323+08:00 +00131.926s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=160 {"delta":"烟草环节信息","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787664130","event_id":"event_438","content_index":0}
+2026-08-12T16:54:11.835+08:00 +00132.438s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=163 {"content_index":0,"delta":"烟草环节信息。","type":"conversation.item.input_audio_transcription.delta","item_id":"52426579787664130","event_id":"event_439"}
+2026-08-12T16:54:11.840+08:00 +00132.443s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=166 {"content_index":1,"text":"烟草环节信息。","event_id":"event_440","type":"conversation.item.input_audio_transcription.completed","item_id":"52426579787664130"}
+2026-08-12T16:54:12.812+08:00 +00133.415s [DOWN <- DUPLEX] type=response.function_call_arguments.done bytes=213 {"type":"response.function_call_arguments.done","event_id":"event_441","items":[{"name":"websearch","arguments":"{\"query\":\"2026年8月12日演唱会信息\"}","call_id":"d80ee11f-ee62-4d5f-85db-b95b3b80361c"}]}
+2026-08-12T16:54:12.812+08:00 +00133.415s [LOCAL TASK] event_id='ecdd217f-1389-46b6-959b-7146acd9e85c' timestamp=datetime.datetime(2026, 8, 12, 16, 54, 12, 812463) type='task.start' task_id='d80ee11f-ee62-4d5f-85db-b95b3b80361c'
+2026-08-12T16:54:25.258+08:00 +00145.861s [LOCAL TASK] event_id='7ade9b77-43dd-4430-94c7-f516f2571903' timestamp=datetime.datetime(2026, 8, 12, 16, 54, 25, 257593) type='task.success' task_id='d80ee11f-ee62-4d5f-85db-b95b3b80361c' result=WebsearchToolOutput(query='2026年8月12日演唱会信息', references=[WebsearchReference(site_name='网易', title='官宣定档！深圳3场演唱会审批通过！5场即将开票', publish_time='2026年08月12日 00:23:00(CST) 星期三', summary='官宣定档！深圳3场演唱会审批通过！5场即将开票\n深圳本地宝\n2026-08-12 00:23\n深圳本周的演唱会抢票简直要爆炸！\n本周8月12日同一天5场演唱会开票！\n还有4场通过审批\n本期为大家带来了\n汪苏泷香港演唱会加场\n邓紫棋加场\n还有郭富城、陈小春、陆虎等演唱会开票\n还有超多演唱会最新消息！\n小编为大家准备了\n上述演唱会开票最新消息\n以及其他演唱会最新消息\n赶快一起来看看吧！\n*红色字体为即将开票的演唱会\n蓝色字体为最新通过审批/上架的演唱会\n0 1深圳即将开票演唱会\n邓紫棋深圳演唱会\n图源：猫眼小程序\n✅最新消息：没错邓紫棋深圳站演唱会又又又加场啦！本次再次加场10月4-5日场！\n✅ 演出项目：G.E.M.邓紫棋IAMGLORIA世界巡回演唱会2.0-深圳站\n1️⃣演出时间：2026年9月11日-13日、19-20日、加场25-27日、加场10月1、2、4、5日\n2️⃣演出地点：深圳大运中心体育场\n3️⃣开票时间：8月12日12:00\n4️⃣购票平台：猫眼|大麦\n5️⃣票价：380/580/780/1080/1380/1680元\n✅座位图：（仅供参考！）\n汪苏泷香港演唱会\n图源：大麦APP\n✅汪苏泷香港演唱会最新消息：\n大家期盼已久的汪苏泷香港演唱会加场啦！8月12日13点开售9月4日加场票！\n✅ 演出项目：汪苏泷2026「明日世界」世界巡回演唱会——中国香港站\n1️⃣演出时间：2026年9月4日至6日\n2️⃣演出地点：中国香港启德体育园启德主场馆\n3️⃣开票时间：8月12日13点\n4️⃣购票平台：大麦APP\n5️⃣票价：380/480/680/880/1280/1680元\n*后续如有调整请以官方最新内容为准\n郭富城深圳演唱会\n图源：猫眼小程序\n✅郭富城深圳演唱会最新消息：\n郭富城深圳演唱会即将开票！开票时间定档8月12日14:28！\n✅ 演出项目：郭富城ICONIC世界巡回演唱会2026深圳站\n1️⃣演出时间：2026年9月26日 19:00\n2️⃣演出地点：深圳市体育中心体育馆主馆\n3️⃣开票时间：8月12日 14:28\n4️⃣购票平台：猫眼|大麦\n5️⃣票价：480/680/980/1280/1680元\n陈小春深圳演唱会\n图源：猫眼小程序\n✅最新消息：2026陈小春深圳演唱会将在8月12日13:18正式开票\n✅ 演出项目 ：2026陈小春 BIGMAN人一個巡回演唱会-深圳站\n1️⃣演出时间：2026/10/6\n2️⃣演出地点：深圳湾体育中心“春茧”体育馆\n3️⃣开票时间：8月12日13:18\n4️⃣购票平台：猫眼|大麦\n5️⃣票价：488/688/888/1088/1288元\n陆虎深圳演唱会\n图源：大麦APP\n✅最新消息：2026陆虎深圳演唱会将在8月12日11:00正式开票！\n✅ 演出项目：2026陆虎「想你这样的朋友3.0」巡演-深圳站\n'), WebsearchReference(site_name='新浪看点', title='蔡徐坤澳门演唱会：三次死亡重生玩转无限流', publish_time='2026年08月12日 00:04:00(CST) 星期三', summary='蔡徐坤澳门演唱会：三次死亡重生玩转无限流\n剧势剖析\n08.12 00:04\n蔡徐坤2026年8月在澳门开启的“thedeadman”巡演首站，被网友和乐评人解读为一场精心设计的“无限流”闯关舞台——整场演出不是简单的歌曲串烧，而是一套完整的叙事闭环。\n一、世界观设计：从MV到舞台的“无限流”副本\n概念移植：演唱会借鉴“无限流”文学中“循环闯关、死亡重生”的核心设定，将舞台打造成西部废土风格的“斗兽场”副本，巨型环形装置替代无限流小说中的“主神空间”中转站功能，地面投影则如同游戏闯关地图。\n主线叙事：整场演出围绕“向死而生”内核展开，蔡徐坤以“玩家”身份进入副本，通过三次“死亡与重生”的循环，完成从迷茫到掌控自我的蜕变。\n视觉符号：脸部战损妆从开场“满身伤痕”到终场“几乎干净”的渐变，直观呈现了“褪去过往伤痛”的蜕变过程，成为最易被观众捕捉的叙事线索。\n二、三次“死亡与重生”的叙事核心\n第一次（迷失与簇拥）：在《fool》结尾从舞台消失，随后在《dancebreak》的“thedeadmanisback”声中重新站起，象征从独自彷徨到被人群簇拥的转变。\n第二次（突破与远行）：在《washedaway》中被海浪意象袭卷，穿越时空隧道来到银河般的《afterglow》舞台，寓意冲出困境、走向更广阔的世界。\n第三次（主动涅槃）：在《colder》结尾，他亲手拿起火把点燃地屏上的“deadman”字样，主动选择“死亡”来迎接新生，完成从被命运摆布到掌控自我的终极蜕变。\n三、硬实力支撑：22首原创全开麦与行业意义\n技术基底：全场近两小时献上22首原创曲目，在四面台360度无死角的设计中全程全开麦高强度唱跳，快歌气息稳定、抒情曲情绪饱满，为“无限流”概念提供了扎实的技术底座。\n行业启发：这场演唱会打破了传统演唱会的“歌曲串烧+安可”模式，将歌单、编舞、灯光、VCR、道具全部编织进一条完整故事线，使整场演出近似一部沉浸式电影，为华语演唱会“剧情化舞台”提供了新样本。\n传播效应：大量观众在社交平台发布万字复盘长文和逐帧剪辑视频，话题#蔡徐坤澳门演唱会原来是无限流# 迅速登上热搜，讨论量突破上亿。\n'), WebsearchReference(site_name='新浪看点', title='蔡徐坤澳门演唱会玩转无限流，三次重生震撼全场', publish_time='2026年08月12日 02:42:00(CST) 星期三', summary='蔡徐坤澳门演唱会玩转无限流，三次重生震撼全场\n娱圈拾影\n08.12 02:42\n蔡徐坤2026年8月在澳门举办的“THE DEADMAN”演唱会，被粉丝和媒体热议为一场“无限流”沉浸式闯关大戏，整场演出以“向死而生”为核心，通过三次“死亡与重生”的叙事闭环，将个人经历转化为舞台艺术，收获了极高关注度。\n一、核心设定：从MV到舞台的“无限流”闯关剧本\n世界观延续：演唱会概念是原创单曲《Deadman》MV的延续，场景从森林转移到西部废土风格的“竞技场”，蔡徐坤扮演的“Deadman”作为核心NPC，带领观众开启闯关试炼。\n副本式叙事：整场演出跳出传统曲目串烧模式，借鉴“无限流”文学中的闯关副本设定，观众化身“玩家”，跟随主角经历困境、破碎、重生的完整故事闭环。\n互动设计：开场时蔡徐坤直接以“玩家们”称呼观众，并邀请大家“一起书写一个新篇章”，强化了沉浸式游戏体验。\n二、核心主线：三次“死亡与重生”的舞台演绎\n第一次重生（《Fool》至《Dancebreak》）：在《Fool》结尾从舞台上消失，随后在《Dancebreak》的“the deadman is back”声中重新站起，象征从独自彷徨到被人群簇拥的转变。\n第二次重生（《Washed Away》至《Afterglow》）：在《Washed Away》尾声被海浪吞噬，随后穿越时光隧道，来到《Afterglow》的银河舞台，寓意冲破风浪、去往更远的地方。\n第三次重生（《Colder》至《What a Day》）：在《Colder》结尾主动点燃地屏上的“Deadman”字样，以“自我选择”的姿态走向死亡并迎来彻底涅槃。随后《What a Day》响起，宣告过去标签随风而去。\n细节呼应：蔡徐坤脸上的“战损妆”随着三次重生逐渐淡化直至消失，妆容变化与剧情推进完美契合。\n三、硬实力支撑：22首原创全开麦与沉浸式舞美\n高强度演出：整场演唱会上演22首原创曲目，全程全开麦、零预录高强度唱跳，快歌气息稳定，抒情曲情绪饱满，展现了扎实的音乐实力。\n舞美创新：澳门站选址威尼斯人综艺馆，打破该馆惯例启用四面台设计，巨型环形斗兽场配合地面投影地图，营造出沉浸式闯关氛围。\n票房与影响：两场演出门票早已售罄，相关话题“蔡徐坤澳门演唱会原来是无限流”引爆网络，引发大量二刷复盘与深度解析，被认为是一次高质量、有诚意的舞台创新。\n内容由AI生成\n'), WebsearchReference(site_name='新浪看点', title='蔡徐坤澳门演唱会“无限流”是什么？28岁生日场22首全开麦唱跳为何被称CD级现场？', publish_time='2026年08月12日 04:37:00(CST) 星期三', summary='级现场”，认为他在高强度舞蹈中保持了稳定的气息与音准。\n问：蔡徐坤澳门演唱会对他的事业有什么影响？\n答：两场门票在强实名制下售罄，大麦“想看”人数突破110万。更重要的影响在口碑层面，大量路人观众看完现场直拍后主动分享，社交平台出现“下沉口碑”热议，被视为其从流量偶像转向实力派歌手的关键节点。\n截至2026年8月12日，围绕蔡徐坤澳门演唱会的讨论仍在持续发酵。“无限流”舞台已成为其职业生涯中具有标志性意义的演出事件——它不仅是一次成功的概念策划，更重要的是，它为“流量艺人是否有实力”这一长期争论提供了一个基于现场检验的答案样本。后续值得关注的是，这一口碑能否持续转化为音乐作品的市场认可，以及“无限流”概念是否会延续至未来的巡演场次中。\n#蔡徐坤# #蔡徐坤澳门演唱会# #THE DEADMAN# #无限流# #全开麦唱跳#\n'), WebsearchReference(site_name='手机新浪网', title='邓紫棋巡演150场创纪录，观众秒变“预言家”引热议', publish_time='2026年08月12日 03:38:00(CST) 星期三', summary='邓紫棋巡演150场创纪录，观众秒变“预言家”引热议\n娱乐新作集\n08.12 03:38\n邓紫棋“I AM GLORIA”世界巡回演唱会近日频现“预言家”观众——他们能精准预判她的每一句talking甚至什么时候哭，这一现象随着巡演突破150场体育场、创下世界纪录而格外引人注目。\n一、“预言家”现象：粉丝玩梗还是流程固化？\n现象回顾：多场演唱会上，有观众在邓紫棋开口前就喊出她的台词，甚至在她落泪前提前喊“不要哭”，几乎分秒不差，被戏称为“全场唯一的预言家”。部分首次观看的粉丝感到“被剧透”，认为难以共情。\n争议焦点：有网友形容演唱会像“一盘巨大的预制菜”，talking、哭点都被精准预测，认为缺乏新鲜感；但许多铁粉认为这只是熟场观众的幽默互动，不能代表演出质量。\n二、现象背后：高密度巡演与标准化的“现场叙事”\n巡演强度：自2023年底启动，“I AM GLORIA”已进行超过150场体育场演出，每场超2小时全开麦，且包含大量固定互动段落和情感表达。\n流程可预测性：因场次密集、时间紧凑，演出中经典台词、互动环节甚至哭点都形成固定“剧本”，被多次追场的粉丝熟记于心，从而能够提前“预言”。这并非刻意敷衍，而是高密度巡演下保持稳定质量的自然结果。\n三、粉丝生态：多元声音与双向奔赴\n路人粉体验：首次观看的观众可能因提前知晓流程而降低新鲜感，但邓紫棋的唱功和现场感染力仍是核心吸引力，大部分普通观众表示“值回票价”。\n铁粉态度：资深棋士认为这恰恰证明巡演的诚意——每场都倾注真实情感，能多年保持同一套高水准演出并不容易。有粉丝')], message='共 5 条参考')
+2026-08-12T16:54:25.259+08:00 +00145.862s [UP -> DUPLEX] type=conversation.item.create bytes=11768 {"type":"conversation.item.create","event_id":"event_12","items":[{"role":"tool","call_id":"d80ee11f-ee62-4d5f-85db-b95b3b80361c","content":[{"type":"input_text","text":"2026年8月12日演唱会信息\n\n1. 网易\n官宣定档！深圳3场演唱会审批通过！5场即将开票\n2026年08月12日 00:23:00(CST) 星期三\n官宣定档！深圳3场演唱会审批通过！5场即将开票\n深圳本地宝\n2026-08-12 00:23\n深圳本周的演唱会抢票简直要爆炸！\n本周8月12日同一天5场演唱会开票！\n还有4场通过审批\n本期为大家带来了\n汪苏泷香港演唱会加场\n邓紫棋加场\n还有郭富城、陈小春、陆虎等演唱会开票\n还有超多演唱会最新消息！\n小编为大家准备了\n上述演唱会开票最新消息\n以及其他演唱会最新消息\n赶快一起来看看吧！\n*红色字体为即将开票的演唱会\n蓝色字体为最新通过审批/上架的演唱会\n0 1深圳即将开票演唱会\n邓紫棋深圳演唱会\n图源：猫眼小程序\n✅最新消息：没错邓紫棋深圳站演唱会又又又加场啦！本次再次加场10月4-5日场！\n✅ 演出项目：G.E.M.邓紫棋IAMGLORIA世界巡回演唱会2.0-深圳站\n1️⃣演出时间：2026年9月11日-13日、19-20日、加场25-27日、加场10月1、2、4、5日\n2️⃣演出地点：深圳大运中心体育场\n3️⃣开票时间：8月12日12:00\n4️⃣购票平台：猫眼|大麦\n5️⃣票价：380/580/780/1080/1380/1680元\n✅座位图：（仅供参考！）\n汪苏泷香港演唱会\n图源：大麦APP\n✅汪苏泷香港演唱会最新消息：\n大家期盼已久的汪苏泷香港演唱会加场啦！8月12日13点开售9月4日加场票！\n✅ 演出项目：汪苏泷2026「明日世界」世界巡回演唱会——中国香港站\n1️⃣演出时间：2026年9月4日至6日\n2️⃣演出地点：中国香港启德体育园启德主场馆\n3️⃣开票时间：8月12日13点\n4️⃣购票平台：大麦APP\n5️⃣票价：380/480/680/880/1280/1680元\n*后续如有调整请以官方最新内容为准\n郭富城深圳演唱会\n图源：猫眼小程序\n✅郭富城深圳演唱会最新消息：\n郭富城深圳演唱会即将开票！开票时间定档8月12日14:28！\n✅ 演出项目：郭富城ICONIC世界巡回演唱会2026深圳站\n1️⃣演出时间：2026年9月26日 19:00\n2️⃣演出地点：深圳市体育中心体育馆主馆\n3️⃣开票时间：8月12日 14:28\n4️⃣购票平台：猫眼|大麦\n5️⃣票价：480/680/980/1280/1680元\n陈小春深圳演唱会\n图源：猫眼小程序\n✅最新消息：2026陈小春深圳演唱会将在8月12日13:18正式开票\n✅ 演出项目 ：2026陈小春 BIGMAN人一個巡回演唱会-深圳站\n1️⃣演出时间：2026/10/6\n2️⃣演出地点：深圳湾体育中心“春茧”体育馆\n3️⃣开票时间：8月12日13:18\n4️⃣购票平台：猫眼|大麦\n5️⃣票价：488/688/888/1088/1288元\n陆虎深圳演唱会\n图源：大麦APP\n✅最新消息：2026陆虎深圳演唱会将在8月12日11:00正式开票！\n✅ 演出项目：2026陆虎「想你这样的朋友3.0」巡演-深圳站\n\n2. 新浪看点\n蔡徐坤澳门演唱会：三次死亡重生玩转无限流\n2026年08月12日 00:04:00(CST) 星期三\n蔡徐坤澳门演唱会：三次死亡重生玩转无限流\n剧势剖析\n08.12 00:04\n蔡徐坤2026年8月在澳门开启的“thedeadman”巡演首站，被网友和乐评人解读为一场精心设计的“无限流”闯关舞台——整场演出不是简单的歌曲串烧，而是一套完整的叙事闭环。\n一、世界观设计：从MV到舞台的“无限流”副本\n概念移植：演唱会借鉴“无限流”文学中“循环闯关、死亡重生”的核心设定，将舞台打造成西部废土风格的“斗兽场”副本，巨型环形装置替代无限流小说中的“主神空间”中转站功能，地面投影则如同游戏闯关地图。\n主线叙事：整场演出围绕“向死而生”内核展开，蔡徐坤以“玩家”身份进入副本，通过三次“死亡与重生”的循环，完成从迷茫到掌控自我的蜕变。\n视觉符号：脸部战损妆从开场“满身伤痕”到终场“几乎干净”的渐变，直观呈现了“褪去过往伤痛”的蜕变过程，成为最易被观众捕捉的叙事线索。\n二、三次“死亡与重生”的叙事核心\n第一次（迷失与簇拥）：在《fool》结尾从舞台消失，随后在《dancebreak》的“thedeadmanisback”声中重新站起，象征从独自彷徨到被人群簇拥的转变。\n第二次（突破与远行）：在《washedaway》中被海浪意象袭卷，穿越时空隧道来到银河般的《afterglow》舞台，寓意冲出困境、走向更广阔的世界。\n第三次（主动涅槃）：在《colder》结尾，他亲手拿起火把点燃地屏上的“deadman”字样，主动选择“死亡”来迎接新生，完成从被命运摆布到掌控自我的终极蜕变。\n三、硬实力支撑：22首原创全开麦与行业意义\n技术基底：全场近两小时献上22首原创曲目，在四面台360度无死角的设计中全程全开麦高强度唱跳，快歌气息稳定、抒情曲情绪饱满，为“无限流”概念提供了扎实的技术底座。\n行业启发：这场演唱会打破了传统演唱会的“歌曲串烧+安可”模式，将歌单、编舞、灯光、VCR、道具全部编织进一条完整故事线，使整场演出近似一部沉浸式电影，为华语演唱会“剧情化舞台”提供了新样本。\n传播效应：大量观众在社交平台发布万字复盘长文和逐帧剪辑视频，话题#蔡徐坤澳门演唱会原来是无限流# 迅速登上热搜，讨论量突破上亿。\n\n3. 新浪看点\n蔡徐坤澳门演唱会玩转无限流，三次重生震撼全场\n2026年08月12日 02:42:00(CST) 星期三\n蔡徐坤澳门演唱会玩转无限流，三次重生震撼全场\n娱圈拾影\n08.12 02:42\n蔡徐坤2026年8月在澳门举办的“THE DEADMAN”演唱会，被粉丝和媒体热议为一场“无限流”沉浸式闯关大戏，整场演出以“向死而生”为核心，通过三次“死亡与重生”的叙事闭环，将个人经历转化为舞台艺术，收获了极高关注度。\n一、核心设定：从MV到舞台的“无限流”闯关剧本\n世界观延续：演唱会概念是原创单曲《Deadman》MV的延续，场景从森林转移到西部废土风格的“竞技场”，蔡徐坤扮演的“Deadman”作为核心NPC，带领观众开启闯关试炼。\n副本式叙事：整场演出跳出传统曲目串烧模式，借鉴“无限流”文学中的闯关副本设定，观众化身“玩家”，跟随主角经历困境、破碎、重生的完整故事闭环。\n互动设计：开场时蔡徐坤直接以“玩家们”称呼观众，并邀请大家“一起书写一个新篇章”，强化了沉浸式游戏体验。\n二、核心主线：三次“死亡与重生”的舞台演绎\n第一次重生（《Fool》至《Dancebreak》）：在《Fool》结尾从舞台上消失，随后在《Dancebreak》的“the deadman is back”声中重新站起，象征从独自彷徨到被人群簇拥的转变。\n第二次重生（《Washed Away》至《Afterglow》）：在《Washed Away》尾声被海浪吞噬，随后穿越时光隧道，来到《Afterglow》的银河舞台，寓意冲破风浪、去往更远的地方。\n第三次重生（《Colder》至《What a Day》）：在《Colder》结尾主动点燃地屏上的“Deadman”字样，以“自我选择”的姿态走向死亡并迎来彻底涅槃。随后《What a Day》响起，宣告过去标签随风而去。\n细节呼应：蔡徐坤脸上的“战损妆”随着三次重生逐渐淡化直至消失，妆容变化与剧情推进完美契合。\n三、硬实力支撑：22首原创全开麦与沉浸式舞美\n高强度演出：整场演唱会上演22首原创曲目，全程全开麦、零预录高强度唱跳，快歌气息稳定，抒情曲情绪饱满，展现了扎实的音乐实力。\n舞美创新：澳门站选址威尼斯人综艺馆，打破该馆惯例启用四面台设计，巨型环形斗兽场配合地面投影地图，营造出沉浸式闯关氛围。\n票房与影响：两场演出门票早已售罄，相关话题“蔡徐坤澳门演唱会原来是无限流”引爆网络，引发大量二刷复盘与深度解析，被认为是一次高质量、有诚意的舞台创新。\n内容由AI生成\n\n4. 新浪看点\n蔡徐坤澳门演唱会“无限流”是什么？28岁生日场22首全开麦唱跳为何被称CD级现场？\n2026年08月12日 04:37:00(CST) 星期三\n级现场”，认为他在高强度舞蹈中保持了稳定的气息与音准。\n问：蔡徐坤澳门演唱会对他的事业有什么影响？\n答：两场门票在强实名制下售罄，大麦“想看”人数突破110万。更重要的影响在口碑层面，大量路人观众看完现场直拍后主动分享，社交平台出现“下沉口碑”热议，被视为其从流量偶像转向实力派歌手的关键节点。\n截至2026年8月12日，围绕蔡徐坤澳门演唱会的讨论仍在持续发酵。“无限流”舞台已成为其职业生涯中具有标志性意义的演出事件——它不仅是一次成功的概念策划，更重要的是，它为“流量艺人是否有实力”这一长期争论提供了一个基于现场检验的答案样本。后续值得关注的是，这一口碑能否持续转化为音乐作品的市场认可，以及“无限流”概念是否会延续至未来的巡演场次中。\n#蔡徐坤# #蔡徐坤澳门演唱会# #THE DEADMAN# #无限流# #全开麦唱跳#\n\n5. 手机新浪网\n邓紫棋巡演150场创纪录，观众秒变“预言家”引热议\n2026年08月12日 03:38:00(CST) 星期三\n邓紫棋巡演150场创纪录，观众秒变“预言家”引热议\n娱乐新作集\n08.12 03:38\n邓紫棋“I AM GLORIA”世界巡回演唱会近日频现“预言家”观众——他们能精准预判她的每一句talking甚至什么时候哭，这一现象随着巡演突破150场体育场、创下世界纪录而格外引人注目。\n一、“预言家”现象：粉丝玩梗还是流程固化？\n现象回顾：多场演唱会上，有观众在邓紫棋开口前就喊出她的台词，甚至在她落泪前提前喊“不要哭”，几乎分秒不差，被戏称为“全场唯一的预言家”。部分首次观看的粉丝感到“被剧透”，认为难以共情。\n争议焦点：有网友形容演唱会像“一盘巨大的预制菜”，talking、哭点都被精准预测，认为缺乏新鲜感；但许多铁粉认为这只是熟场观众的幽默互动，不能代表演出质量。\n二、现象背后：高密度巡演与标准化的“现场叙事”\n巡演强度：自2023年底启动，“I AM GLORIA”已进行超过150场体育场演出，每场超2小时全开麦，且包含大量固定互动段落和情感表达。\n流程可预测性：因场次密集、时间紧凑，演出中经典台词、互动环节甚至哭点都形成固定“剧本”，被多次追场的粉丝熟记于心，从而能够提前“预言”。这并非刻意敷衍，而是高密度巡演下保持稳定质量的自然结果。\n三、粉丝生态：多元声音与双向奔赴\n路人粉体验：首次观看的观众可能因提前知晓流程而降低新鲜感，但邓紫棋的唱功和现场感染力仍是核心吸引力，大部分普通观众表示“值回票价”。\n铁粉态度：资深棋士认为这恰恰证明巡演的诚意——每场都倾注真实情感，能多年保持同一套高水准演出并不容易。有粉丝\n共 5 条参考"}]}]}
+2026-08-12T16:54:26.644+08:00 +00147.247s [DOWN <- DUPLEX] type=response.output_audio.started bytes=152 {"question_id":"52426579787664130","response_id":"52426579787664386","tts_type":"default","type":"response.output_audio.started","event_id":"event_449"}
+2026-08-12T16:54:29.647+08:00 +00150.251s [DOWN <- DUPLEX] type=response.output_text.done bytes=475 {"question_id":"52426579787664130","response_id":"52426579787664386","type":"response.output_text.done","text":"今天的演唱会消息还多哦，蔡徐坤澳门的“THE DEADMAN”演唱会还在热头，搞的无限流舞台，22首歌全是全开麦唱跳。另外今天中午12点邓紫棋深圳加场开票，13点汪苏泷香港加场、陈小春深圳场也开票，下午2点28还有郭富城深圳场抢票，想冲的话盯到时间哈。","event_id":"event_548"}
+2026-08-12T16:54:30.567+08:00 +00151.171s [DOWN <- DUPLEX] type=response.output_audio.done bytes=128 {"question_id":"52426579787664130","response_id":"52426579787664386","type":"response.output_audio.done","event_id":"event_569"}
+2026-08-12T16:54:30.568+08:00 +00151.171s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=70
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_13",
+                                            "items": []
+                                          }
+2026-08-12T16:54:30.628+08:00 +00151.232s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=3319
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "id": "52426579787642370",
+                                                "role": "user",
+                                                "timestamp": 1786524729708,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你可以用贵阳话或者四川话和我交流吗？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787643394",
+                                                "role": "assistant",
+                                                "timestamp": 1786524730343,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "可以嘞，你想先听贵阳话还是四川话嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787644162",
+                                                "role": "user",
+                                                "timestamp": 1786524735165,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "四川话。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787644418",
+                                                "role": "assistant",
+                                                "timestamp": 1786524736194,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，那我就用四川话跟你摆哈龙门阵咯，你想扯点啥子嘛？"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787645698",
+                                                "role": "user",
+                                                "timestamp": 1786524745698,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "我想看看明天成都的天气。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787646466",
+                                                "role": "assistant",
+                                                "timestamp": 1786524761459,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "明天成都大晴天哦，最高温要到37度，最低23度，风不大还是有点烤人哈。出门记得把防晒做好，多喝水防到中暑，要是在外头待久了，找得到阴凉地方就多歇哈。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787650562",
+                                                "role": "user",
+                                                "timestamp": 1786524777484,
+                                                "content": [
+                                                  {
+                                                    "text": "那你看哈成都这这两天有哪样好看的电影？",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787651074",
+                                                "role": "assistant",
+                                                "timestamp": 1786524794580,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "这两天成都热映的还多哦，评分9.7的动画《八仙！》、沈腾主演刚上的《欢迎来龙餐馆》都值得看。还有《蜘蛛侠：崭新之日》《年会不能停！2》口碑也不错，要是想蹲点映，14号上的诺兰新片《奥德赛》可以先预售占位置。另外成华区、金牛区还有免费公益电影，想省钱也可以去凑哈热闹。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "timestamp": 1786524816185,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你怎么不说成都话了？"
+                                                  }
+                                                ],
+                                                "id": "52426579787656962",
+                                                "role": "user"
+                                              },
+                                              {
+                                                "id": "52426579787657218",
+                                                "role": "assistant",
+                                                "timestamp": 1786524817458,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "哎呀搞忘咯！刚刚一哈没转过来弯，马上给你扯成都话嘛，你想咋个摆都要得！"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787659010",
+                                                "role": "user",
+                                                "timestamp": 1786524828360,
+                                                "content": [
+                                                  {
+                                                    "text": "帮我在奢华附近的演唱会。",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "同时帮我打开空调。"
+                                                  }
+                                                ],
+                                                "id": "52426579787661314",
+                                                "role": "user",
+                                                "timestamp": 1786524836020
+                                              },
+                                              {
+                                                "id": "52426579787661570",
+                                                "role": "assistant",
+                                                "timestamp": 1786524838984,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "要得嘛，空调已经给你打开咯，这么热的天，吹起凉风吹起才巴适嘛。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787664130",
+                                                "role": "user",
+                                                "timestamp": 1786524853980,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "烟草环节信息。"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52426579787664386",
+                                                "role": "assistant",
+                                                "timestamp": 1786524871788,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "今天的演唱会消息还多哦，蔡徐坤澳门的“THE DEADMAN”演唱会还在热头，搞的无限流舞台，22首歌全是全开麦唱跳。另外今天中午12点邓紫棋深圳加场开票，13点汪苏泷香港加场、陈小春深圳场也开票，下午2点28还有郭富城深圳场抢票，想冲的话盯到时间哈。"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "event_id": "event_570"
+                                          }
+2026-08-12T16:54:49.951+08:00 +00170.555s [UP -> DUPLEX] type=session.close bytes=46 {"type":"session.close","event_id":"event_14"}
+2026-08-12T16:54:50.550+08:00 +00171.153s [DOWN <- DUPLEX] type=session.closed bytes=48 {"type":"session.closed","event_id":"event_571"}
+2026-08-12T16:54:50.600+08:00 +00171.203s === DUPLEX VOICE CASE END ===

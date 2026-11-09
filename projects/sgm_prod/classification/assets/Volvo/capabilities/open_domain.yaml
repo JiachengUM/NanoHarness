@@ -1,0 +1,63 @@
+executor: 联网
+description: 联网搜索和开放信息查询不由 parser 直接证明 simple，只把明确开放信息类意图送入 Volvo LLM fallback 做最终边界判断。
+capabilities:
+  - id: open_domain.web_search.query
+    name: 联网搜索和开放信息查询
+    required_slots:
+      - action
+      - target
+    targets:
+      - 联网搜索
+    actions:
+      - 帮我搜一下
+      - 帮我搜
+      - 搜一下
+      - 搜索一下
+      - 帮我查一下
+      - 帮我查
+      - 查一下
+    target_policy: open_after_action
+    route_policy: llm_fallback
+    intent_marker_policy: override_cross_executor
+    intent_markers:
+      - 介绍一下
+      - 帮我搜
+      - 搜一下
+      - 搜索一下
+      - 攻略
+      - 玩法
+      - 怎么玩
+      - 一家三口
+      - 迪士尼
+      - 飞越地平线
+      - 疯狂动物城
+      - 在干什么
+      - 新闻
+      - 热搜
+      - 有多少
+      - 多少卡路里
+      - 卡路里
+      - 百公里油耗
+      - 油耗
+      - 最近上映
+      - 热门电影
+      - 电影
+      - 星巴克
+      - 门店
+      - 几点开门
+      - 营业时间
+      - 高铁
+      - 最快要多久
+      - 感冒
+      - 健康建议
+      - 什么是
+      - 插电混动
+      - 概念解释
+      - 冷笑话
+      - 笑话
+      - 推荐几首
+      - 开车听
+      - 早高峰
+      - 中环
+      - 堵车
+      - 路况

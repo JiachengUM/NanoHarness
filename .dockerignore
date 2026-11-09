@@ -1,0 +1,55 @@
+# Python 缓存文件（使用通配符匹配所有层级）
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+
+# Git 相关
+.git/
+.gitignore
+.gitattributes
+
+# 虚拟环境（所有层级）
+**/.venv/
+**/venv/
+.venv/
+venv/
+
+# Node dependencies
+**/node_modules/
+
+# 日志文件（所有层级）
+*.log
+**/*.log
+
+# 系统文件（所有层级）
+.DS_Store
+**/.DS_Store
+
+# IDE 文件（所有层级）
+.vscode/
+.idea/
+**/.vscode/
+**/.idea/
+
+# 测试和缓存（所有层级）
+.pytest_cache/
+.mypy_cache/
+*.ipynb
+**/.pytest_cache/
+**/.mypy_cache/
+
+# 其他项目（可选，如果只需要 SGM）
+# projects/hwhms/
+# projects/uiagent/
+# projects/uiagent_server/
+# examples/
+# tests/
+# datasets/
+# mvms/

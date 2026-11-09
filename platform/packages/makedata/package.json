@@ -1,0 +1,33 @@
+{
+  "name": "@eval-platform/makedata",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run",
+    "test:real": "cross-env RUN_REAL_LLM=true vitest run",
+    "test:watch": "vitest",
+    "e2e": "tsx tests/e2e-debug.ts"
+  },
+  "dependencies": {
+    "@eval-platform/database": "workspace:*",
+    "@eval-platform/llm": "workspace:*",
+    "@eval-platform/shared": "workspace:*",
+    "p-limit": "^7.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

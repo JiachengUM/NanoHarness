@@ -1,0 +1,63 @@
+{
+  "name": "@eval-platform/database",
+  "version": "1.0.0",
+  "description": "Database access layer with Mongoose + Typegoose + Zod",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./models/tag-tree": {
+      "development": "./src/models/tag-tree/index.ts",
+      "types": "./src/models/tag-tree/index.ts",
+      "default": "./dist/models/tag-tree/index.js"
+    },
+    "./models/scenario": {
+      "development": "./src/models/scenario/index.ts",
+      "types": "./src/models/scenario/index.ts",
+      "default": "./dist/models/scenario/index.js"
+    },
+    "./models/case-audit": {
+      "development": "./src/models/case-audit/index.ts",
+      "types": "./src/models/case-audit/index.ts",
+      "default": "./dist/models/case-audit/index.js"
+    },
+    "./models/scenario-judge": {
+      "development": "./src/models/scenario-judge/index.ts",
+      "types": "./src/models/scenario-judge/index.ts",
+      "default": "./dist/models/scenario-judge/index.js"
+    },
+    "./models/scenario-plan": {
+      "development": "./src/models/scenario-plan/index.ts",
+      "types": "./src/models/scenario-plan/index.ts",
+      "default": "./dist/models/scenario-plan/index.js"
+    },
+    "./models/dataset-item": {
+      "development": "./src/models/dataset-item/index.ts",
+      "types": "./src/models/dataset-item/index.ts",
+      "default": "./dist/models/dataset-item/index.js"
+    },
+    "./models/dataset": {
+      "development": "./src/models/dataset/index.ts",
+      "types": "./src/models/dataset/index.ts",
+      "default": "./dist/models/dataset/index.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@eval-platform/shared": "workspace:*",
+    "@typegoose/typegoose": "^13.3.0",
+    "mongoose": "^9.6.3",
+    "reflect-metadata": "^0.2.2"
+  }
+}

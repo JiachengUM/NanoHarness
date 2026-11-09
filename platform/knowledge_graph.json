@@ -1,0 +1,1026 @@
+{
+  "_meta": {
+    "description": "eval-platform 项目知识图谱（MCP Knowledge Graph Memory 兼容格式）。用于快速定位目录、模块、文件、数据模型、API 路由、核心概念等。",
+    "format": "entities[] + relations[]，每个 entity 含 name/entityType/observations[]；relation 含 from/to/relationType（主动语态）",
+    "root_path": "d:\\yitu_projects\\nanoai\\platform",
+    "last_updated": "2026-07-13",
+    "source_docs": ["PROJECT_STRUCTURE.md", "README.md", "packages/makedata/README.md"]
+  },
+  "entities": [
+    {
+      "name": "eval-platform",
+      "entityType": "Project",
+      "observations": [
+        "基于 pnpm workspace + Turborepo 的 monorepo AI Agent 评测平台",
+        "包管理器: pnpm@11.5.1；构建工具: Turborepo；语言: TypeScript 6.x；运行时: Node.js >= 22",
+        "数据库: MongoDB；LLM: 字节跳动 Doubao（通过 OpenAI SDK 兼容接口调用）",
+        "根目录: d:\\yitu_projects\\nanoai\\platform"
+      ]
+    },
+    {
+      "name": "apps",
+      "entityType": "Directory",
+      "observations": [
+        "路径: platform/apps",
+        "应用层，包含可部署的独立应用：backend、frontend"
+      ]
+    },
+    {
+      "name": "apps/backend",
+      "entityType": "App",
+      "observations": [
+        "路径: platform/apps/backend",
+        "技术栈: Fastify 5.x + Zod Type Provider + MongoDB",
+        "API URL 前缀: /api；完整路由格式: /api/{route_prefix}/{path}",
+        "MongoDB URI: mongodb://127.0.0.1:27017/ai-mind-test；端口: 8100；主机: 0.0.0.0",
+        "入口: src/index.ts（连接 DB + 启动服务）",
+        "核心目录: src/core（app.ts, config.ts）、src/api/routes、src/http/response.ts、src/schema/params.ts、src/constants、src/tests/api"
+      ]
+    },
+    {
+      "name": "apps/frontend",
+      "entityType": "App",
+      "observations": [
+        "路径: platform/apps/frontend",
+        "前端应用（暂不活跃）"
+      ]
+    },
+    {
+      "name": "packages",
+      "entityType": "Directory",
+      "observations": [
+        "路径: platform/packages",
+        "共享包目录，包含: database、evaluation、llm、makedata、shared"
+      ]
+    },
+    {
+      "name": "@eval-platform/database",
+      "entityType": "Package",
+      "observations": [
+        "路径: platform/packages/database",
+        "技术栈: Mongoose + Typegoose + Zod",
+        "职责: MongoDB 数据访问层，含连接管理、基础 Repository、各业务模型",
+        "核心: src/connection.ts（connect/disconnect 单例）、src/base/（document/repository/schema-options/dto）",
+        "模型子路径导出: ./models/tag-tree、./models/scenario、./models/scenario-plan、./models/scenario-judge、./models/case-audit、./models/dataset-item、./models/dataset、./models/generation-task、./models/generation-task-run"
+      ]
+    },
+    {
+      "name": "@eval-platform/llm",
+      "entityType": "Package",
+      "observations": [
+        "路径: platform/packages/llm",
+        "技术栈: OpenAI SDK（封装字节 Doubao 模型）",
+        "支持模型: doubao-seed-2-0-pro-260215、doubao-seed-2-0-mini-260428",
+        "主要导出: createClient、invoke、invokeWithRetry（指数退避 1s/2s/4s，最多 3 次）、invokeWithRetryRaw、stream、zodTextFormat",
+        "结构化输出: 通过 Zod Schema 定义输出格式，LLM 严格遵循"
+      ]
+    },
+    {
+      "name": "@eval-platform/makedata",
+      "entityType": "Package",
+      "observations": [
+        "路径: platform/packages/makedata",
+        "用途: 基于 LLM 生成测试场景和用例，含 Plan → Pattern → 生成 → 审核 → 修复完整流程",
+        "数据合成流程: Query → Plan → Pattern → 场景 → 用例 → 数据集",
+        "子模块: core/、generation/、audit/、principles/、simple_run/、examples/、tests/",
+        "并发参数: patternLimit=25、initialBatchSize=25、auditConcurrency=35、fixConcurrency=20，峰值约 40（豆包限 50）",
+        "双模式测试: pnpm test（Mock ~2s）/ pnpm test:real（真实 LLM）/ pnpm test:watch",
+        "调试入口: tests/e2e-debug.ts、tests/scenario-planner-debug.ts、simple_run/full-pipeline.ts",
+        "关键设计: Plan/Pattern 分离、Pattern 并发生成、程序化初筛、targetScenarioCount 归属 Pattern Generator、Scenario.pattern 字段、LLMScenarioSchema、Prompt 模板化",
+        "用户偏好: 用例对话内容会被语音读出，必须使用真实非占位地址（禁止 'XX路' 等占位路名）"
+      ]
+    },
+    {
+      "name": "@eval-platform/evaluation",
+      "entityType": "Package",
+      "observations": [
+        "路径: platform/packages/evaluation",
+        "用途: Agent 评测核心逻辑",
+        "核心: Evaluator.evaluate()、Judge（基于 nl_assertion 判定）、AgentV1Adaptor",
+        "实验模块: fake_person、virtual_car、virtual_environment、script_events、tag_tree",
+        "请求封装: src/request/https.ts、src/request/sse.ts"
+      ]
+    },
+    {
+      "name": "@eval-platform/shared",
+      "entityType": "Package",
+      "observations": [
+        "路径: platform/packages/shared",
+        "用途: 公共类型与工具函数",
+        "导出: logger（Pino 封装，等级 trace/debug/info/warn/error/fatal/silent；debug+ 打印控制台，info+ 写日志文件）",
+        "工具: utils/date.ts、utils/id.ts、utils/validation.ts、utils/nl_repr.ts"
+      ]
+    },
+
+    {
+      "name": "makedata/core/tag-tree.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/core/tag-tree.ts",
+        "导出 TagTree 类：树操作、可视化、叶子标签判定"
+      ]
+    },
+    {
+      "name": "makedata/generation/scenario-planner.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/scenario-planner.ts",
+        "函数: generateScenarioPlan()",
+        "职责: Plan 生成（不含 patterns），输出 task_description、target_tags、interpretation_notes、hard_constraints",
+        "hard_constraints 提取原则：宁多勿漏、主动挖掘隐含约束、宁可多提取；只在 query 确无硬约束时返回空数组；prompt 含 7 条示例引导 LLM 识别隐含约束",
+        "hard_constraints 强制扫描步骤：输出前必须逐句扫描 query 的限定词（数量/频次/能力要求/能力排除/主题/难度/交互模式），隐含挖掘，汇总填入；schema 描述去掉'无硬约束返回空数组'退路",
+        "硬约束相关 prompt 全部解耦：示例改用能力A/B、主题T、X类等抽象占位，不绑定具体 query 内容；EXPERT_IDENTITY 的'用车场景/出行生活'是领域术语保留"
+      ]
+    },
+    {
+      "name": "makedata/generation/scenario-pattern-generator.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/scenario-pattern-generator.ts",
+        "函数: generateScenarioPatterns(plan)",
+        "职责: 独立 Pattern 生成，基于 Plan 派生；targetScenarioCount = max(10, patterns.length, tags×2)",
+        "谱系覆盖服从 task_description：识别 task_description 中的限定词（交互模式/能力范围/主题/任务类型/难度），pattern 必须在限定范围内设计；方法论与具体 query 解耦",
+        "发散思维引导：主题领域拆解→子领域情境化→穷举所有子领域→情境×维度交叉派生 pattern；数量按主题广度分档（狭窄 5-15 / 中等 15-30 / 广泛 30-60+）；方法论与具体 query 解耦"
+      ]
+    },
+    {
+      "name": "makedata/generation/scenario-core.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/scenario-core.ts",
+        "函数: generateScenarios(query, tagTree, { plan, patterns })",
+        "职责: 场景生成主入口，含并发优化",
+        "阶段1: Pattern 并发巡游（p-limit 25），每 pattern 生成 3-5 场景 → 审核 → 修复",
+        "阶段2: Judge 全局驱动深化，评估覆盖度 → 指导下一轮 → 去重 → 循环",
+        "停止条件: patterns 全覆盖 AND (标签全覆盖 OR Judge满意)"
+      ]
+    },
+    {
+      "name": "makedata/generation/scenario-generator.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/scenario-generator.ts",
+        "函数: generateAndRefineBatch()",
+        "职责: 底层场景生成 + 审核 + 修复",
+        "标签选择服从 task_description：识别任务描述中的限定词（交互模式/能力范围/主题/任务类型），标签不得违反限定；辨析边界（限定禁止主动动作 vs 自然副产物）；方法论与具体 query 解耦"
+      ]
+    },
+    {
+      "name": "makedata/generation/scenario-audit.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/scenario-audit.ts",
+        "函数: auditScenarios()、fixScenariosByAudit()",
+        "职责: 场景审核与自动修复"
+      ]
+    },
+    {
+      "name": "makedata/generation/scenario-judge.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/scenario-judge.ts",
+        "函数: judgeScenarioCoverage()、detectDuplicateScenarios()、filterScenariosByHardConstraints()",
+        "职责: Judge 评估覆盖度、场景去重、硬约束校验",
+        "filterScenariosByHardConstraints: 基于 plan.hard_constraints 让 LLM 逐个场景判定是否违反硬约束，返回应移除的 scenario_id 列表。LLM 失败时回退到不剔除（保守策略）",
+        "硬约束校验在去重之后、Judge 覆盖率评估之前执行（scenario-core.ts 第610-632行）"
+      ]
+    },
+    {
+      "name": "makedata/generation/case.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/case.ts",
+        "函数: generateCasesFromScenarios()、generateAndRefineCases()、generateCasesForScenario()、simplifyUserQueryLists()",
+        "职责: 用例生成与精修，生成 → 审核 → 修复 → 循环直到达标",
+        "generateCasesForScenario 支持分批生成（每批最多4个），批间注入 priorCasesSummary 做弱协同差异化",
+        "generateCasesForScenario 支持 externalPriorCases 参数：跨迭代轮次补充生成时传入该场景已通过 case，避免与已有 case 雷同",
+        "generateAndRefineCases 在补充生成时自动传入 existingScenarioCases 作为去重上下文",
+        "时间一致性规则：涉时效性信息（年度活动/季节性事件/赛事/政策/实时动态）的 case 必须在 car_info 加'当前日期时间'字段作为时间基准；nl_assertion 中的具体年份/日期必须能从 car_info 或台词推出，不得凭空出现；详细规则见 writing.md §12b",
+        "冷启动台词自然性规则：冷启动台词必须是真人一口气会说出的话；允许并行多任务长句和带犹豫语气的自然改口；禁止单句内多次反复改变同一目标且无犹豫语气（像念任务清单），这种多轮交互应拆为冷启动第一句 + expected_script 后续轮次；详细规则见 writing.md §8.1",
+        "expected_script 多轮交替剧本规则：涉及中途插话/取消/查询/改口/多任务并行等需要中途交互的标签时，必须逐轮写'用户：xxx 管家：（期望…）'的交替结构，不能只写一行概括；单次多轮不标'第N轮'；多次多轮用'（重启新的对话……）'分隔；详细规则见 writing.md §7",
+        "expected_script 首句一致性规则：expected_script 第一句'用户：xxx'必须与 user_query_lists[0] 的冷启动台词逐字一致；多次多轮场景每个'（重启新的对话……）'段的首句也必须与对应 session 冷启动台词逐字一致；原因：执行器冷启动阶段只会念 user_query_lists 首条 user 消息给被测助手，剧本首句不一致会导致假人念错第一句或无所适从；自检清单已含此项",
+        "expected_script 后续轮次台词自然性规则：expected_script 中每个'用户：'行的台词必须像真人对车机说的话；禁止技术化/书面化/指令式表述（如'再问下当前座椅设置''查询当前任务状态'）和机械组合'功能名+动作'（如'查询加油站信息'）；应改为口语化、结果导向的短句（如'现在啥状态''调好了吗''还有多久到'）；详细规则见 writing.md §8.1；自检清单已含此项",
+        "人设/规则前导段规则（可选）：测'用户性格/行为模式''助手容错''应对策略''重试逻辑''唤醒词'等非固定台词场景时，可在 expected_script 开头加前导段；前导段只写演绎规则（用户性格/应对策略/重试规则/环境约束），不写助手行为/判分点/架空前置；前导段和正文用空行分隔；详细规则见 writing.md §7.3；自检清单已含此项",
+        "任务持续性与可取消性规则：测'取消任务/询问任务进度/中途插话改任务/任务优先级调度'时，被操作对象必须是持续任务（导航/搜索/播放/提醒），禁止用瞬间车控任务（开按摩/调空调/开车窗等）冒充可取消/可查询状态；详细规则见 writing.md §13b；自检清单已含此项",
+        "架空前置禁止规则：状态依赖型指令中'取消之前的XX''查询刚才那个任务'等带定语引用前置任务的台词，被引用任务必须在本 case 内真实建立过，禁止引用本 case 外的虚构背景；与记忆类生产→消费闭环同理；详细规则见 writing.md §14b.2；自检清单已含此项",
+        "prompt 中 priorCasesSection 强调'测的那一件事必须不同'，并给出硬性要求禁止重复已有测试点",
+        "去重检查仅基于 case_id 字符串相等，语义去重依赖 prompt 注入的 priorCasesSummary"
+      ]
+    },
+    {
+      "name": "makedata/generation/case-judge.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/case-judge.ts",
+        "函数: judgeCaseGeneration()",
+        "职责: 用例生成进度判别"
+      ]
+    },
+    {
+      "name": "makedata/generation/prompt-templates.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/generation/prompt-templates.ts",
+        "职责: 集中管理所有 Prompt 模板和专家角色定义",
+        "属于关键设计决策之一：Prompt 模板化",
+        "核心导出: EXPERT_IDENTITY、EXPERT_THINKING_FRAMEWORK、SAFETY_JUDGMENT_PRINCIPLES、EXPERT_OUTPUT_STANDARDS",
+        "组合函数: getFullExpertIdentity()、getExpertIdentityBrief()、getThinkingFramework()、getSafetyJudgmentPrinciples()、getGenerationTemplate()、getAuditTemplate()、getPlanningTemplate()、buildHardConstraintsSection()、buildHardConstraintsDesignRule()",
+        "EXPERT_IDENTITY 已包含对'用车场景'的广义理解（出行规划/沿途服务/目的地生活/实时信息/车辆状态查询五类），强调出行生活多元分布，避免收敛到'问车'",
+        "EXPERT_THINKING_FRAMEWORK 第1条为'用户出行需求驱动'（优先于车辆功能清单），原'驾驶情境真实性'顺移为第2条，整体5条原则",
+        "被 scenario-planner.ts、scenario-pattern-generator.ts、scenario-generator.ts、case.ts 共同引用作为系统级 instructions 基底"
+      ]
+    },
+    {
+      "name": "makedata/audit/validation.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/audit/validation.ts",
+        "职责: 程序化校验（Schema、交互链、标签），LLM 审核前用代码快速剔除明显问题，减少 30-50% LLM 调用"
+      ]
+    },
+    {
+      "name": "makedata/audit/audit.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/audit/audit.ts",
+        "函数: auditOneCase()、auditCases()",
+        "职责: 用例审核（含程序化预检查 + LLM 深度审核）",
+        "K类硬性约束含 K0-K12：K0时间规律发现场景合理性、K1条件变量泄题、K2验证轮复述动作、K3断言引用不可见字段、K4 car_info格式、K5 user_query_lists结构、K6能力泄题、K7占位符、K8记忆配置、K9字段类型、K10 car_info误用、K11用户台词自然性（含冷启动+expected_script后续轮次）、K12任务持续性与可取消性",
+        "K11 用户台词自然性（含冷启动 + expected_script 后续轮次）：检查 user_query_lists 首条 user 消息以及 expected_script 中每个'用户：'行的台词是否像真人会对车机说的话；重点抓念清单式冷启动（单句内多次反复改变同一目标且无犹豫语气）和 expected_script 后续轮次技术化/书面化/指令式表述（如'再问下当前座椅设置''查询当前任务状态'）；不抓并行多任务长句和带犹豫语气的自然改口；口语化不等于必须极短",
+        "K12 任务持续性与可取消性：检查测'取消任务/询问任务进度/中途插话改任务/任务优先级调度'的场景是否含至少一个持续任务（导航/搜索/播放/提醒）作为前置状态；重点抓用连续瞬间车控任务（开按摩/调空调/开车窗等）冒充'多任务并行/任务状态查询/任务取消'测试；纯车控并行执行测试不在此约束内但不应伪装成'任务状态管理'测试",
+        "K12 架空前置检查：冷启动台词或剧本里'取消之前的XX''查询刚才那个任务'等带定语引用前置任务的台词，被引用的任务必须在本 case 内真实建立过；若被引用任务从未在本 case 建立过（LLM 脑补的背景故事），属架空前置，评测不可复现；详见 writing.md §14b.2",
+        "C类结构正确性含 expected_script 多轮交替格式检查：多轮场景必须展开为交替剧本（非一行概括）；单次多轮不标'第N轮'；多次多轮用'（重启新的对话……）'分隔",
+        "C类结构正确性含 expected_script 首句一致性检查：expected_script 第一句'用户：xxx'必须与 user_query_lists[0] 冷启动台词逐字一致；多次多轮场景每个分隔段的首句也必须与对应 session 冷启动台词逐字一致",
+        "C类结构正确性含人设前导段检查（若使用）：expected_script 开头若有非'用户：/管家：'的前导段，检查前导段和正文用空行分隔、前导段只写演绎规则不写助手行为/判分点/架空前置；不要把前导段误判为格式错误（§7.3）"
+      ]
+    },
+    {
+      "name": "makedata/audit/fix.ts",
+      "entityType": "Module",
+      "observations": [
+        "路径: platform/packages/makedata/src/audit/fix.ts",
+        "函数: fixCaseOnce()、fixCaseLoop()、fixCasesByAudit()",
+        "职责: 用例自动修复",
+        "修复步骤6步：1处理审核反馈 2nl_assertion 3tags 4user_query_lists 5expected_script 6自查K0-K11",
+        "第四步含冷启动台词自然性：念清单式不自然台词应拆为冷启动第一句 + expected_script 后续轮次；保留自然的并行多任务和犹豫改口",
+        "第五步含expected_script多轮交替剧本：多轮场景必须展开为交替结构；单次多轮不标'第N轮'；多次多轮用'（重启新的对话……）'分隔"
+      ]
+    },
+    {
+      "name": "makedata/principles",
+      "entityType": "Directory",
+      "observations": [
+        "路径: platform/packages/makedata/src/principles",
+        "原则文档目录，由 index.ts 加载",
+        "文件: writing.md（用例编写原则）、key-constraints.md（K0-K6 硬性规则）、audit.md（审核原则）、composite-skill.md（复合用例技能）、audit-supplements.md（审核补充说明）"
+      ]
+    },
+    {
+      "name": "makedata/principles/writing.md",
+      "entityType": "Doc",
+      "observations": [
+        "路径: platform/packages/makedata/src/principles/writing.md",
+        "用例编写原则",
+        "用户偏好约束: 对话内容会被语音读出，必须使用真实地址，禁止 'XX路' 等占位路名",
+        "§7 expected_script 规范：多轮场景必须展开为'用户：xxx 管家：（期望…）'交替剧本（非一行概括）；单次多轮不标'第N轮'；多次多轮用'（重启新的对话……）'分隔；含单次多轮和多次多轮剧本示例",
+        "§7.3 人设/规则前导段（可选）：测'用户性格/行为模式''助手容错''应对策略''重试逻辑''唤醒词'等非固定台词场景时，可在 expected_script 开头加前导段（演绎规则），用空行与正文分隔；前导段只写'假人怎么演'（用户性格/应对策略/重试规则/环境约束），不写助手行为/判分点/架空前置；审核时不要把前导段误判为格式错误",
+        "§8.1 冷启动台词自然性：必须像真人一口气会说出的话；允许并行多任务长句和带犹豫语气的自然改口；禁止单句内多次反复改变同一目标且无犹豫语气（像念任务清单），应拆为冷启动第一句 + expected_script 后续轮次",
+        "§8.1 expected_script 后续轮次台词自然性：expected_script 中每个'用户：'行的台词同样必须像真人对车机说的话；重点抓技术化/书面化/指令式表述（如'再问下当前座椅设置''查询当前任务状态'）和机械组合'功能名+动作'（如'查询加油站信息'）；应改为口语化、结果导向的短句（如'现在啥状态''调好了吗''还有多久到'）",
+        "§9.3 对话形式标签与结构对应关系表：多次多轮的 expected_script 段间用'（重启新的对话……）'分隔",
+        "§12b 当前日期时间一致性：涉时效性场景须在 car_info 加'当前日期时间'字段，台词用相对时间，断言换算为具体年份；禁止断言出现 car_info/台词无法推出的年份/日期",
+        "§13b 任务持续性与可取消性：瞬间任务（车控类：开按摩/调空调/开车窗等秒级完成）不能作为'取消/询问进度/中途改任务/优先级调度'的测试对象；持续任务（导航/搜索/播放/提醒）有持续状态可取消、有进度可问；测这些交互时场景必须含至少一个持续任务作为前置状态",
+        "§14b 状态依赖型指令必须先建立前置状态（生产→消费闭环）：暂停/切歌/取消导航等有状态依赖的指令必须先建立前置状态再操作；§14b.2 禁止架空前置——'取消之前的XX''查询刚才那个任务'等带定语引用前置任务的台词，被引用任务必须在本 case 内真实建立过，禁止引用本 case 外的虚构背景；与记忆类生产→消费闭环（§10）同理",
+        "§15 入库前勾表含：冷启动台词自然性检查、expected_script后续轮次台词自然性检查、多轮剧本展开检查、人设前导段检查（若使用）、剧本首句=冷启动台词检查、任务持续性检查、状态依赖检查（含架空前置）",
+        "§16 Anti-patterns 第53-59条：冷启动台词念任务清单、多轮场景expected_script只写一行概括、单次多轮误标'第N轮'或多次多轮未用分隔符、剧本首句与冷启动台词不一致、瞬间任务冒充可取消/可查询状态、架空前置状态、expected_script后续轮次台词技术化/书面化"
+      ]
+    },
+    {
+      "name": "makedata/principles/key-constraints.md",
+      "entityType": "Doc",
+      "observations": [
+        "路径: platform/packages/makedata/src/principles/key-constraints.md",
+        "关键约束 K0-K6，硬性规则"
+      ]
+    },
+    {
+      "name": "makedata/simple_run",
+      "entityType": "Directory",
+      "observations": [
+        "路径: platform/packages/makedata/src/simple_run",
+        "调试运行脚本（非核心逻辑）",
+        "文件: full-pipeline.ts（完整流水线调试）、planner.ts（Planner 调试）、scenario.ts（场景生成调试）"
+      ]
+    },
+    {
+      "name": "makedata/tests",
+      "entityType": "Directory",
+      "observations": [
+        "路径: platform/packages/makedata/tests",
+        "双模式测试: Mock（pnpm test ~2s）/ Real LLM（pnpm test:real）",
+        "test-utils.ts: Mock Client（按 text.format.json_schema.name 分发预定义响应，支持 11 种 format name）",
+        "测试文件: index、tag-tree、principles、validation、pattern-driven、scenario-planner、scenario-pattern-generator、generation、audit、integration、e2e-debug"
+      ]
+    },
+    {
+      "name": "makedata/examples/data/vehicle-tag-tree.json",
+      "entityType": "Data",
+      "observations": [
+        "路径: platform/packages/makedata/examples/data/vehicle-tag-tree.json",
+        "示例标签树数据（181 个叶子标签）"
+      ]
+    },
+
+    {
+      "name": "Dataset",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: complex_reasoning_dataset",
+        "字段: name（必填）、description?、item_count（自动计算）",
+        "关系: 1:N DatasetItem，级联删除"
+      ]
+    },
+    {
+      "name": "DatasetItem",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: complex_reasoning_case",
+        "即测试用例 Case",
+        "字段: dataset_id(FK)、case_id（必填唯一）、context_config、max_round、user_query_lists、expected_script、nl_assertion[]、case_description?、code_assertion?、tags[]、source_scenario_id?、source_scenario_name?",
+        "关系: N:1 属于 Dataset；N:1 派生自 Scenario（通过 source_scenario_id）"
+      ]
+    },
+    {
+      "name": "TagTree",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: tag_tree",
+        "字段: name（唯一）、description?、tree（完整标签树 JSON）",
+        "作用: 测试维度/能力地图，贯穿全程"
+      ]
+    },
+    {
+      "name": "Scenario",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: scenario",
+        "字段: scenario_id（业务唯一）、scenario_name、description、tags[]、pattern?、tag_tree_id?、source_query?、scenario_plan_id?、generation_task_id?",
+        "LLM 输出使用 LLMScenarioSchema（不含 pattern，兼容 OpenAI strict mode）",
+        "关系: N:1 ScenarioPlan；1:N DatasetItem；N:1 TagTree"
+      ]
+    },
+    {
+      "name": "ScenarioPlan",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: scenario_plan",
+        "字段: plan_id（业务唯一）、task_id(FK)、generation_task_run_id(FK)、original_query、task_description、target_tags[]、interpretation_notes、hard_constraints[]、status(pending/confirmed/generating/completed/cancelled)、tag_tree_name",
+        "不含 scenario_patterns（由 Pattern Generator 在场景生成阶段产出）",
+        "hard_constraints: HardConstraint[]，从query中提取的硬性约束列表，贯穿 Pattern Generator/场景生成/Judge 全链路",
+        "HardConstraint 类型: { type: 'capability_required'|'capability_excluded'|'interaction_pattern'|'theme'|'difficulty'|'other', description: string }",
+        "PlannerOutputSchema 是 LLM 输出 schema，包含 plan.task_description、plan.target_tags、plan.interpretation_notes、plan.hard_constraints",
+        "MongoDB schema (ScenarioPlanDoc) 在 scenario-plan.schema.ts，hard_constraints 为 HardConstraintDoc 子文档数组"
+      ]
+    },
+    {
+      "name": "GenerationTask",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: generation_task",
+        "字段: name、description?、creator",
+        "关系: 1:N GenerationTaskRun"
+      ]
+    },
+    {
+      "name": "GenerationTaskRun",
+      "entityType": "DataModel",
+      "observations": [
+        "集合名: generation_task_run",
+        "字段: generation_task_id(FK)、query、tag_tree_id(FK)、status(pending/running/completed/failed/cancelled)、progress?、events[]（SSE 事件记录）",
+        "关系: N:1 GenerationTask；1:1 ScenarioPlan"
+      ]
+    },
+
+    {
+      "name": "Query",
+      "entityType": "Concept",
+      "observations": [
+        "用户输入，自然语言描述想测什么场景",
+        "示例: '生成导航场景'、'测试时间规律发现能力'"
+      ]
+    },
+    {
+      "name": "Plan",
+      "entityType": "Concept",
+      "observations": [
+        "场景生成计划，作战蓝图",
+        "字段: original_query、task_description、target_tags[]、interpretation_notes",
+        "由 generateScenarioPlan() 产出，可被用户预览/修改",
+        "只描述'测什么'，Pattern 独立生成作为'执行蓝图'"
+      ]
+    },
+    {
+      "name": "Pattern",
+      "entityType": "Concept",
+      "observations": [
+        "场景模式，执行蓝图",
+        "由 generateScenarioPatterns(plan) 独立派生",
+        "targetScenarioCount = max(10, patterns.length, tags×2)，仅作安全阀和进度展示，非停止必要条件"
+      ]
+    },
+    {
+      "name": "ScenarioConcept",
+      "entityType": "Concept",
+      "observations": [
+        "测试场景，'测什么'，电影剧本的故事大纲",
+        "字段: scenario_id、scenario_name、description、tags[]",
+        "由 Plan + Pattern 生成"
+      ]
+    },
+    {
+      "name": "Case",
+      "entityType": "Concept",
+      "observations": [
+        "测试用例，'怎么测'，电影剧本的分镜脚本",
+        "即 DatasetItem，含完整对话流程和评判标准",
+        "核心字段: case_id、context_config、max_round、user_query_lists、expected_script、nl_assertion[]、tags[]",
+        "case_id 要求: 10字左右中文精炼描述，禁止 '变体N/用例N' 等无信息量编号",
+        "max_round: 简单 5-8；多轮 10-12；规律类 14-18"
+      ]
+    },
+
+    {
+      "name": "API: dataset",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/complex_reasoning_dataset",
+        "操作: GET /list、/page、/:id；POST /；PUT /:id；DELETE /:id",
+        "对应文件: apps/backend/src/api/routes/dataset.ts"
+      ]
+    },
+    {
+      "name": "API: dataset-item",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/complex_reasoning_case",
+        "操作: GET /list、/page、/:id；POST /；PUT /:id；DELETE /:id",
+        "对应文件: apps/backend/src/api/routes/dataset-item.ts"
+      ]
+    },
+    {
+      "name": "API: tag-tree",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/tag-tree",
+        "操作: GET /list、/:id/preview、/:id/export；POST /；DELETE /:id",
+        "对应文件: apps/backend/src/api/routes/tag-tree.ts"
+      ]
+    },
+    {
+      "name": "API: scenario-management",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/scenario-management",
+        "操作: GET /list、/page、/:id、/:id/cases；POST /；PUT /:id；DELETE /:id",
+        "对应文件: apps/backend/src/api/routes/scenario-management.ts"
+      ]
+    },
+    {
+      "name": "API: scenario-planning",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/scenario-planning",
+        "操作: POST /generate；GET /:id、/list；PUT /:id（确认/取消 Plan）",
+        "对应文件: apps/backend/src/api/routes/scenario-planning.ts"
+      ]
+    },
+    {
+      "name": "API: scenario-generation",
+      "entityType": "API",
+      "observations": [
+        "同步: POST /api/scenario-generation",
+        "流式: POST /api/scenario-generation-stream；POST /api/scenario-generation-stream/cancel",
+        "SSE 事件流: plan → patterns → scenario → progress → complete（异常: error）",
+        "对应文件: scenario-generation.ts、scenario-generation-stream.ts"
+      ]
+    },
+    {
+      "name": "API: case-generation",
+      "entityType": "API",
+      "observations": [
+        "同步: POST /api/case-generation",
+        "流式: POST /api/case-generation-stream",
+        "SSE 事件流: case → progress → complete（异常: error）",
+        "对应文件: case-generation.ts、case-generation-stream.ts"
+      ]
+    },
+    {
+      "name": "API: generation-task",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/generation-task",
+        "操作: GET /list、/page、/:id；POST /；PUT /:id；DELETE /:id",
+        "对应文件: apps/backend/src/api/routes/generation-task.ts"
+      ]
+    },
+    {
+      "name": "API: generation-task-run",
+      "entityType": "API",
+      "observations": [
+        "路由前缀: /api/generation-task-run",
+        "操作: GET /list、/page、/:id；POST /；PUT /:id；DELETE /:id",
+        "对应文件: apps/backend/src/api/routes/generation-task-run.ts"
+      ]
+    },
+
+    {
+      "name": "Config: pnpm-workspace.yaml",
+      "entityType": "Config",
+      "observations": [
+        "路径: platform/pnpm-workspace.yaml",
+        "定义 workspace 成员: packages: - apps/* - packages/*"
+      ]
+    },
+    {
+      "name": "Config: turbo.json",
+      "entityType": "Config",
+      "observations": [
+        "路径: platform/turbo.json",
+        "Turborepo 构建管道: build/typecheck/lint 依赖 ^同名任务；dev 不缓存且持久运行；test 依赖 ^build"
+      ]
+    },
+    {
+      "name": "Config: tsconfig.base.json",
+      "entityType": "Config",
+      "observations": [
+        "路径: platform/tsconfig.base.json",
+        "共享 TS 配置: ES2023、ESNext、Bundler resolution"
+      ]
+    },
+    {
+      "name": "auto_test_and_rl_data_generator.py",
+      "entityType": "Module",
+      "observations": [
+        "路径: projects/mind/mem/auto_test_script/auto_test_and_rl_data_generator.py",
+        "职责: 自动测试和强化学习数据生成器，含 FakePerson（假人演员）、Judge（裁判）、ReportWriter（报告写手）、AutoTestAndRLDataGenerator（主入口）",
+        "test_mode 参数（2026-08-06 新增）: 支持 'api'（接口测试，默认）和 'voice'（语音测试）两种模式",
+        "test_mode 透传链路: AutoTestAndRLDataGenerator.__init__ → FakePerson.__init__ → arender_system_prompt_from_a_case_and_start_query（注入 FAKE_DRIVER_VOICE_MODE_DIRECTIVES）→ aauto_chat_test（voice 模式第一轮假人主动开口）",
+        "voice 模式核心机制: 被测助手收不到 car_info 注入（除当前位置外），假人通过对话搬运必要前置（身份/偏好/任务上下文），可语音发起的任务型前置（导航/播放等）由假人自主构建；车辆状态类前置仍放 car_info",
+        "voice 模式开场信号: FakePerson.VOICE_MODE_OPEN_SIGNAL='__VOICE_MODE_OPEN__'，aauto_chat_test voice 分支第一轮向假人发此信号，假人主动说出第一句话点燃对话，信号不进入 history_for_judge",
+        "Judge.test_mode: voice 模式下裁判 prompt 注入 JUDGE_VOICE_MODE_DIRECTIVES，告知裁判本次是语音测试、假人自主构建的前置轮次非评测重点、ASR 识别问题可在 reason 提示",
+        "run_full_auto_judge_test / arun_full_auto_judge_test 无需改方法签名，test_mode 通过 __init__ 实例属性 self.test_mode 访问",
+        "FAKE_DRIVER_PROFILE_TEMPLATE 和 FAKE_DRIVER_PROFILE_WITH_RL_TEMPLATE 均加了 {% if test_mode_directives %} 块",
+        "JUDGE_PROMPT 加了 {% if test_mode_directives_for_judge %} 块"
+      ]
+    },
+    {
+      "name": "test_mode 测试模式分模式原则",
+      "entityType": "Principle",
+      "observations": [
+        "写入位置: make_datasets_for_vehicle_assistant/skills/_shared_case_writing_principles.md §14b.0 + _shared_case_audit_principles.md C2b/C2c 的【voice 模式分模式例外】",
+        "核心: case 设计不绑定测试方式，演员适配由 test_mode prompt 注入实现，同一份 case 同时支持 api 和 voice 两种模式",
+        "api 模式（默认）: car_info 直接注入被测助手，前置构建轮必须显式写在 expected_script 里，审核判据照常生效",
+        "voice 模式: 被测助手收不到 car_info（除当前位置外），可语音发起的任务型前置（导航/播放/放新闻等）允许省略由假人自主构建，车辆状态类前置仍放 car_info，记忆类前置仍须多会话构建",
+        "审核时默认按 api 模式判（因为 case 要同时兼容两种模式，api 模式要求更严格）；若 case 在 api 模式下前置完整，voice 模式下也兼容"
+      ]
+    },
+    {
+      "name": "什么叫做跑一个测试用例.md",
+      "entityType": "Doc",
+      "observations": [
+        "路径: projects/mind/mem/auto_test_script/make_datasets_for_vehicle_assistant/什么叫做跑一个测试用例.md",
+        "定位: 车载助手测试全流程认知对齐文档，面向所有参与用例编写/审核/合成/执行/分析的人员",
+        "核心心智模型: 一次独立测试 = 构建前提条件 → 验证 → 收尾 三段式；只有验证段产生判分，前提与收尾是搭台/拆台",
+        "前提构建方式: 车况状态靠 car_info 注入、任务态靠对话生产（生产→消费闭环）、记忆靠跨会话生产；voice 模式下身份/偏好/任务上下文由假人口头搬运",
+        "执行侧角色: FakePerson 假人演员（演绎车主，不照念剧本，退下信号结束对话）、bot_to_test 被测助手、Judge 裁判（拿 nl_assertion+对话记录+车机trace判 Yes/No）、ReportWriter 报告写手",
+        "关键机制: 执行结果从车机log核对不要求口头反馈、裁判口头与日志不一致时以日志为准、恢复轮不作为判据、case间记忆隔离（user_id=case_id）、max_round=台词轮数×2、api/voice 双模式共用同一份 case",
+        "数据合成侧字段与三段式的映射: context_config/car_info→前提状态类、user_query_lists→会话切分与冷启动、expected_script→前提构建轮+验证轮+恢复轮、nl_assertion→判分标准、tags→覆盖统计不给裁判看"
+      ]
+    },
+    {
+      "name": "用例原则分层重构（重试先导段项目化）",
+      "entityType": "Principle",
+      "observations": [
+        "变更时间: 2026-08-21",
+        "背景: 通用写作原则存在 v1/v2 两版且混入奔驰项目特有的重试先导段，需合并为一个版本并按'通用/项目级'分层",
+        "合并版本: 删除 _shared_case_writing_principles_v2.md，skills/2_tag_tree_to_testset/SKILL.md 引用改回 _shared_case_writing_principles.md",
+        "重试先导段项目化: 通用写作原则§7.3.7 由'重试先导段（强制保留）'改为'项目特有先导段由项目原则定义'的指引；重试先导段完整定义迁移至奔驰项目写作原则 vehicle_assistant_case_tagging_guideline.md §2.1.7（含'管家可能耳背'+'你好，你好奔驰'完整文案、重试规则、能力受限不纠缠规则、修复兜底）",
+        "通用原则保留内容: 前导段通用结构（§7.3.1-7.3.6）与演员应变规则（§7.3.8 盲选第一个+简洁回复承接）保留在通用原则，措辞通用化（'前导部分'替代'重试先导段之后'）",
+        "审核原则同步: 通用审核原则§F4 改为'项目特有先导段是合法前导段'，§F4b 措辞同步通用化；奔驰项目审核补充 case_audit_supplements.md 新增§6 重试先导段审核规则（缺少先导段判不通过）",
+        "优先级链: 通用写作/审核原则文件开头新增'优先级'说明——项目级原则优先于通用原则，冲突时以项目级为准",
+        "同步更新: full_case_audit.py 特别提示、fix_case_by_audit.py 注释、README 原则5（标注奔驰项目特有）、benz_mbux_test_case_generation_guide.md §0.4"
+      ]
+    },
+    {
+      "name": "time_travel_auto_test",
+      "entityType": "Project",
+      "observations": [
+        "路径: projects/experiments/time_travel_auto_test",
+        "时间旅行自动测试框架：通过虚拟时间轴 + 剧本事件驱动，对车载助手进行自动化端到端测试",
+        "核心思想：脚本事件驱动时间线演进，假人按剧本说话，被测助手流式回复，Runner 统一调度",
+        "支持时间加速（fast_mode）：静默期跳过真实等待，直接跳到下一事件时间",
+        "支持流式打断：假人可在助手流式回复中途打断，模拟全双工交互",
+        "架构文档: ARCHITECTURE.md；决策记录: CONTEXT.md"
+      ]
+    },
+    {
+      "name": "CaseRunner",
+      "entityType": "Module",
+      "observations": [
+        "路径: time_travel_auto_test/case_runner/runner.py",
+        "核心调度器：加载 TestCase → 初始化假人/虚拟车/被测助手 → 按时间线调度事件 → 记录 trace",
+        "关键机制：多步时间快进（_maybe_accelerate）——查询助手 pending 定时任务作为中间停靠点，确保不跳过定时任务触发",
+        "关键机制：注入事件处理（_handle_context_update）——处理 aupdate_context 返回的 ContextUpdateResult，记录主动话语并调度注入的 WorldTick 事件",
+        "关键机制：锚点执行时序（_execute_world_tick，2026-08-25 定稿）——锚点到达先记录系统事件再触发任务，保证 trace 上'锚点到达'必排在'主动话语'之前；_drain_pending_tasks_near_anchor 只处理 60s 内任务，5s 缓冲静默推进不记为快进事件",
+        "两级触发保障（2026-08-25）：主通道为锚点 drain（_execute_world_tick），兜底通道为多步快进（无锚点时靠 get_pending_scheduled_tasks 停靠触发）",
+        "主动话语时序标注：_aupdate_context_timed 测量 aupdate_context 真实耗时，记入 UtteranceRecord.ttft + is_proactive，渲染为'触发后 X.Xs 开口'",
+        "关键机制：流式打断——假人锚点事件触发时，若助手正在流式回复则调用 interrupt() 打断并记录半截话",
+        "打断时刻语义（2026-08-25 修正）：打断事件记在触发打断的锚点时刻（= 假人插话开口瞬间），不能用冻结中的 mock_time（助手回复期间停在轮次开始时刻，用它会因果倒置）；半截话为空时记'（尚未开口就被打断）'，打断事件始终可见"
+      ]
+    },
+    {
+      "name": "AssistantProtocol",
+      "entityType": "Interface",
+      "observations": [
+        "路径: time_travel_auto_test/case_runner/assistant_protocol.py",
+        "定义被测助手必须实现的协议：create / achat / achat_stream / aupdate_context / adump_history",
+        "aupdate_context 返回 ContextUpdateResult（proactive_text + injected_events），支持助手主动说话和注入时间锚点",
+        "StreamingReply：流式回复封装，支持 put_chunk / finish / interrupt",
+        "ContextUpdateResult：结构化返回，包含 proactive_text（助手主动话语）和 injected_events（注入的 WorldTick 事件列表）"
+      ]
+    },
+    {
+      "name": "WorldTickScriptEvent",
+      "entityType": "DataModel",
+      "observations": [
+        "路径: time_travel_auto_test/script_events/script_event.py",
+        "时间锚点事件：无执行主体（target='world'），只表示'时间演进到此刻必须停一下'",
+        "来源：剧本定义（ScriptEventType.WORLD_TICK）或助手注入（ContextUpdateResult.injected_events）",
+        "用途：确保时间快进不会跳过关键时间点（如定时任务触发时刻），作为快进序列中的中间停靠点",
+        "锚点缓冲（2026-08-25）: 助手注入的锚点停在 trigger_time - 5s（WORLD_TICK_BUFFER），锚点到达后由 Runner 静默推进 5s 触发任务，trace 呈现'锚点到达 → 5 秒后主动开口'"
+      ]
+    },
+    {
+      "name": "TestedAssistant",
+      "entityType": "Module",
+      "observations": [
+        "路径: time_travel_auto_test/demos/v2_agent_to_test/tested_assistant.py",
+        "基于 v2_agent（create_react_agent_with_task_runner）的协议封装被测助手",
+        "实现 AssistantProtocol 全部接口，支持流式回复、打断、上下文更新",
+        "集成 ScheduledTaskManager：set_reminder 工具供 Agent 调用，aupdate_context 检查到期任务并触发主动提醒",
+        "aupdate_context 检测到期定时任务 → 注入系统消息 → Agent 生成主动话语 → 返回 ContextUpdateResult(proactive_text=...)",
+        "支持车控工具（VirtualCarControlTool）：空调/门窗/导航等操作直接写入共享 VirtualCar 实例",
+        "综合验证（2026-08-25，run_e2e_demo.py --case complex）：闲聊中 T0+3s 插话打断（半截话保存）+ 打断后双指令（35min 提醒+开空调）不丢失 + WorldTick 锚点停靠（T0+35m7.698s）+ 5s 缓冲后主动提醒（T0+35m12.698s，触发后 2.6s 开口）+ 1h 后跨时记忆 + 恢复轮关空调 + state_check 通过，Judge 100/100",
+        "中立性（2026-09-07）：不人为干预助手流式节奏（已移除 chunk_delay 参数与 sleep），忠实记录被测助手自然输出快慢；假人说话节奏由 RunnerConfig.chunk_delay 单独控制"
+      ]
+    },
+    {
+      "name": "ScheduledTaskManager",
+      "entityType": "DataModel",
+      "observations": [
+        "路径: time_travel_auto_test/demos/v2_agent_to_test/tools/scheduled_tasks/manager.py",
+        "管理被测助手的定时任务：add_task / get_due_tasks / get_pending / get_pending_triggers / get_pending_world_ticks / offset_recent_tasks / clear",
+        "get_pending_triggers：返回所有 pending 任务的 (trigger_time, description)，供 Runner 多步快进时查询中间停靠点",
+        "get_due_tasks：根据时间区间返回已到期的任务，供 aupdate_context 检测并触发主动提醒",
+        "add_task 自动登记时间锚点：trigger_time - WORLD_TICK_BUFFER(5s)，经 get_pending_world_ticks 取出后由 aupdate_context 注入 ContextUpdateResult.injected_events",
+        "offset_recent_tasks：时间偏移修正——助手回复耗时 wall_elapsed 期间创建的任务，trigger_time 和锚点同步偏移 wall_elapsed（'30分钟后'从助手实际设置完成时刻起算），_created_at 防重复偏移"
+      ]
+    },
+    {
+      "name": "TraceRecorder",
+      "entityType": "Module",
+      "observations": [
+        "路径: time_travel_auto_test/case_runner/trace.py",
+        "轨迹记录器：记录测试过程中所有事件（假人说话/助手回复/打断/车态变更/状态检查/时间快进/系统事件）",
+        "RecordKind 枚举：FAKE_PERSON_SPEAK / ASSISTANT_REPLY / INTERRUPT / VIRTUAL_CAR_SET_STATE / VIRTUAL_CAR_STATE_CHECK / ACCELERATION / SYSTEM",
+        "UtteranceRecord 时序字段（2026-08-25）：ttft（首字延迟或主动话语触发延迟）、speech_duration（说话时长）、is_proactive（是否助手主动开口）",
+        "支持导出为可视化 JSON（export_trace.py）和裁判文本（render_timeline_text）"
+      ]
+    },
+    {
+      "name": "Visualizer",
+      "entityType": "Module",
+      "observations": [
+        "路径: time_travel_auto_test/visualizer/",
+        "双列时间轴可视化：左侧剧本事件（预期），右侧实际事件（Trace），按时间偏移对齐",
+        "事件类型区分：假人说话（蓝色）/ 助手回复（绿色）/ 打断（橙色虚线）/ 时间加速（紫色）/ 状态检查（灰色）",
+        "虚拟车状态面板：点击事件动态更新车辆状态，高亮变更字段（黄色=变更，绿色=匹配，红色=不匹配）",
+        "支持 HTTP 服务（run_server.py）提供 case 列表 + 一键运行测试 + 实时可视化"
+      ]
+    },
+    {
+      "name": "多步时间快进机制",
+      "entityType": "Concept",
+      "observations": [
+        "定义: Runner 在快进时不一步跳到目标，而是查询助手 pending 定时任务，在任务触发时间点逐个停靠",
+        "流程: 1. 计算下一事件时间 next_event_time；2. 查询 get_pending_scheduled_tasks() 获取中间停靠点；3. 按时间排序逐个快进+停靠+触发 aupdate_context；4. 最后到达 next_event_time",
+        "确保定时任务不会因时间快进被跳过",
+        "实现位置: CaseRunner._maybe_accelerate()",
+        "定位（2026-08-25）: 兜底通道——WorldTick 锚点存在时由锚点 drain 触发任务（trace 层次更清晰），无锚点时（如助手未实现注入）由此机制兜底"
+      ]
+    },
+    {
+      "name": "注入事件机制",
+      "entityType": "Concept",
+      "observations": [
+        "定义: 被测助手在运行时通过 aupdate_context 返回 ContextUpdateResult，向事件队列注入 WorldTick 事件",
+        "Runner 将注入事件合并到调度器的事件队列中，统一按时间排序调度",
+        "用途: 助手设置定时任务后，注入对应触发时间的 WorldTick，确保 Runner 在该时间点停靠",
+        "实现位置: CaseRunner._handle_context_update()",
+        "锚点时刻（2026-08-25 实测验证）: trigger_time - WORLD_TICK_BUFFER(5s)，其中 trigger_time 已含偏移修正（助手回复耗时 wall_elapsed），故锚点尾数 = wall_elapsed - 5s",
+        "锚点执行时序: 快进停在锚点 → 记录'WorldTick 锚点到达'系统事件 → 虚拟时间静默推进 5s（低于阈值不记快进）→ 任务到期触发主动话语（时间戳=触发时刻，真实生成耗时另记 ttft）"
+      ]
+    },
+    {
+      "name": "adapter_v2",
+      "entityType": "Directory",
+      "observations": [
+        "路径: projects/experiments/time_travel_auto_test/adapter_v2",
+        "新接入协议（事件源适配器模式）独立验证目录，与旧 case_runner/assistant_protocol.py 完全独立，不动现有代码",
+        "仅复用与协议无关的基础设施：TimelineEngine（wall→mock 换算）、TraceRecorder（轨迹落盘）、VirtualCar（虚拟车）、EventScheduler（事件调度）、VirtualCarDriver（车态驱动）、deliver_fake_person_speech_stream（假人说话节奏）",
+        "文件: __init__.py、protocol.py（协议核心类型）、turn_muxer.py（TurnMuxer）、mock_adapter.py（参考接入样本）、verify.py（机制验证）、runner_v2.py（AdapterRunner 薄调度器）、demo_e2e.py（端到端 demo）"
+      ]
+    },
+    {
+      "name": "事件源适配器模式",
+      "entityType": "Concept",
+      "observations": [
+        "新接入协议的设计思想：框架承担多源汇合、wall→mock 换算、task_id 配对、忙闲判定、快进拦截等基础设施，彻底中立",
+        "对接入者只要求：自报家门（capabilities）、交初始事件源（initial_sources）、翻译函数（translate）、结果续接（on_result）、世界更新响应（apply_world_update）、历史导出（dump_history）",
+        "对比旧 AssistantProtocol 的教训：旧协议是「5 方法 + 8 散落 hasattr 钩子」，把框架责任甩给接入者导致接入代码膨胀（见 v2 tested_assistant.py）"
+      ]
+    },
+    {
+      "name": "AssistantAdapter",
+      "entityType": "Interface",
+      "observations": [
+        "路径: adapter_v2/protocol.py",
+        "新接入协议接口（@runtime_checkable Protocol），取代旧 AssistantProtocol 的 hasattr 探测",
+        "实现 = capabilities 属性 + setup + initial_sources + translate + on_result + apply_world_update + dump_history 七个成员",
+        "核心类型: Capabilities(能力自报家门)、AdapterEnv(环境注入)、Turn/TurnKind(回合)、AssistantEvent/EventType(统一事件)、WorldUpdate(世界更新)、SourcedEvent(框架盖戳产物)",
+        "AssistantEvent 只带 wall_time（真实墙钟），mock 时间戳由框架 TurnMuxer 统一 wall→mock 换算盖戳；task_id 用于并行同名工具精确配对",
+        "彻底中立：protocol.py 不 import 任何被测助手实现，也不依赖旧 assistant_protocol.py"
+      ]
+    },
+    {
+      "name": "TimelineEngine",
+      "entityType": "Module",
+      "observations": [
+        "路径: time_travel_auto_test/case_runner/timeline.py",
+        "虚拟时间引擎：真实墙钟与虚拟时间通过锚点对 (anchor_mock, anchor_wall) 连续 1:1 锚定，mock_time = anchor_mock + (now - anchor_wall)",
+        "唯一时间跳跃方式 accelerate_to（快进，记录跳跃历史）；pin_to 在漂移 ≤ PIN_TOLERANCE(5s) 时精确对齐；jump_to 仅供 fast_mode 强制重置",
+        "wall_to_mock：把事件流携带的 wall_time 换算进虚拟时间线（新协议 TurnMuxer 用它统一盖 mock 戳）",
+        "被新协议 adapter_v2 显式复用的与协议无关基础设施之一"
+      ]
+    },
+    {
+      "name": "TurnMuxer",
+      "entityType": "Module",
+      "observations": [
+        "路径: adapter_v2/turn_muxer.py",
+        "框架核心基础设施：把一个回合（Turn）的多条原生事件源汇合成一条有序的已盖戳统一事件流",
+        "核心机制: 多源汇合（initial_sources 的 N 条线 + on_result 挂载的接续源全部扇入同一队列）；引用计数判耗尽（_active 计数归零且队列空 = 回合自然结束 = 助手彻底安静）",
+        "wall→mock 盖戳：translate 出的 AssistantEvent 只带 wall_time，此处用 TimelineEngine.wall_to_mock 统一换算虚拟时刻（接入者零感知）",
+        "cancel：测试基建超时兜底——仅当被测助手底层流卡死（如回复超时 180s）时强制终止消费协程防止测试挂死；不用于用户插话打断，打断由被测助手自驱（Capabilities.supports_barge_in），框架全程不主动 cancel，只在 initial_sources 再次被调用时把「新输入来了」的事实暴露给助手",
+        "契约：上层必须在 stream() 自然耗尽后才允许快进（accelerate_to），否则 wall→mock 换算因快进重锚定失真",
+        "对外 API: stream() 异步迭代产出 SourcedEvent；run_turn() 便捷收集全部事件"
+      ]
+    },
+    {
+      "name": "MockAdapter",
+      "entityType": "Module",
+      "observations": [
+        "路径: adapter_v2/mock_adapter.py",
+        "新协议的极薄参考接入样本（被测助手的替身，属被验证对象，非框架一部分）",
+        "演示机制: 普通回复+文字增量流、异步工具调用→结果晚到→续接回复（on_result 挂载续接源）、主动话语（定时提醒到期）、车态变更（操作注入的 virtual_car）",
+        "capabilities = supports_barge_in=True / has_async_tools=True / can_proactive_speak=True / needs_time_source=True",
+        "自驱打断机制（_barge_signal + _barged_in_count）：新用户输入到来、旧回复源未耗尽时，initial_sources 自行置位信号中断旧长回复（长故事分 chunk + 0.3s 说话间隔可被插话），对应旧协议 achat_stream 的 self._active_reply.interrupt()；框架全程不 cancel",
+        "框架不认识它，只通过 protocol.AssistantAdapter 接口驱动"
+      ]
+    },
+    {
+      "name": "adapter_v2/verify.py",
+      "entityType": "Module",
+      "observations": [
+        "路径: adapter_v2/verify.py",
+        "新协议独立验证脚本，验证五个机制点：异步工具回灌回合、快进→定时提醒→主动话语、车控写虚拟车、打断（助手自驱，框架从不 cancel）、复用 TraceRecorder 落盘",
+        "复用 TimelineEngine / TraceRecorder / VirtualCar，不接 event_bus（行为同旧版）",
+        "运行: D:\\apps\\miniconda\\envs\\dzy_env\\python.exe projects/experiments/time_travel_auto_test/adapter_v2/verify.py"
+      ]
+    },
+    {
+      "name": "AdapterRunner",
+      "entityType": "Module",
+      "observations": [
+        "路径: adapter_v2/runner_v2.py",
+        "新协议的薄调度器：把 TurnMuxer 接入脚本事件链路（对照旧 CaseRunner，脏活已由 TurnMuxer 承担）",
+        "复用基础设施: TimelineEngine、TraceRecorder、VirtualCar+VirtualCarDriver、deliver_fake_person_speech_stream、EventScheduler",
+        "run(case) 完整脚本驱动复用 EventScheduler；动作级方法 speak / accelerate_to / proactive / wait_idle 供 demo 复用",
+        "打断：_start_turn 标记旧 USER 回合 handle.barged_in=True（只记录事实），真正中断由助手自驱（Capabilities.supports_barge_in）；新回合并发发起，框架不主动 cancel",
+        "消费回合 _consume_turn：按「话语段」落盘，工具事件（TOOL_CALL/TOOL_RESULT）把连续 TEXT_DELTA 切段；工具 duration_ms 由展示层按 task_id 配对计算",
+        "接入事件总线: __init__ 接受 event_bus 参数（不注入则零开销），TraceRecorder 接 event_bus 自动发射层1事件（utterance/tool_call/tool_result/car_set_state/state_check），_emit 发射层2过程事件（case_started/case_finished/fake_person_delta/assistant_delta）；case_finished 含 duration_seconds",
+        "case_started 载荷: 初始车态 initial_car_info + car_state_groups 分组 + script_plan 剧本时间表（锚点事件预览，前端未来区竖线）",
+        "run_server.py 的 adapter_v2 分支使用本类（event_bus 注入），前端 RunConsole.tsx/visualizerClient.ts 提供 adapter_v2 被测助手选项",
+        "demo 仅支持固定台词（假人 LLM 自主发挥是执行细节，不在事件源适配器范围内）"
+      ]
+    },
+    {
+      "name": "adapter_v2/demo_e2e.py",
+      "entityType": "Module",
+      "observations": [
+        "路径: adapter_v2/demo_e2e.py",
+        "新协议端到端 demo，分两部分验证 AdapterRunner + TurnMuxer 完整链路",
+        "Part A run(case) 完整脚本驱动：异步工具回灌（set_reminder）、车控写虚拟车（开空调 source=assistant）、状态检查（空调==制冷中）、打断（长故事半截话）",
+        "Part B 方法级快进+主动话语：设 30 分钟提醒 → 快进 1800s → 提醒到期 → 主动话语（无用户输入）",
+        "运行: D:\\apps\\miniconda\\envs\\dzy_env\\python.exe projects/experiments/time_travel_auto_test/adapter_v2/demo_e2e.py"
+      ]
+    },
+    {
+      "name": "demos/v2_agent_adapter",
+      "entityType": "Directory",
+      "observations": [
+        "路径: projects/experiments/time_travel_auto_test/demos/v2_agent_adapter",
+        "真实 v2_agent（ReactAgentWithTaskRunner）接入新协议（事件源适配器模式）的落地目录",
+        "复用现有工具（车控/导航/媒体/天气/POI/音乐/网页搜索/任务取消/定时提醒），不改动任何工具代码，仅在适配器内重新初始化",
+        "文件: adapter.py（V2AgentAdapter，实现 AssistantAdapter 六个核心方法）、run_e2e.py（端到端验证脚本）"
+      ]
+    },
+    {
+      "name": "V2AgentAdapter",
+      "entityType": "Module",
+      "observations": [
+        "路径: demos/v2_agent_adapter/adapter.py",
+        "真实 v2_agent 的新协议适配器，实现 adapter_v2.AssistantAdapter 六个核心方法：capabilities + setup + initial_sources + translate + on_result + apply_world_update + dump_history",
+        "capabilities: supports_barge_in=True / has_async_tools=True / can_proactive_speak=True / needs_time_source=True",
+        "核心映射：agent.astream 只冒文本增量（回复源）；工具的 TaskCreatedEvent/TaskSuccessEvent 走 TaskManager.astream 持久流，由后台排水泵 _pump 按 task_id 路由到对应回合任务事件队列（_task_source）",
+        "异步工具回灌：TaskSuccessEvent 携带 result=AsyncTaskResultBackfill 时，on_result 返回 agent.astream(TaskSuccessEvent) 作为接续回复源，生成「工具结果回来 → 接着往下说」后续回复",
+        "自驱打断：新 USER 回合 initial_sources 置位旧回合 _active_barge_signal，旧回复源在下一 token 间隔点自行提前结束（半截话），框架全程不 cancel，对应协议 supports_barge_in 语义",
+        "定时提醒：apply_world_update 检测到期任务（ScheduledTaskManager.get_due_tasks），把到期描述作为系统 prompt 注入历史并进入 _pending_proactive_prompts 队列，PROACTIVE 回合驱动 agent 自主开口",
+        "所有 agent.astream 调用串行化（_agent_turn_lock），避免回灌轮与用户轮并发争用导致竞态/上下文倒置",
+        "直接复用现有工具并在 _ensure_agent 懒加载时重新初始化（VirtualCarControlTool/NavigationControlTool/MediaControlTool/weather_search_v2_tool/poi_search_v2_tool/qq_music_song_search_v2_tool/websearch/create_task_cancel_tool/create_reminder_tool），不修改任何工具代码"
+      ]
+    },
+    {
+      "name": "demos/v2_agent_adapter/run_e2e.py",
+      "entityType": "Module",
+      "observations": [
+        "路径: demos/v2_agent_adapter/run_e2e.py",
+        "真实 v2_agent 新协议接入的端到端验证脚本，默认跑「开空调」用例",
+        "验证：真实 LLM agent 被 AdapterRunner 驱动对话、异步工具经 TaskManager→TurnMuxer→TraceRecorder 落盘、工具结果回灌接续回复、车控结果落到共享 VirtualCar 实例",
+        "命令行参数：--query（用户台词，默认「开空调」）、--check FIELD VALUE（额外断言虚拟车字段最终值，可多次）",
+        "运行: D:\\apps\\miniconda\\envs\\dzy_env\\python.exe projects/experiments/time_travel_auto_test/demos/v2_agent_adapter/run_e2e.py --query \"开空调\" --check \"空调开启状态及模式\" \"制冷中\""
+      ]
+    }
+  ],
+  "relations": [
+    { "from": "eval-platform", "to": "apps", "relationType": "contains" },
+    { "from": "eval-platform", "to": "packages", "relationType": "contains" },
+    { "from": "apps", "to": "apps/backend", "relationType": "contains" },
+    { "from": "apps", "to": "apps/frontend", "relationType": "contains" },
+    { "from": "packages", "to": "@eval-platform/database", "relationType": "contains" },
+    { "from": "packages", "to": "@eval-platform/llm", "relationType": "contains" },
+    { "from": "packages", "to": "@eval-platform/makedata", "relationType": "contains" },
+    { "from": "packages", "to": "@eval-platform/evaluation", "relationType": "contains" },
+    { "from": "packages", "to": "@eval-platform/shared", "relationType": "contains" },
+
+    { "from": "@eval-platform/makedata", "to": "@eval-platform/llm", "relationType": "depends on" },
+    { "from": "@eval-platform/makedata", "to": "@eval-platform/database", "relationType": "depends on" },
+    { "from": "@eval-platform/makedata", "to": "@eval-platform/shared", "relationType": "depends on" },
+    { "from": "@eval-platform/makedata", "to": "makedata/core/tag-tree.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/scenario-planner.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/scenario-pattern-generator.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/scenario-core.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/scenario-generator.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/scenario-audit.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/scenario-judge.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/case.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/case-judge.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/generation/prompt-templates.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/audit/validation.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/audit/audit.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/audit/fix.ts", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/principles", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/simple_run", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/tests", "relationType": "contains" },
+    { "from": "@eval-platform/makedata", "to": "makedata/examples/data/vehicle-tag-tree.json", "relationType": "contains" },
+    { "from": "makedata/principles", "to": "makedata/principles/writing.md", "relationType": "contains" },
+    { "from": "makedata/principles", "to": "makedata/principles/key-constraints.md", "relationType": "contains" },
+
+    { "from": "makedata/generation/scenario-planner.ts", "to": "Plan", "relationType": "produces" },
+    { "from": "makedata/generation/scenario-pattern-generator.ts", "to": "Pattern", "relationType": "produces" },
+    { "from": "makedata/generation/scenario-core.ts", "to": "ScenarioConcept", "relationType": "produces" },
+    { "from": "makedata/generation/case.ts", "to": "Case", "relationType": "produces" },
+    { "from": "makedata/generation/scenario-core.ts", "to": "makedata/generation/scenario-generator.ts", "relationType": "calls" },
+    { "from": "makedata/generation/scenario-generator.ts", "to": "makedata/generation/scenario-audit.ts", "relationType": "calls" },
+    { "from": "makedata/generation/scenario-core.ts", "to": "makedata/generation/scenario-judge.ts", "relationType": "calls" },
+    { "from": "makedata/generation/case.ts", "to": "makedata/audit/audit.ts", "relationType": "calls" },
+    { "from": "makedata/audit/audit.ts", "to": "makedata/audit/validation.ts", "relationType": "calls" },
+    { "from": "makedata/audit/audit.ts", "to": "makedata/audit/fix.ts", "relationType": "calls" },
+    { "from": "makedata/audit/audit.ts", "to": "makedata/principles/writing.md", "relationType": "references" },
+    { "from": "makedata/audit/audit.ts", "to": "makedata/principles/key-constraints.md", "relationType": "references" },
+
+    { "from": "Query", "to": "Plan", "relationType": "drives" },
+    { "from": "Plan", "to": "Pattern", "relationType": "drives" },
+    { "from": "Pattern", "to": "ScenarioConcept", "relationType": "drives" },
+    { "from": "ScenarioConcept", "to": "Case", "relationType": "derives" },
+
+    { "from": "Dataset", "to": "DatasetItem", "relationType": "contains" },
+    { "from": "DatasetItem", "to": "Scenario", "relationType": "derives from" },
+    { "from": "Scenario", "to": "ScenarioPlan", "relationType": "belongs to" },
+    { "from": "Scenario", "to": "TagTree", "relationType": "belongs to" },
+    { "from": "GenerationTask", "to": "GenerationTaskRun", "relationType": "contains" },
+    { "from": "GenerationTaskRun", "to": "ScenarioPlan", "relationType": "produces" },
+
+    { "from": "ScenarioConcept", "to": "Scenario", "relationType": "stored as" },
+    { "from": "Case", "to": "DatasetItem", "relationType": "stored as" },
+
+    { "from": "apps/backend", "to": "API: dataset", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: dataset-item", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: tag-tree", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: scenario-management", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: scenario-planning", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: scenario-generation", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: case-generation", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: generation-task", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "API: generation-task-run", "relationType": "exposes" },
+    { "from": "apps/backend", "to": "@eval-platform/database", "relationType": "depends on" },
+    { "from": "apps/backend", "to": "@eval-platform/makedata", "relationType": "depends on" },
+
+    { "from": "API: dataset", "to": "Dataset", "relationType": "manages" },
+    { "from": "API: dataset-item", "to": "DatasetItem", "relationType": "manages" },
+    { "from": "API: tag-tree", "to": "TagTree", "relationType": "manages" },
+    { "from": "API: scenario-management", "to": "Scenario", "relationType": "manages" },
+    { "from": "API: scenario-planning", "to": "ScenarioPlan", "relationType": "manages" },
+    { "from": "API: scenario-generation", "to": "ScenarioConcept", "relationType": "produces" },
+    { "from": "API: case-generation", "to": "Case", "relationType": "produces" },
+    { "from": "API: generation-task", "to": "GenerationTask", "relationType": "manages" },
+    { "from": "API: generation-task-run", "to": "GenerationTaskRun", "relationType": "manages" },
+
+    { "from": "eval-platform", "to": "Config: pnpm-workspace.yaml", "relationType": "configured by" },
+    { "from": "eval-platform", "to": "Config: turbo.json", "relationType": "configured by" },
+    { "from": "eval-platform", "to": "Config: tsconfig.base.json", "relationType": "configured by" },
+
+    { "from": "auto_test_and_rl_data_generator.py", "to": "test_mode 测试模式分模式原则", "relationType": "implements" },
+    { "from": "auto_test_and_rl_data_generator.py", "to": "makedata/principles/writing.md", "relationType": "references" },
+    { "from": "什么叫做跑一个测试用例.md", "to": "auto_test_and_rl_data_generator.py", "relationType": "explains" },
+    { "from": "用例原则分层重构（重试先导段项目化）", "to": "auto_test_and_rl_data_generator.py", "relationType": "constrains" },
+
+    { "from": "time_travel_auto_test", "to": "CaseRunner", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "AssistantProtocol", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "WorldTickScriptEvent", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "TestedAssistant", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "ScheduledTaskManager", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "TraceRecorder", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "Visualizer", "relationType": "contains" },
+    { "from": "time_travel_auto_test", "to": "多步时间快进机制", "relationType": "implements" },
+    { "from": "time_travel_auto_test", "to": "注入事件机制", "relationType": "implements" },
+
+    { "from": "CaseRunner", "to": "AssistantProtocol", "relationType": "depends on" },
+    { "from": "CaseRunner", "to": "多步时间快进机制", "relationType": "implements" },
+    { "from": "CaseRunner", "to": "注入事件机制", "relationType": "implements" },
+    { "from": "CaseRunner", "to": "TraceRecorder", "relationType": "uses" },
+
+    { "from": "TestedAssistant", "to": "AssistantProtocol", "relationType": "implements" },
+    { "from": "TestedAssistant", "to": "ScheduledTaskManager", "relationType": "uses" },
+
+    { "from": "多步时间快进机制", "to": "ScheduledTaskManager", "relationType": "depends on" },
+    { "from": "多步时间快进机制", "to": "WorldTickScriptEvent", "relationType": "uses" },
+    { "from": "注入事件机制", "to": "WorldTickScriptEvent", "relationType": "produces" },
+    { "from": "注入事件机制", "to": "CaseRunner", "relationType": "integrated into" },
+
+    { "from": "Visualizer", "to": "TraceRecorder", "relationType": "depends on" },
+    { "from": "Visualizer", "to": "CaseRunner", "relationType": "depends on" },
+    { "from": "Visualizer", "to": "AdapterRunner", "relationType": "depends on" },
+
+    { "from": "time_travel_auto_test", "to": "adapter_v2", "relationType": "contains" },
+    { "from": "adapter_v2", "to": "事件源适配器模式", "relationType": "implements" },
+    { "from": "adapter_v2", "to": "AssistantAdapter", "relationType": "contains" },
+    { "from": "adapter_v2", "to": "TurnMuxer", "relationType": "contains" },
+    { "from": "adapter_v2", "to": "MockAdapter", "relationType": "contains" },
+    { "from": "adapter_v2", "to": "adapter_v2/verify.py", "relationType": "contains" },
+    { "from": "adapter_v2", "to": "AdapterRunner", "relationType": "contains" },
+    { "from": "adapter_v2", "to": "adapter_v2/demo_e2e.py", "relationType": "contains" },
+    { "from": "AssistantAdapter", "to": "事件源适配器模式", "relationType": "implements" },
+    { "from": "TurnMuxer", "to": "AssistantAdapter", "relationType": "depends on" },
+    { "from": "TurnMuxer", "to": "TimelineEngine", "relationType": "depends on" },
+    { "from": "MockAdapter", "to": "AssistantAdapter", "relationType": "implements" },
+    { "from": "adapter_v2/verify.py", "to": "TurnMuxer", "relationType": "uses" },
+    { "from": "adapter_v2/verify.py", "to": "MockAdapter", "relationType": "uses" },
+    { "from": "adapter_v2/verify.py", "to": "TimelineEngine", "relationType": "reuses" },
+    { "from": "adapter_v2/verify.py", "to": "TraceRecorder", "relationType": "reuses" },
+    { "from": "AdapterRunner", "to": "TurnMuxer", "relationType": "uses" },
+    { "from": "AdapterRunner", "to": "AssistantAdapter", "relationType": "depends on" },
+    { "from": "AdapterRunner", "to": "TraceRecorder", "relationType": "uses" },
+    { "from": "AdapterRunner", "to": "TimelineEngine", "relationType": "reuses" },
+    { "from": "adapter_v2/demo_e2e.py", "to": "AdapterRunner", "relationType": "uses" },
+    { "from": "adapter_v2/demo_e2e.py", "to": "MockAdapter", "relationType": "uses" },
+
+    { "from": "time_travel_auto_test", "to": "demos/v2_agent_adapter", "relationType": "contains" },
+    { "from": "demos/v2_agent_adapter", "to": "V2AgentAdapter", "relationType": "contains" },
+    { "from": "demos/v2_agent_adapter", "to": "demos/v2_agent_adapter/run_e2e.py", "relationType": "contains" },
+    { "from": "V2AgentAdapter", "to": "AssistantAdapter", "relationType": "implements" },
+    { "from": "V2AgentAdapter", "to": "ScheduledTaskManager", "relationType": "uses" },
+    { "from": "V2AgentAdapter", "to": "TestedAssistant", "relationType": "refers to" },
+    { "from": "demos/v2_agent_adapter/run_e2e.py", "to": "AdapterRunner", "relationType": "uses" },
+    { "from": "demos/v2_agent_adapter/run_e2e.py", "to": "V2AgentAdapter", "relationType": "uses" }
+  ]
+}

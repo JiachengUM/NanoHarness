@@ -1,0 +1,415 @@
+executor: 媒体
+description: SGM 媒体规则直接覆盖基础播控、音量静音、音乐应用和收音机；开放音乐实体、歌单、风格和推荐检索交给 LLM fallback 判断。
+capabilities:
+  - id: system.volume.set
+    name: 音量调节
+    required_slots:
+      - action
+      - target
+    targets:
+      - 声音
+      - 音量
+      - 声
+      - 视频声音
+      - 视频音量
+      - 副屏声音
+      - 副驾屏声音
+      - 腾讯视频声音
+      - 爱奇艺声音
+      - 静音
+    actions:
+      - 大点声
+      - 小点声
+      - 大声一点
+      - 小声一点
+      - 大声点
+      - 小声点
+      - 声音大一点
+      - 声音小一点
+      - 声音大点
+      - 声音小点
+      - 调大
+      - 调小
+      - 调低
+      - 调高
+      - 提高
+      - 加大
+      - 大一点
+      - 小一点
+      - 大点
+      - 小点
+      - 再大一点
+      - 再小一点
+      - 增大
+      - 减小
+      - 高一点
+      - 低一点
+      - 再高一点
+      - 再低一点
+      - 最大
+      - 最小
+      - 调到
+      - 调成
+      - 设为
+      - 打开
+      - 关闭
+      - 取消
+      - 恢复
+      - 静音
+    residue_policy: safe_modifier
+
+  - id: media.app.playback.start
+    name: 指定音源播放
+    required_slots:
+      - action
+      - target
+    targets:
+      - QQ音乐
+      - 网易云音乐
+      - 网易云
+      - 喜马拉雅
+      - 蓝牙
+      - USB
+    actions:
+      - 使用
+      - 采用
+      - 用
+      - 播放
+      - 播歌
+      - 听歌
+      - 使用QQ音乐播放
+      - 用QQ音乐播放
+      - 用QQ音乐播歌
+      - 使用网易云音乐播放
+      - 用网易云音乐播放
+      - 用网易云音乐播歌
+      - 用喜马拉雅播放
+      - 用蓝牙听歌
+    residue_policy: strict
+
+  - id: media.music_app.set
+    name: 音乐应用开关
+    required_slots:
+      - action
+      - target
+    targets:
+      - 音乐应用
+      - QQ音乐
+      - 网易云音乐
+      - 网易云
+      - 喜马拉雅
+    actions:
+      - 打开
+      - 关闭
+      - 开启
+      - 启动
+      - 退出
+      - 使用
+      - 采用
+      - 关
+      - 关掉
+      - 关了
+    residue_policy: safe_modifier
+
+  - id: media.radio.tune
+    name: 收音机调频
+    required_slots:
+      - target
+    targets:
+      - FM
+      - AM
+      - 收音机
+      - 电台
+    actions:
+      - 打开
+      - 开启
+      - 启动
+      - 播放
+      - 收听
+      - 调到
+    residue_policy: safe_modifier
+
+  - id: media.basic.playback.start
+    name: 基础播放入口
+    required_slots:
+      - action
+    targets:
+      - 音乐
+      - 歌
+      - 歌曲
+      - 播放
+    actions:
+      - 播放
+      - 开始播放
+      - 帮我播放
+      - 给我播放
+      - 让它播放
+      - 使用播放
+      - 播放音乐
+      - 播放歌曲
+      - 放音乐
+      - 放歌
+      - 听歌
+      - 听音乐
+    residue_policy: strict
+
+  - id: media.playback.continue
+    name: 播放控制
+    required_slots:
+      - action
+    targets:
+      - 音乐
+      - 播放
+      - 歌
+      - 歌曲
+    actions:
+      - 继续
+      - 继续播放
+      - 继续放歌
+      - 下一首
+      - 上一首
+      - 前一首
+      - 后一首
+      - 下一曲
+      - 上一曲
+      - 帮我下一首
+      - 换一首
+      - 换首歌
+      - 切歌
+      - 重播
+      - 从头播放
+      - 再放一遍
+      - 暂停
+      - 停止
+      - 停
+      - 不听
+    residue_policy: safe_modifier
+
+  - id: media.playback.seek
+    name: 播放进度和倍速控制
+    required_slots:
+      - action
+    targets:
+      - 视频
+      - 倍速
+      - 播放速度
+    actions:
+      - 快进
+      - 快退
+      - 调节
+      - 调整
+      - 调快
+      - 调慢
+      - 加快
+      - 放慢
+      - 高一点
+      - 低一点
+      - 合适一点
+      - 让倍速合适一点
+      - 播放倍速调节
+      - 调节播放倍速
+      - 调整播放倍速
+      - 播放倍速调到
+    values:
+      patterns:
+        - "\\d+倍"
+    residue_policy: safe_modifier
+
+  - id: media.mode.set
+    name: 播放模式和播放源切换
+    required_slots:
+      - action
+    targets:
+      - 顺序播放
+      - 随机播放
+      - 单曲循环
+      - 列表循环
+      - 列表播放
+      - 心动模式
+      - 漫游模式
+      - 随机漫游模式
+    actions:
+      - 切换
+      - 更换
+      - 更改
+      - 换为
+      - 设为
+      - 模式
+      - 使用
+      - 采用
+      - 开启
+      - 启用
+      - 打开
+      - 变成
+      - 播放模式切换
+      - 切换播放模式
+      - 更换播放模式
+      - 更改播放模式
+      - 帮我切换播放模式
+      - 把播放模式切换
+      - 让播放模式切换
+      - 播放模式换为
+      - 把播放模式设为
+      - 把播放换成
+      - 让播放变成
+      - 帮我设为
+      - 更换为
+      - 播放源切换
+      - 切换播放源
+      - 更换播放源
+      - 更改播放源
+      - 帮我切换播放源
+      - 把播放源切换
+    residue_policy: safe_modifier
+
+  - id: media.current.status.query
+    name: 当前播放状态查询
+    required_slots:
+      - target
+    targets:
+      - 播放状态
+      - 当前播放状态
+      - 播放列表
+      - 当前播放列表
+    actions:
+      - 查询
+      - 查看
+      - 帮我查
+      - 让我看
+      - 打开
+    residue_policy: safe_modifier
+
+  - id: media.video.set
+    name: 视频应用和播放
+    required_slots:
+      - target
+    targets:
+      - 视频
+      - 副驾视频
+      - 腾讯视频
+      - 爱奇艺
+      - 抖音
+    actions:
+      - 打开
+      - 关闭
+      - 看
+      - 播放
+      - 放个
+      - 刷
+      - 切换
+      - 上一个
+      - 下一个
+      - 上个
+      - 下个
+      - 下一条
+    residue_policy: safe_modifier
+
+  - id: media.music.search
+    name: 开放音乐内容兜底
+    required_slots:
+      - action
+      - target
+    targets:
+      - 音乐
+      - 歌曲
+      - 歌
+      - QQ音乐
+      - 网易云
+      - 如果可以
+      - BGM
+      - bgm
+      - 背景音乐
+      - 插曲
+      - 舞曲
+      - 配乐
+      - 曲目
+      - 单曲
+      - 纯音
+      - 纯音乐
+      - 老歌
+      - 合唱
+      - 翻唱
+      - 现场版
+      - 原声
+    actions:
+      - 播放
+      - 播放一首
+      - 播一首
+      - 放一首
+      - 放首
+      - 放个
+      - 放首歌
+      - 放首音乐
+      - 放点
+      - 搜索
+      - 搜下
+      - 搜
+      - 搜一下
+      - 找
+      - 找一下
+      - 给我找
+      - 我要听
+      - 我想听
+      - 想听
+      - 要听
+      - 听
+      - 来一首
+      - 来首
+      - 来几首
+      - 来点
+      - 切换成
+      - 切换
+    target_policy: open_after_action
+    route_policy: llm_fallback
+    intent_marker_policy: override_cross_executor
+    intent_markers:
+      - 音乐
+      - QQ音乐
+      - 网易云音乐
+      - 播放
+      - 歌
+      - 歌曲
+      - 曲
+      - 曲目
+      - 单曲
+      - 歌手
+      - 歌单
+      - 歌词
+      - 专辑
+      - 新歌
+      - 榜
+      - 排行
+      - BGM
+      - bgm
+      - 背景音乐
+      - 配乐
+      - 纯音
+      - 纯音乐
+      - 轻音乐
+      - 舞曲
+      - 主题曲
+      - 插曲
+      - 原声
+      - 翻唱
+      - 乐队
+      - 女声
+      - 男声
+      - 摇滚
+      - 民谣
+      - 流行
+      - 爵士
+      - 电子
+      - DJ
+      - 语歌
+      - 年代
+      - 中国风
+      - 音质
+      - 音效
+      - 周杰伦
+      - 刘德华
+      - 刘若英
+      - 林俊杰
+      - 陈奕迅
+      - 邓丽君
+      - 邓紫棋
+    residue_policy: safe_modifier

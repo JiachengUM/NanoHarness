@@ -1,0 +1,168 @@
+entries:
+  - slot: action
+    canonical: 打开
+    aliases: [打开, 开启, 开, 降下来, 放下来]
+  - slot: action
+    canonical: 关闭
+    aliases: [关闭, 关掉, 关, 关了, 升起]
+  - slot: action
+    canonical: 调到
+    aliases: [调到, 调至, 调成, 调为, 设为, 设置为, 设定为, 降到, 打到, 改成, 开到]
+  - slot: action
+    canonical: 调高
+    aliases: [调高, 升高, 设高, 提高, 调大, 开大, 大一点, 再大一点]
+  - slot: action
+    canonical: 调低
+    aliases: [调低, 降低, 设低, 调小, 开小, 小一点, 再小一点]
+  - slot: action
+    canonical: 继续
+    aliases: [继续, 继续播放, 继续放歌]
+  - slot: action
+    canonical: 播放
+    aliases: [播放, 播放音乐, 放音乐, 放歌]
+  - slot: action
+    canonical: 搜索
+    aliases: [搜索, 搜下, 搜, 搜一下, 找, 找一下, 给我找, 查, 查询]
+  - slot: action
+    canonical: 导航
+    aliases: [导航, 导航到, 导航去, 回, 回家, 回公司, 我要回家, 继续导航]
+  - slot: action
+    canonical: 拨打
+    aliases: [打电话, 打个电话, 拨打, 拨, 呼叫, 联系, 报警]
+  - slot: action
+    canonical: 接电话
+    aliases: [接, 接电话, 接听, 不接, 拒接, 挂, 挂了, 挂电话]
+  - slot: action
+    canonical: 退出
+    aliases: [退下, 退出, 拜拜, 再见, 闭嘴, 没事, 滚, 滚蛋, 取消, 关掉, 关了, 没叫, 没喊, 别说, 不用, 不需要, goodbye, 退了, 退掉]
+  - slot: action
+    canonical: 播放控制
+    aliases: [下一首, 上一首, 下一曲, 上一曲, 换一首, 换首歌, 切歌, 暂停, 停止, 停, 不听]
+  - slot: action
+    canonical: 拍照
+    aliases: [拍照, 拍个照, 拍张照, 自拍, 录像]
+  - slot: action
+    canonical: 快进
+    aliases: [快进, 快退]
+  - slot: action
+    canonical: 确认
+    aliases: [是, 是的, 对, 对的, 好, 好的, 可以, 收藏]
+  - slot: action
+    canonical: 喜欢
+    aliases: [喜欢]
+  - slot: target
+    canonical: 车窗
+    aliases: [车窗, 窗户, 主驾车窗, 副驾车窗, 副驾驶车窗, 左前窗, 右前窗, 左后窗, 右后窗, 前窗, 后窗, 左后车窗, 右后车窗, 前排车窗, 后排车窗, 所有车窗, 全部车窗]
+  - slot: target
+    canonical: 天窗
+    aliases: [天窗]
+  - slot: target
+    canonical: 遮阳帘
+    aliases: [遮阳帘, 天窗遮阳帘, 后窗遮阳帘]
+  - slot: target
+    canonical: 灯光
+    aliases: [车灯, 灯, 大灯, 近光, 远光, 近光灯, 远光灯, 雾灯, 前雾灯, 后雾灯]
+  - slot: target
+    canonical: 空调
+    aliases: [空调, 温度, 冷气, 暖风]
+  - slot: target
+    canonical: 体感温度
+    aliases: [太冷, 太热, 有点冷, 有点热, 有一点冷, 有一点热, 我冷, 我热, 我好冷, 我好热, 好冷, 好热, 冷了, 热了, 冷死, 热死, 很冷, 很热, 冷啊, 热啊, 冷一点, 热一点, 暖和, 晒]
+  - slot: target
+    canonical: 风量
+    aliases: [风量, 风速, 空调风量, 空调风速, 空调风]
+  - slot: target
+    canonical: 循环模式
+    aliases: [内循环, 外循环, 循环模式]
+  - slot: target
+    canonical: 氛围灯
+    aliases: [氛围灯]
+  - slot: target
+    canonical: 音乐
+    aliases: [音乐, 歌曲, 歌]
+  - slot: target
+    canonical: 导航目的地
+    aliases: [家, 公司, 地图, 导航]
+  - slot: target
+    canonical: 路线偏好
+    aliases: [高速, 充电]
+  - slot: target
+    canonical: 电话
+    aliases: [电话, 号码]
+  - slot: target
+    canonical: 音量
+    aliases: [声音, 音量, 声, 导航声音, 导航音量, 导航播报声音, 导航播报音量, 导航语音播报音量, 视频声音, 视频音量, 副屏声音, 副驾屏声音, 腾讯视频声音, 爱奇艺声音, 静音]
+  - slot: target
+    canonical: 屏幕显示
+    aliases: [中控屏, 副驾屏, 主驾屏, 后排屏, 副驾屏幕, 主驾屏幕, 所有屏幕, 后排屏角度, 屏幕亮度, 主驾屏幕亮度, 副驾屏幕亮度, 亮度, 屏保, 分屏, 全屏, 娱乐屏]
+  - slot: target
+    canonical: 视频
+    aliases: [视频, 副驾视频, 腾讯视频, 爱奇艺, 抖音]
+  - slot: target
+    canonical: 收音机
+    aliases: [FM, 收音机, 电台]
+  - slot: target
+    canonical: 影像屏幕
+    aliases: [三六零, "360", 全景影像, 行车记录仪, 熄屏]
+  - slot: target
+    canonical: 拍照
+    aliases: [拍照, 照片]
+  - slot: target
+    canonical: 位置
+    aliases: [现在在哪儿, 现在在哪, 现在在哪里, 在哪, 在哪里, 我在哪, 目的地, 现在目的地, 当前目的地, 还有多久到, 还有多久]
+  - slot: target
+    canonical: 车辆状态
+    aliases: [胎压, 电量, 多少电, 还有多少电, 电还有多少, 油, 还有多少油, 续航, 还能跑多少公里, 还能跑多远, 跑多少公里, 保养]
+  - slot: target
+    canonical: 天气
+    aliases: [天气, 雨, 下雨, 刮风, 风力, 大风, 刮大风, 多少度, 气温, 冷不冷, 热不热, 空气质量, 雾霾, 湿度, 太阳, 带伞, 穿外套, 外套, 降水概率, 紫外线, 紫外线指数, 防晒, 防晒霜, 气压, 大气压, 风速, 能见度, 适合出门, 臭氧, 臭氧污染, 沙尘暴, 花粉, 花粉浓度, 戴口罩, 返潮, 晒被子, 天气预报, 天气预告]
+  - slot: target
+    canonical: 座椅舒适
+    aliases: [座椅加热, 座椅通风, 座椅按摩, 方向盘加热, 按摩, 加热, 通风]
+  - slot: target
+    canonical: 泊车辅助
+    aliases: [自动泊入, 自动泊出, 泊入, 泊出, 车位, 一键贴边]
+  - slot: target
+    canonical: 通用车控
+    aliases: [车道保持, 道路保持, 保持功能, 车道辅助, 道路辅助, 驾驶辅助, 辅助系统, 辅助功能, 注意力辅助系统, 车道居中, 自动泊车, 智能泊车, 泊车, 蓝牙, 屏幕, 除雾, 除霜, 后视镜, 无线充电, 手机无线充电, 手机充电, 动能回收, 能量回收, 方向盘, 座椅, 车机, 联网, 空气净化, 净化空气, 驾驶模式, 运动模式, 自动驾驶, 启动车辆, QQ音乐, 网易云, 收音机, CarPlay, carplay]
+  - slot: target
+    canonical: 除雾出风
+    aliases: [玻璃, 前玻璃, 前挡玻璃, 车内空气, 空气]
+  # scope：人体部位 + 车内方位，仅用于多 scope 计数，
+  # 不参与 capability 槽位消费，避免与 target/value 冲突。
+  - slot: scope
+    canonical: 主驾
+    aliases: [主驾, 主驾驶, 左前]
+  - slot: scope
+    canonical: 副驾
+    aliases: [副驾, 副驾驶, 右前]
+  - slot: scope
+    canonical: 后排
+    aliases: [后排, 左后, 右后, 左后座, 右后座]
+  - slot: scope
+    canonical: 前排
+    aliases: [前排]
+  - slot: scope
+    canonical: 左右
+    aliases: [左边, 右边, 左侧, 右侧]
+  - slot: scope
+    canonical: 屁股
+    aliases: [屁股, 臀部]
+  - slot: scope
+    canonical: 腰
+    aliases: [腰, 腰部]
+  - slot: scope
+    canonical: 肩
+    aliases: [肩, 肩部, 肩膀]
+  - slot: scope
+    canonical: 脚
+    aliases: [脚, 脚部, 双脚]
+  - slot: scope
+    canonical: 脖子
+    aliases: [脖子, 颈, 颈部]
+  - slot: scope
+    canonical: 头
+    aliases: [头, 头部, 头顶]
+  - slot: scope
+    canonical: 胸
+    aliases: [胸口, 胸部]

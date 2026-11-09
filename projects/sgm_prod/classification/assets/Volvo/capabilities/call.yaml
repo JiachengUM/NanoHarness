@@ -1,0 +1,36 @@
+executor: 电话
+description: 电话工具可直接执行的高精度 simple 白名单能力，包括拨打、接听和拒接。
+capabilities:
+  - id: call.phone.start
+    name: 电话拨打
+    required_slots:
+      - action
+    targets:
+      - 电话
+      - 号码
+    actions:
+      - 打电话
+      - 打个电话
+      - 拨打
+      - 拨
+      - 呼叫
+      - 联系
+      - 报警
+    residue_policy: safe_modifier
+  - id: call.phone.control
+    name: 电话接听和拒接
+    required_slots:
+      - action
+      - target
+    targets:
+      - 电话
+    actions:
+      - 接
+      - 接电话
+      - 接听
+      - 不接
+      - 拒接
+      - 挂
+      - 挂了
+      - 挂电话
+    residue_policy: safe_modifier

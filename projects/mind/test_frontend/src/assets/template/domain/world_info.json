@@ -1,0 +1,35 @@
+{
+  "city": {
+    "name": "慈溪",
+    "id": "101210403",
+    "lat": "30.17714",
+    "lon": "121.24806",
+    "adm2": "宁波",
+    "adm1": "浙江省",
+    "country": "中国",
+    "tz": "Asia/Shanghai",
+    "type": "city"
+  },
+  "weather": {
+    "obs_time": "",
+    "temp": "7",
+    "feels_like": "",
+    "text": "霾",
+    "wind_dir": "",
+    "wind_scale": "",
+    "wind_speed": "",
+    "humidity": "65",
+    "precip": "0.0",
+    "cloud": "99",
+    "pressure": "1025",
+    "vis": "4"
+  },
+  "date": {
+    "date": "2026-01-09",
+    "lunar_date": "二〇二五年冬月廿一",
+    "lunar_holiday": [],
+    "solar_holiday": [],
+    "solar_terms": ""
+  },
+  "attributes": null
+}

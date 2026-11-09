@@ -1,0 +1,155 @@
+.container {
+  height: calc(100vh - 156px);
+  position: relative;
+  display: flex;
+
+  .chatHistory {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+
+    .historyHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sessionList {
+      flex-grow: 1;
+      height: 0;
+      overflow: auto;
+      scroll-behavior: smooth;
+      margin-top: 8px;
+
+
+      .sessionItem {
+        display: flex;
+        padding: 0 8px;
+        margin: 6px 0;
+        border-radius: 4px;
+        line-height: 40px;
+
+        .sessionName {
+          flex: 1;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .sessionAction {
+          display: none;
+        }
+
+        &:hover {
+          background: rgba(57, 187, 244, 0.05);
+          cursor: pointer;
+
+          .sessionAction {
+            display: block;
+          }
+        }
+
+        &.active {
+          background: rgba(57, 187, 244, 0.1);
+        }
+      }
+    }
+  }
+
+  .chat {
+    flex: 1;
+    height: 100%;
+    max-width: 820px;
+    padding: 0 24px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .config {
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    align-self: flex-end;
+  }
+}
+
+.chatList {
+  flex-grow: 1;
+  height: 0;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+.chatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 8px 12px;
+  gap: 24px;
+  margin: 0 auto;
+
+  .chatMessage {
+    border-radius: 12px 12px 4px 12px;
+    padding: 12px 16px;
+
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.5em;
+
+    &.user,
+    &.human {
+      max-width: 70%;
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.assistant,
+    &.ai {
+      align-self: flex-start;
+      padding: 0;
+      width: 100%;
+    }
+
+    .tags {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 12px;
+    }
+  }
+}
+
+.chatInput {
+  .inputItem {
+    position: relative;
+
+    .sendButton,
+    .menuButton {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .menuButton {
+      left: 10px;
+    }
+
+    .sendButton {
+      right: 10px;
+    }
+  }
+
+  .moreInfo {
+    background: white;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 0;
+    position: relative;
+    top: 8px;
+    overflow: hidden;
+  }
+}

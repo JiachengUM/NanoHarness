@@ -1,0 +1,155 @@
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+
+server {
+  listen       9001;
+  server_name  _;
+
+  # 设置上传文件大小限制为 10MB
+  client_max_body_size 10M;
+
+  root   /usr/share/nginx/html;
+  index  index.html;
+
+  # 带 hash 的静态资源：不存在直接返回 404，不 fallback 到 index.html
+  # 避免部署新版本后，旧页面加载懒加载 chunk 时返回 HTML 导致 MIME 类型错误
+  location /assets/ {
+    try_files $uri =404;
+    access_log off;
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+  }
+
+  # 其他静态资源（favicon、logo 等）
+  location ~* \.(?:js|css|svg|png|jpg|jpeg|gif|ico|woff2?|ttf|eot)$ {
+    try_files $uri =404;
+    access_log off;
+    expires 7d;
+    add_header Cache-Control "public";
+  }
+
+  # Serve static files & enable history fallback for SPA
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  # Proxy API requests to backend service
+  # BACKEND_ORIGIN must include scheme and NO trailing slash, e.g. http://host.docker.internal:8080
+  location /api/ {
+    proxy_pass ${BACKEND_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_set_header   Upgrade $http_upgrade;
+    proxy_set_header   Connection $connection_upgrade;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  location /v1/ {
+    proxy_pass ${BACKEND_ADVISOR_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_set_header   Upgrade $http_upgrade;
+    proxy_set_header   Connection $connection_upgrade;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  location /platform-api/ {
+    rewrite ^/platform-api/(.*)$ /api/$1 break;
+    proxy_pass ${PLATFORM_BACKEND_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  location /agent-arena-api/ {
+    rewrite ^/agent-arena-api/(.*)$ /api/$1 break;
+    proxy_pass ${AGENT_ARENA_BACKEND_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  # Legacy API proxies (old backend services)
+  location /legacy/api/ {
+    rewrite ^/legacy/api/(.*)$ /$1 break;
+    proxy_pass ${LEGACY_BACKEND_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_set_header   Upgrade $http_upgrade;
+    proxy_set_header   Connection $connection_upgrade;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  location /legacy/v1/ {
+    rewrite ^/legacy/v1/(.*)$ /$1 break;
+    proxy_pass ${LEGACY_BACKEND_ADVISOR_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_set_header   Upgrade $http_upgrade;
+    proxy_set_header   Connection $connection_upgrade;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  location /legacy/platform-api/ {
+    rewrite ^/legacy/platform-api/(.*)$ /api/$1 break;
+    proxy_pass ${LEGACY_PLATFORM_BACKEND_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  location /legacy/agent-arena-api/ {
+    rewrite ^/legacy/agent-arena-api/(.*)$ /api/$1 break;
+    proxy_pass ${LEGACY_AGENT_ARENA_BACKEND_ORIGIN};
+
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+    proxy_http_version 1.1;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+  }
+
+  # Optional: Gzip compression
+  gzip on;
+  gzip_comp_level 2;
+  gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+}

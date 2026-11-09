@@ -1,0 +1,381 @@
+{
+  "description": "车载助手评测数据集合成项目知识图谱",
+  "generated_at": "2026-05-28",
+  "entities": [
+    {
+      "entityType": "project",
+      "name": "make_datasets_for_vehicle_assistant",
+      "observations": [
+        "车载助手评测数据集合成项目",
+        "将数据集合成拆解为8个可独立执行的环节(0-7)",
+        "两个生产循环：叶子用例循环(2→5→6→覆盖率)和复合用例循环(4→5→6→覆盖率)",
+        "每个环节输出需人工确认(👤)",
+        "项目根目录: d:\\yitu_projects\\nanoai\\projects\\mind\\mem\\auto_test_script\\make_datasets_for_vehicle_assistant"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage0_输入预处理",
+      "observations": [
+        "环节0: Input Ingestion",
+        "将各种原始项目文件(Excel/CSV/Word/PDF等)预处理为结构化中间产物",
+        "支持大文件分块读取、增量提取",
+        "内容四分类: 标签线索/已有case/需求描述/无关内容",
+        "SKILL: skills/0_input_ingestion/SKILL.md",
+        "输入: <P>/inputs/raw/ 各种原始文件",
+        "输出: extracted_tag_hints.json + extracted_cases_raw.json + extracted_requirements.md + extraction_report.md",
+        "按需执行，不是每次都必须运行"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage1_构建标签树",
+      "observations": [
+        "环节1: Build Tag Tree",
+        "一次性环节，基于基础标签树+项目增量构建项目标签树",
+        "核心增量类型: +新增/-排除/~调整",
+        "SKILL: skills/1_tag_tree_from_requirements/SKILL.md",
+        "输入: base标签树 + <P>/inputs/extracted/ 提取产物",
+        "输出: <P>/tag_tree/ 标签树+指南",
+        "指南含§2.1项目写作原则覆盖",
+        "核心理念: 车载助手项目大同小异，标签树主体来自领域常识，提取产物只提供增量"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage2_叶子用例",
+      "observations": [
+        "环节2: Leaf Cases (Tag Tree to Testset)",
+        "从叶子标签直接构建评测用例",
+        "批量生产循环: 写→审→修→覆盖率检查→重复",
+        "SKILL: skills/2_tag_tree_to_testset/SKILL.md",
+        "目标: 100%叶子覆盖率",
+        "输入: 标签树+指南+共享写作原则+提取的已有case(风格参考)",
+        "输出: vehicle_assistant_leaf_cases.json",
+        "每批约20个case"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage3_复合标签采样",
+      "observations": [
+        "环节3: Composite Tag Sampling",
+        "基于场景模板生成复合标签组合",
+        "31行场景表驱动采样",
+        "SKILL: skills/3_composite_tag_sampling/SKILL.md",
+        "输入: 标签树+指南+叶子用例库",
+        "输出: scenario_templates.json",
+        "一次性环节"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage4_复合用例",
+      "observations": [
+        "环节4: Composite Cases",
+        "基于场景模板构建复合评测用例",
+        "批量生产循环: 写→审→修→覆盖率检查→重复",
+        "SKILL: skills/4_composite_cases/SKILL.md",
+        "输入: scenario_templates.json+标签树+指南+共享写作原则+提取的已有case(风格参考)",
+        "输出: vehicle_assistant_leaf_cases.json(追加)",
+        "emit批次工作流: run_emit.py → merge_handwritten_batches.py"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage5_质量审计",
+      "observations": [
+        "环节5: Quality Audit",
+        "只输出审计报告，不做修复",
+        "两层审计管线: 规则审计(快速确定性) + LLM语义审查(深度概率性)",
+        "SKILL: skills/5_quality_audit/SKILL.md",
+        "公共服务: 被叶子用例循环和复合用例循环共用",
+        "核心脚本: full_case_audit.py",
+        "审计原则从 _shared_case_audit_principles.md + case_audit_supplements.md 加载"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage6_审计修复",
+      "observations": [
+        "环节6: Audit Fix",
+        "读取审计报告，修复case",
+        "步骤1格式清洗(确定性幂等) → 步骤2 LLM语义修复(概率性循环) → 步骤3通过率检查(≥95%)",
+        "SKILL: skills/6_audit_fix/SKILL.md",
+        "公共服务: 被叶子用例循环和复合用例循环共用",
+        "核心脚本: fix_case_by_audit.py + batch_audit_fix.py",
+        "修复原则也从共享审核原则文件加载"
+      ]
+    },
+    {
+      "entityType": "stage",
+      "name": "Stage7_覆盖率与导出",
+      "observations": [
+        "环节7: Coverage and Export",
+        "最终覆盖率报告与数据集导出",
+        "SKILL: skills/7_coverage_and_export/SKILL.md",
+        "只做最终汇总，中间覆盖率检查在生产循环内完成",
+        "脚本: report_composite_leaf_tag_coverage.py + export_product_L1_cases.py + export_product_subtree_cases.py"
+      ]
+    },
+    {
+      "entityType": "shared_principle",
+      "name": "_shared_case_writing_principles",
+      "observations": [
+        "用例编写通用原则，582行，16个章节",
+        "被环节2/4/5/6共享引用",
+        "路径: skills/_shared_case_writing_principles.md",
+        "内容: 内容层面评测/叶子标签约束/联网打标/内容合规/感知边界/nl_assertion规范/expected_script规范/user_query_list/多会话结构/记忆类题型/四轮规律归纳/car_info叙事/场景角色座位一致性/max_round/入库前勾表/45条Anti-patterns",
+        "优先级: 基础，项目覆盖优先"
+      ]
+    },
+    {
+      "entityType": "shared_principle",
+      "name": "_shared_case_audit_principles",
+      "observations": [
+        "用例审核通用原则，236行",
+        "审核视角(检查违规)，与写作原则(如何写)互补",
+        "被环节5/6共享引用",
+        "路径: skills/_shared_case_audit_principles.md",
+        "内容: A1-A9(用户台词)/B1-B6(断言质量)/C1-C4(结构)/D1-D3(标签)/E1-E2(场景)/F1-F3(expected_script) + 审核方法论",
+        "full_case_audit.py 和 fix_case_by_audit.py 运行时自动加载",
+        "优先级: 基础，项目覆盖优先"
+      ]
+    },
+    {
+      "entityType": "project_override",
+      "name": "case_audit_supplements",
+      "observations": [
+        "项目级审核原则覆盖",
+        "优先级高于 _shared_case_audit_principles",
+        "路径: <P>/tag_tree/case_audit_supplements.md",
+        "含覆盖模板/新增审核要点模板/7项冲突检查清单",
+        "当前为模板状态(暂无覆盖)",
+        "full_case_audit.py 自动加载，检测到'暂无覆盖'时跳过"
+      ]
+    },
+    {
+      "entityType": "project_override",
+      "name": "guideline_§2.1_写作原则覆盖",
+      "observations": [
+        "项目级写作原则覆盖，在guideline的§2.1节",
+        "优先级高于 _shared_case_writing_principles",
+        "路径: <P>/tag_tree/vehicle_assistant_case_tagging_guideline.md §2.1",
+        "含覆盖模板/具体例子/7项冲突检查清单",
+        "从评审反馈中增量生长——评审时吐槽了什么项目特有的问题，就补什么"
+      ]
+    },
+    {
+      "entityType": "production_loop",
+      "name": "叶子用例生产循环",
+      "observations": [
+        "环节2→5→6→覆盖率检查→重复",
+        "每批约20个case",
+        "目标: 100%叶子覆盖率",
+        "人工确认点: 写完case后、审计报告后、修复后",
+        "循环退出条件: 叶子覆盖率达100%"
+      ]
+    },
+    {
+      "entityType": "production_loop",
+      "name": "复合用例生产循环",
+      "observations": [
+        "环节4→5→6→覆盖率检查→重复",
+        "每批约20个case",
+        "目标: 场景标签组合覆盖率达标",
+        "人工确认点: 写完case后、审计报告后、修复后",
+        "循环退出条件: 场景覆盖率达标"
+      ]
+    },
+    {
+      "entityType": "script",
+      "name": "full_case_audit.py",
+      "observations": ["核心审核引擎，环节5使用", "路径: scripts/audit/full_case_audit.py", "从 _shared_case_audit_principles.md + case_audit_supplements.md 加载审核原则", "用 {{CASE_AUDIT_PRINCIPLES}} 占位符注入prompt", "调用 DOUBAO_SEED LLM，输出 CaseAudit 结构化结果", "含 _merge_audit_principles() 合并通用+项目原则", "含 validate_tags_against_tree() 标签树校验"]
+    },
+    {
+      "entityType": "script",
+      "name": "fix_case_by_audit.py",
+      "observations": ["LLM修复脚本，环节6使用", "路径: scripts/audit/fix_case_by_audit.py", "FIX_PROMPT_TEMPLATE 用 {{CASE_AUDIT_PRINCIPLES}} 占位符", "从 full_case_audit 导入 _merge_audit_principles 和 PROJECT_ROOT", "含修复独有的: case合成规范/修复执行检查清单/修复步骤", "最多5轮修复循环"]
+    },
+    {
+      "entityType": "script",
+      "name": "batch_audit_fix.py",
+      "observations": ["批量审核+修复编排器，环节5+6使用", "路径: scripts/audit/batch_audit_fix.py", "组合 full_case_audit.py + fix_case_by_audit.py", "自适应节流(ThrottleController)处理429限流", "高并发异步执行"]
+    },
+    {
+      "entityType": "script",
+      "name": "compose_handwritten_helpers.py",
+      "observations": ["复合用例编写辅助库，环节4使用", "路径: scripts/composite_cases/compose_handwritten_helpers.py", "提供 case()/sess()/pattern_case()/director_script() 等函数"]
+    },
+    {
+      "entityType": "script",
+      "name": "run_emit.py",
+      "observations": ["emit批次运行器，环节4使用", "路径: scripts/composite_cases/run_emit.py", "加载 emit_*.py 模块执行并输出JSON批次文件"]
+    },
+    {
+      "entityType": "script",
+      "name": "merge_handwritten_batches.py",
+      "observations": ["批次合并入库，环节4使用", "路径: scripts/composite_cases/merge_handwritten_batches.py", "将handwritten_batches/追加到vehicle_assistant_leaf_cases.json"]
+    },
+    {
+      "entityType": "script",
+      "name": "report_composite_leaf_tag_coverage.py",
+      "observations": ["覆盖率报告，环节7使用", "路径: scripts/coverage/report_composite_leaf_tag_coverage.py", "统计每个叶子标签的case数，标记零覆盖和低覆盖"]
+    },
+    {
+      "entityType": "script",
+      "name": "export_product_L1_cases.py",
+      "observations": ["L1子树导出，环节7使用", "路径: scripts/coverage/export_product_L1_cases.py"]
+    },
+    {
+      "entityType": "script",
+      "name": "export_product_subtree_cases.py",
+      "observations": ["通用子树导出，环节7使用", "路径: scripts/coverage/export_product_subtree_cases.py"]
+    },
+    {
+      "entityType": "script",
+      "name": "validate_cases_schema.py",
+      "observations": ["Schema校验，环节2+4使用", "路径: scripts/leaf_cases/validate_cases_schema.py", "校验TestCase Pydantic模型"]
+    },
+    {
+      "entityType": "script",
+      "name": "refresh_guideline_leaf_examples.py",
+      "observations": ["guideline例子同步，环节1+2使用", "路径: scripts/leaf_cases/refresh_guideline_leaf_examples.py"]
+    },
+    {
+      "entityType": "script",
+      "name": "normalize_composite_expected_scripts.py",
+      "observations": ["expected_script格式归一化，环节6使用", "路径: scripts/normalize/normalize_composite_expected_scripts.py"]
+    },
+    {
+      "entityType": "script",
+      "name": "strip_user_meta_parentheticals.py",
+      "observations": ["全面移除标注括号(67种模式)，环节6使用", "路径: scripts/normalize/strip_user_meta_parentheticals.py"]
+    },
+    {
+      "entityType": "script",
+      "name": "preview_vehicle_tag_tree.py",
+      "observations": ["标签树可视化，环节1使用", "路径: scripts/tag_tree/preview_vehicle_tag_tree.py"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "base_vehicle_assistant_case_tag_tree.json",
+      "observations": ["基础标签树，192→181叶子(去重后)", "路径: artifacts/base/base_vehicle_assistant_case_tag_tree.json", "所有项目共享，环节1读取作为起点"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "base_vehicle_assistant_case_tagging_guideline.md",
+      "observations": ["基础打标指南", "路径: artifacts/base/base_vehicle_assistant_case_tagging_guideline.md"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "vehicle_assistant_case_tag_tree.json",
+      "observations": ["项目标签树，环节1产出", "路径: <P>/tag_tree/vehicle_assistant_case_tag_tree.json", "基于基础标签树+项目增量构建"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "vehicle_assistant_case_tagging_guideline.md",
+      "observations": ["项目打标指南，环节1产出", "路径: <P>/tag_tree/vehicle_assistant_case_tagging_guideline.md", "含§2.1项目写作原则覆盖", "含§3标签语义说明"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "vehicle_assistant_leaf_cases.json",
+      "observations": ["用例库，环节2/4产出", "路径: <P>/vehicle_assistant_leaf_cases.json", "叶子case和复合case都存在这里"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "scenario_templates.json",
+      "observations": ["场景模板，环节3产出", "路径: <P>/scenario_templates.json", "31行场景表驱动的复合标签组合"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "extracted_tag_hints.json",
+      "observations": ["提取的标签线索，环节0产出", "路径: <P>/inputs/extracted/extracted_tag_hints.json"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "extracted_cases_raw.json",
+      "observations": ["提取的已有case，环节0产出", "路径: <P>/inputs/extracted/extracted_cases_raw.json", "只作风格参考和场景灵感，不直接复用"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "extracted_requirements.md",
+      "observations": ["提取的需求描述，环节0产出", "路径: <P>/inputs/extracted/extracted_requirements.md"]
+    },
+    {
+      "entityType": "artifact",
+      "name": "extraction_report.md",
+      "observations": ["提取报告，环节0产出", "路径: <P>/inputs/extracted/extraction_report.md", "供人工确认提取质量"]
+    }
+  ],
+  "relations": [
+    {"from": "Stage0_输入预处理", "relationType": "feeds_into", "to": "Stage1_构建标签树"},
+    {"from": "Stage1_构建标签树", "relationType": "feeds_into", "to": "Stage2_叶子用例"},
+    {"from": "Stage1_构建标签树", "relationType": "feeds_into", "to": "Stage3_复合标签采样"},
+    {"from": "Stage2_叶子用例", "relationType": "feeds_into", "to": "Stage5_质量审计"},
+    {"from": "Stage5_质量审计", "relationType": "feeds_into", "to": "Stage6_审计修复"},
+    {"from": "Stage6_审计修复", "relationType": "feeds_back_to", "to": "Stage2_叶子用例"},
+    {"from": "Stage3_复合标签采样", "relationType": "feeds_into", "to": "Stage4_复合用例"},
+    {"from": "Stage4_复合用例", "relationType": "feeds_into", "to": "Stage5_质量审计"},
+    {"from": "Stage6_审计修复", "relationType": "feeds_back_to", "to": "Stage4_复合用例"},
+    {"from": "Stage2_叶子用例", "relationType": "feeds_into", "to": "Stage7_覆盖率与导出"},
+    {"from": "Stage4_复合用例", "relationType": "feeds_into", "to": "Stage7_覆盖率与导出"},
+    {"from": "Stage0_输入预处理", "relationType": "produces", "to": "extracted_tag_hints.json"},
+    {"from": "Stage0_输入预处理", "relationType": "produces", "to": "extracted_cases_raw.json"},
+    {"from": "Stage0_输入预处理", "relationType": "produces", "to": "extracted_requirements.md"},
+    {"from": "Stage0_输入预处理", "relationType": "produces", "to": "extraction_report.md"},
+    {"from": "Stage1_构建标签树", "relationType": "produces", "to": "vehicle_assistant_case_tag_tree.json"},
+    {"from": "Stage1_构建标签树", "relationType": "produces", "to": "vehicle_assistant_case_tagging_guideline.md"},
+    {"from": "Stage2_叶子用例", "relationType": "produces", "to": "vehicle_assistant_leaf_cases.json"},
+    {"from": "Stage3_复合标签采样", "relationType": "produces", "to": "scenario_templates.json"},
+    {"from": "Stage4_复合用例", "relationType": "appends_to", "to": "vehicle_assistant_leaf_cases.json"},
+    {"from": "Stage1_构建标签树", "relationType": "consumes", "to": "base_vehicle_assistant_case_tag_tree.json"},
+    {"from": "Stage1_构建标签树", "relationType": "consumes", "to": "base_vehicle_assistant_case_tagging_guideline.md"},
+    {"from": "Stage1_构建标签树", "relationType": "consumes", "to": "extracted_tag_hints.json"},
+    {"from": "Stage1_构建标签树", "relationType": "consumes", "to": "extracted_requirements.md"},
+    {"from": "Stage2_叶子用例", "relationType": "consumes", "to": "vehicle_assistant_case_tag_tree.json"},
+    {"from": "Stage2_叶子用例", "relationType": "consumes", "to": "vehicle_assistant_case_tagging_guideline.md"},
+    {"from": "Stage2_叶子用例", "relationType": "consumes", "to": "extracted_cases_raw.json"},
+    {"from": "Stage3_复合标签采样", "relationType": "consumes", "to": "vehicle_assistant_case_tag_tree.json"},
+    {"from": "Stage3_复合标签采样", "relationType": "consumes", "to": "vehicle_assistant_leaf_cases.json"},
+    {"from": "Stage4_复合用例", "relationType": "consumes", "to": "scenario_templates.json"},
+    {"from": "Stage4_复合用例", "relationType": "consumes", "to": "extracted_cases_raw.json"},
+    {"from": "Stage5_质量审计", "relationType": "uses_script", "to": "full_case_audit.py"},
+    {"from": "Stage6_审计修复", "relationType": "uses_script", "to": "fix_case_by_audit.py"},
+    {"from": "Stage6_审计修复", "relationType": "uses_script", "to": "batch_audit_fix.py"},
+    {"from": "Stage6_审计修复", "relationType": "uses_script", "to": "normalize_composite_expected_scripts.py"},
+    {"from": "Stage6_审计修复", "relationType": "uses_script", "to": "strip_user_meta_parentheticals.py"},
+    {"from": "Stage4_复合用例", "relationType": "uses_script", "to": "compose_handwritten_helpers.py"},
+    {"from": "Stage4_复合用例", "relationType": "uses_script", "to": "run_emit.py"},
+    {"from": "Stage4_复合用例", "relationType": "uses_script", "to": "merge_handwritten_batches.py"},
+    {"from": "Stage7_覆盖率与导出", "relationType": "uses_script", "to": "report_composite_leaf_tag_coverage.py"},
+    {"from": "Stage7_覆盖率与导出", "relationType": "uses_script", "to": "export_product_L1_cases.py"},
+    {"from": "Stage7_覆盖率与导出", "relationType": "uses_script", "to": "export_product_subtree_cases.py"},
+    {"from": "Stage2_叶子用例", "relationType": "references", "to": "_shared_case_writing_principles"},
+    {"from": "Stage4_复合用例", "relationType": "references", "to": "_shared_case_writing_principles"},
+    {"from": "Stage5_质量审计", "relationType": "references", "to": "_shared_case_writing_principles"},
+    {"from": "Stage6_审计修复", "relationType": "references", "to": "_shared_case_writing_principles"},
+    {"from": "Stage5_质量审计", "relationType": "references", "to": "_shared_case_audit_principles"},
+    {"from": "Stage6_审计修复", "relationType": "references", "to": "_shared_case_audit_principles"},
+    {"from": "full_case_audit.py", "relationType": "loads_at_runtime", "to": "_shared_case_audit_principles"},
+    {"from": "full_case_audit.py", "relationType": "loads_at_runtime", "to": "case_audit_supplements"},
+    {"from": "fix_case_by_audit.py", "relationType": "loads_at_runtime", "to": "_shared_case_audit_principles"},
+    {"from": "fix_case_by_audit.py", "relationType": "loads_at_runtime", "to": "case_audit_supplements"},
+    {"from": "case_audit_supplements", "relationType": "overrides", "to": "_shared_case_audit_principles"},
+    {"from": "guideline_§2.1_写作原则覆盖", "relationType": "overrides", "to": "_shared_case_writing_principles"},
+    {"from": "叶子用例生产循环", "relationType": "includes", "to": "Stage2_叶子用例"},
+    {"from": "叶子用例生产循环", "relationType": "includes", "to": "Stage5_质量审计"},
+    {"from": "叶子用例生产循环", "relationType": "includes", "to": "Stage6_审计修复"},
+    {"from": "复合用例生产循环", "relationType": "includes", "to": "Stage4_复合用例"},
+    {"from": "复合用例生产循环", "relationType": "includes", "to": "Stage5_质量审计"},
+    {"from": "复合用例生产循环", "relationType": "includes", "to": "Stage6_审计修复"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage0_输入预处理"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage1_构建标签树"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage2_叶子用例"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage3_复合标签采样"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage4_复合用例"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage5_质量审计"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage6_审计修复"},
+    {"from": "make_datasets_for_vehicle_assistant", "relationType": "contains", "to": "Stage7_覆盖率与导出"}
+  ]
+}

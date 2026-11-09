@@ -1,0 +1,50 @@
+{
+  "protocol_version": 4,
+  "commands": [
+    {
+      "command": "agent.run",
+      "payload": "AgentRunCommandPayload",
+      "success_status": "accepted"
+    },
+    {
+      "command": "task.cancel",
+      "payload": "TaskCancelCommandPayload",
+      "success_status": "completed"
+    },
+    {
+      "command": "session.reset",
+      "payload": "SessionResetCommandPayload",
+      "success_status": "completed"
+    },
+    {
+      "command": "voice.start",
+      "payload": null,
+      "success_status": "completed"
+    },
+    {
+      "command": "voice.stop",
+      "payload": null,
+      "success_status": "completed"
+    },
+    {
+      "command": "voice.text.query",
+      "payload": "VoiceTextQueryCommandPayload",
+      "success_status": "completed"
+    },
+    {
+      "command": "voice.mic.open",
+      "payload": null,
+      "success_status": "completed"
+    },
+    {
+      "command": "voice.mic.close",
+      "payload": null,
+      "success_status": "completed"
+    },
+    {
+      "command": "voice.playback.ended",
+      "payload": null,
+      "success_status": "completed"
+    }
+  ]
+}

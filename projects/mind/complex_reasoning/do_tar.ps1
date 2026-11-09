@@ -1,0 +1,2 @@
+cd ../
+tar --exclude="complex_reasoning_agent/.git" --exclude="complex_reasoning_agent/.idea"  --exclude="complex_reasoning_agent/logs" --exclude="complex_reasoning_agent/venv" -cf c:\work\upload\complex_reasoning_agent.tar complex_reasoning_agent

@@ -1,0 +1,50 @@
+{
+  "name": "eval-platform",
+  "version": "1.0.0",
+  "description": "Agent Evaluation Platform",
+  "scripts": {
+    "build": "turbo build",
+    "build:packages": "turbo build --filter=@eval-platform/*",
+    "dev": "turbo dev",
+    "dev:packages": "turbo dev --filter=@eval-platform/*",
+    "dev:backend": "cd apps/backend && pnpm dev",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "typecheck:packages": "turbo typecheck --filter=@eval-platform/*",
+    "test": "turbo test",
+    "test:packages": "turbo test --filter=@eval-platform/*",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "keywords": [
+    "agent",
+    "evaluation",
+    "llm"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@11.5.1",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.9.1",
+    "@types/nunjucks": "^3.2.6",
+    "@typescript-eslint/eslint-plugin": "^8.60.1",
+    "@typescript-eslint/parser": "^8.60.1",
+    "eslint": "^10.4.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3",
+    "tsx": "^4.22.4",
+    "turbo": "^2.9.16",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.60.1",
+    "vitest": "^4.1.8"
+  },
+  "dependencies": {
+    "nunjucks": "^3.2.4",
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.3",
+    "zod": "^4.4.3"
+  }
+}

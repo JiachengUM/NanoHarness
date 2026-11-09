@@ -1,0 +1,63 @@
+[project]
+name = "sgm"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13.1"
+dependencies = [
+    "aiohttp>=3.11.0",
+    "anyio>=4.12.0",
+    "asgiref>=3.12.1",
+    "asyncer>=0.0.17",
+    "beanie>=1.30,<2",
+    "croniter>=6.1.0",
+    "cryptography>=46.0.0",
+    "fastapi>=0.100.1",
+    "httpcore>=1.0.0",
+    "httpx>=0.28.0",
+    "jinja2>=3.0.0",
+    "jq>=1.11.0",
+    "langchain>=1.3.14",
+    "langchain-openai>=1.3.5",
+    "markupsafe>=3.0.0",
+    "motor>=3.7.1",
+    "numpy>=2.4.0",
+    "openai>=1.0.0",
+    "packaging>=25.0",
+    "pandas>=2.3.0",
+    "pydantic>=2.0.0",
+    "pyinstrument>=5.1.2",
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.3.0",
+    "python-dotenv>=1.2.0",
+    "python-multipart>=0.0.6",
+    "requests>=2.31.0",
+    "rich>=14.2.0",
+    "starlette>=0.27.0",
+    "textual>=8.2.4",
+    "tqdm>=4.67.0",
+    "typer>=0.24.1",
+    "typesafe-sdk>=0.7.0",
+    "typing-extensions>=4.15.0",
+    "uvicorn[standard]>=0.23.2",
+    "volcengine>=1.0.195",
+    "volcengine-python-sdk[ark]>=0.1.0",
+    "websockets>=15,<16",
+]
+
+[dependency-groups]
+dev = [
+    "pyaudio>=0.2.14",
+    "pre-commit>=4.6.0",
+]
+
+[tool.ruff]
+extend-exclude = [
+    "projects/",
+    "aicore/tools/base.py",
+]
+
+[tool.uv.workspace]
+members = [
+    "projects/nanoai",
+]

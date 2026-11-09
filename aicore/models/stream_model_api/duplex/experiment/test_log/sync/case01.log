@@ -1,0 +1,124 @@
+=== DUPLEX VOICE CASE LOG ===
+started_at=2026-08-12T15:45:34.786+08:00
+log_file=aicore/models/stream_model_api/duplex/sync_test_case_log/case01.log
+=== EVENTS ===
+2026-08-12T15:45:34.786+08:00 +00000.000s [SESSION] {"model":"1.2.6.1","tool_call_mode":"sync","tools":["car_control","navigation","QQ音乐单曲搜索","QQ音乐歌单搜索","QQ音乐专辑搜索","地点搜索工具","websearch"]}
+2026-08-12T15:45:35.153+08:00 +00000.367s [UP -> DUPLEX] type=session.create bytes=5598 {"type":"session.create","event_id":"event_1","session":{"id":"ef0c7205-1d98-4c52-9ce4-521e5d873789","model":"1.2.6.1","instructions":"你是车载语音助手，准确执行用户要求，并用适合语音播报的简短表达回复。\n\n基本信息：我在上海市徐汇滨江城开中心 T2 楼，今天是 2026 年 8 月 6 日。\n\n先完整理解用户输入，再判断是否需要调用工具。简单问题直接回答；多个彼此独立的需求，\n应在同一次响应中发出全部必要的工具调用，让它们并行执行。缺少无法从上下文确定的必要\n参数时，用一个短句向用户澄清，不要暴露工具名、参数名或内部实现。\n\n工具返回的是本轮调用的真实结果。收到结果后，应结合用户原始请求自然作答，不要重复调用\n已经完成的工具。回复先说结论，再补充最必要的信息；除非用户明确要求，不使用长列表，\n不复述工具执行过程，也不解释内部推理。","audio":{"input":{"format":{"type":"pcm","rate":16000}},"output":{"format":{"type":"pcm_s16le","rate":24000},"voice":"zh_female_xiaohe_jupiter_bigtts"}},"tools":[{"type":"function","name":"car_control","description":"车控指令执行","parameters":{"properties":{"command":{"description":"车控指令描述","title":"Command","type":"string"}},"required":["command"],"title":"CarControlInput","type":"object"}},{"type":"function","name":"navigation","description":"通过导航指令执行导航任务，指定目的地导航、添加途径点、路线偏好","parameters":{"properties":{"command":{"description":"导航任务指令","title":"Command","type":"string"}},"required":["command"],"title":"NavigateInput","type":"object"}},{"type":"function","name":"QQ音乐单曲搜索","description":"单曲搜索工具，支持按歌曲名搜索歌曲信息；必须按criteria筛选，criteria是除了query之外的包括个人偏好等任何其它信息。","parameters":{"properties":{"query":{"description":"支持搜索单曲名、歌手名、专辑名","title":"Query","type":"string"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"音乐搜索条件列表，每条是一个自然语言约束","title":"Criteria"}},"required":["query"],"title":"MusicSearchInput","type":"object"}},{"type":"function","name":"QQ音乐歌单搜索","description":"歌单搜索工具，支持按主题、歌单名搜索歌单信息；必须按criteria筛选，criteria是除了query之外的包括个人偏好等任何其它信息。","parameters":{"properties":{"query":{"description":"支持搜索单曲名、歌手名、专辑名","title":"Query","type":"string"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"音乐搜索条件列表，每条是一个自然语言约束","title":"Criteria"}},"required":["query"],"title":"MusicSearchInput","type":"object"}},{"type":"function","name":"QQ音乐专辑搜索","description":"专辑搜索工具，支持按专辑名、歌手名搜索专辑信息；必须按criteria筛选，criteria是除了query之外的包括个人偏好等任何其它信息。","parameters":{"properties":{"query":{"description":"支持搜索单曲名、歌手名、专辑名","title":"Query","type":"string"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"音乐搜索条件列表，每条是一个自然语言约束","title":"Criteria"}},"required":["query"],"title":"MusicSearchInput","type":"object"}},{"type":"function","name":"地点搜索工具","description":"完全遵循用户要求搜索poi，必须按criteria筛选，criteria是除了query之外的任何其它信息；business：poi所属商圈、营业时间、联系电话、特色内容、停车场类型、评分和人均消费；indoor：楼层索引、所在楼层；navi：导航引导点坐标包括各类poi出入口；返回的结果列表默认按距离从近到远排序。","parameters":{"properties":{"query":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"description":"根据内容自动映射至高德API的types或keywords","title":"Query"},"city":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"description":"搜索城市名称","title":"City"},"criteria":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"default":null,"description":"criteria是除了query之外的任何其它信息","title":"Criteria"},"address":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"description":"地址或地点，周边搜索必填","title":"Address"},"radius":{"default":3000,"description":"周边搜索半径，周边搜必填，单位米","maximum":50000,"minimum":0,"title":"Radius","type":"integer"},"show_fields":{"default":"children,business,indoor,navi","description":"children、business、indoor、navi，可以多选用逗号分割","title":"Show Fields","type":"string"}},"title":"PoiSearchInput","type":"object"}},{"type":"function","name":"websearch","description":"通用联网搜索","parameters":{"properties":{"query":{"description":"搜索关键词","title":"Query","type":"string"}},"required":["query"],"title":"WebsearchInput","type":"object"}}]},"extension":{"asr":{"extra":{"end_smooth_window_ms":1500,"enable_custom_vad":true}},"tts":{"extra":{}},"dialog":{"extra":{"audit_response":"抱歉，这个问题我无法回答，你可以换个其他话题，我会尽力为你提供帮助。","enable_loudness_norm":true,"enable_music":true}}}}
+2026-08-12T15:45:35.217+08:00 +00000.431s [DOWN <- DUPLEX] type=session.created bytes=103 {"type":"session.created","event_id":"event_1","session":{"id":"ef0c7205-1d98-4c52-9ce4-521e5d873789"}}
+2026-08-12T15:45:44.072+08:00 +00009.287s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=113 {"item_id":"52305420946996994","type":"conversation.item.input_audio_transcription.started","event_id":"event_2"}
+2026-08-12T15:45:44.078+08:00 +00009.292s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=143 {"content_index":0,"delta":"你","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946996994","event_id":"event_3"}
+2026-08-12T15:45:44.180+08:00 +00009.394s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=149 {"content_index":0,"delta":"你可以","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946996994","event_id":"event_4"}
+2026-08-12T15:45:44.341+08:00 +00009.555s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=152 {"content_index":0,"delta":"你可以唱","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946996994","event_id":"event_5"}
+2026-08-12T15:45:44.584+08:00 +00009.798s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=161 {"event_id":"event_6","content_index":0,"delta":"你可以唱一首歌","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946996994"}
+2026-08-12T15:45:44.824+08:00 +00010.038s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=164 {"item_id":"52305420946996994","event_id":"event_7","content_index":0,"delta":"你可以唱一首歌吗","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T15:45:44.930+08:00 +00010.145s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=167 {"content_index":0,"delta":"你可以唱一首歌吗？","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946996994","event_id":"event_8"}
+2026-08-12T15:45:44.976+08:00 +00010.190s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=164 {"item_id":"52305420946996994","event_id":"event_9","content_index":0,"delta":"你可以唱一首歌吗","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T15:45:45.581+08:00 +00010.796s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=168 {"content_index":0,"delta":"你可以唱一首歌吗？","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946996994","event_id":"event_10"}
+2026-08-12T15:45:45.584+08:00 +00010.799s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=171 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52305420946996994","content_index":1,"text":"你可以唱一首歌吗？","event_id":"event_11"}
+2026-08-12T15:45:46.382+08:00 +00011.596s [DOWN <- DUPLEX] type=response.output_audio.started bytes=151 {"question_id":"52305420946996994","response_id":"52305420946997762","tts_type":"default","type":"response.output_audio.started","event_id":"event_12"}
+2026-08-12T15:45:50.883+08:00 +00016.097s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=114 {"item_id":"52305420946998274","type":"conversation.item.input_audio_transcription.started","event_id":"event_61"}
+2026-08-12T15:45:51.212+08:00 +00016.426s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=144 {"content_index":0,"delta":"换","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946998274","event_id":"event_62"}
+2026-08-12T15:45:51.369+08:00 +00016.583s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=147 {"content_index":0,"delta":"换首","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946998274","event_id":"event_63"}
+2026-08-12T15:45:51.455+08:00 +00016.669s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=156 {"item_id":"52305420946998274","event_id":"event_64","content_index":0,"delta":"换首张学友","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T15:45:51.771+08:00 +00016.985s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=159 {"content_index":0,"delta":"换首张学友的","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946998274","event_id":"event_65"}
+2026-08-12T15:45:51.889+08:00 +00017.103s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=162 {"delta":"换首张学友的。","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946998274","event_id":"event_66","content_index":0}
+2026-08-12T15:45:51.929+08:00 +00017.143s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=159 {"content_index":0,"delta":"换首张学友的","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946998274","event_id":"event_67"}
+2026-08-12T15:45:52.537+08:00 +00017.751s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=162 {"content_index":0,"delta":"换首张学友的。","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420946998274","event_id":"event_68"}
+2026-08-12T15:45:52.541+08:00 +00017.756s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=165 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52305420946998274","content_index":1,"text":"换首张学友的。","event_id":"event_69"}
+2026-08-12T15:45:53.994+08:00 +00019.208s [DOWN <- DUPLEX] type=response.output_audio.started bytes=151 {"question_id":"52305420946998274","response_id":"52305420946999554","tts_type":"default","type":"response.output_audio.started","event_id":"event_71"}
+2026-08-12T15:45:56.659+08:00 +00021.874s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.started bytes=115 {"item_id":"52305420947001858","type":"conversation.item.input_audio_transcription.started","event_id":"event_103"}
+2026-08-12T15:45:56.840+08:00 +00022.054s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=145 {"item_id":"52305420947001858","event_id":"event_104","content_index":0,"delta":"你","type":"conversation.item.input_audio_transcription.delta"}
+2026-08-12T15:45:56.914+08:00 +00022.128s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=148 {"content_index":0,"delta":"你还","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_105"}
+2026-08-12T15:45:57.127+08:00 +00022.341s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=154 {"delta":"你还能干","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_106","content_index":0}
+2026-08-12T15:45:57.293+08:00 +00022.507s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=160 {"type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_107","content_index":0,"delta":"你还能干什么"}
+2026-08-12T15:45:57.432+08:00 +00022.646s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=163 {"delta":"你还能干什么呀","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_108","content_index":0}
+2026-08-12T15:45:57.562+08:00 +00022.776s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"content_index":0,"delta":"你还能干什么呀？","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_109"}
+2026-08-12T15:45:57.599+08:00 +00022.813s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=163 {"content_index":0,"delta":"你还能干什么呀","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_110"}
+2026-08-12T15:45:58.323+08:00 +00023.537s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.delta bytes=166 {"content_index":0,"delta":"你还能干什么呀？","type":"conversation.item.input_audio_transcription.delta","item_id":"52305420947001858","event_id":"event_111"}
+2026-08-12T15:45:58.330+08:00 +00023.544s [DOWN <- DUPLEX] type=conversation.item.input_audio_transcription.completed bytes=169 {"type":"conversation.item.input_audio_transcription.completed","item_id":"52305420947001858","content_index":1,"text":"你还能干什么呀？","event_id":"event_112"}
+2026-08-12T15:45:58.423+08:00 +00023.637s [DOWN <- DUPLEX] type=response.output_audio.started bytes=152 {"tts_type":"default","type":"response.output_audio.started","event_id":"event_116","question_id":"52305420947001858","response_id":"52305420947002882"}
+2026-08-12T15:45:59.333+08:00 +00024.547s [DOWN <- DUPLEX] type=response.output_text.done bytes=254 {"question_id":"52305420947001858","response_id":"52305420947002882","type":"response.output_text.done","text":"我能查信息、导航、控制车载功能，也能陪你聊天、唱歌，你有什么需求都可以直接说。","event_id":"event_135"}
+2026-08-12T15:46:00.227+08:00 +00025.441s [DOWN <- DUPLEX] type=response.output_audio.done bytes=128 {"question_id":"52305420947001858","response_id":"52305420947002882","type":"response.output_audio.done","event_id":"event_150"}
+2026-08-12T15:46:00.227+08:00 +00025.441s [DUPLEX CONTEXT] type=conversation.item.retrieve bytes=69
+                                          {
+                                            "type": "conversation.item.retrieve",
+                                            "event_id": "event_2",
+                                            "items": []
+                                          }
+2026-08-12T15:46:00.275+08:00 +00025.489s [DUPLEX CONTEXT] type=conversation.item.retrieved bytes=1154
+                                          {
+                                            "type": "conversation.item.retrieved",
+                                            "items": [
+                                              {
+                                                "timestamp": 1786520745738,
+                                                "content": [
+                                                  {
+                                                    "text": "你可以唱一首歌吗？",
+                                                    "type": "input_text"
+                                                  }
+                                                ],
+                                                "id": "52305420946996994",
+                                                "role": "user"
+                                              },
+                                              {
+                                                "id": "52305420946997762",
+                                                "role": "assistant",
+                                                "timestamp": 1786520751034,
+                                                "content": [
+                                                  {
+                                                    "text": "哦我想说其实你很好你自己却不知道，真心的对我好，不要求回报，爱一个人希望他过更好，打从心里暖暖的",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52305420946998274",
+                                                "role": "user",
+                                                "timestamp": 1786520752695,
+                                                "content": [
+                                                  {
+                                                    "text": "换首张学友的。",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "id": "52305420946999554",
+                                                "role": "assistant",
+                                                "timestamp": 1786520756805,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "我和你吻别在无人的街，让风痴笑我不能拒绝，我和"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "timestamp": 1786520758481,
+                                                "content": [
+                                                  {
+                                                    "type": "input_text",
+                                                    "text": "你还能干什么呀？"
+                                                  }
+                                                ],
+                                                "id": "52305420947001858",
+                                                "role": "user"
+                                              },
+                                              {
+                                                "id": "52305420947002882",
+                                                "role": "assistant",
+                                                "timestamp": 1786520759487,
+                                                "content": [
+                                                  {
+                                                    "text": "我能查信息、导航、控制车载功能，也能陪你聊天、唱歌，你有什么需求都可以直接说。",
+                                                    "type": "input_text"
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "event_id": "event_151"
+                                          }
+2026-08-12T15:46:06.561+08:00 +00031.775s [DOWN <- DUPLEX] type=response.done bytes=356 {"type":"response.done","event_id":"event_152","response":{"usage":{"total_tokens":221,"input_tokens":62,"output_tokens":159,"input_token_details":{"text_tokens":0,"audio_tokens":62,"image_tokens":0,"cached_tokens":0,"cached_tokens_details":{"text_tokens":0,"audio_tokens":0,"image_tokens":0}},"output_token_details":{"text_tokens":0,"audio_tokens":159}}}}
+2026-08-12T15:46:07.702+08:00 +00032.916s [UP -> DUPLEX] type=session.close bytes=45 {"type":"session.close","event_id":"event_3"}
+2026-08-12T15:46:08.301+08:00 +00033.515s [DOWN <- DUPLEX] type=session.closed bytes=48 {"type":"session.closed","event_id":"event_153"}
+2026-08-12T15:46:08.345+08:00 +00033.560s === DUPLEX VOICE CASE END ===

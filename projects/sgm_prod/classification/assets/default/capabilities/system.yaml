@@ -1,0 +1,331 @@
+executor: 端侧系统
+description: 端侧系统可直接执行的高精度 simple 白名单能力，包括显示、语言、主题、热点、DVR 和语音包等。
+capabilities:
+  - id: system.dialog.dismiss
+    name: 退出和打断
+    required_slots:
+      - action
+    actions:
+      - 退下
+      - 退出
+      - 拜拜
+      - 再见
+      - 闭嘴
+      - 没事
+      - 滚
+      - 滚蛋
+      - 取消
+      - 关掉
+      - 关了
+      - 没叫
+      - 没喊
+      - 别说
+      - 不用
+      - 不需要
+      - goodbye
+      - 退了
+      - 退掉
+    residue_policy: safe_modifier
+  - id: system.camera_360.set
+    name: 影像和屏幕快捷控制
+    required_slots:
+      - target
+    targets:
+      - 三六零
+      - '360'
+      - 全景影像
+      - 行车记录仪
+      - 熄屏
+    actions:
+      - 打开
+      - 关闭
+      - 开
+      - 关
+      - 开启
+    residue_policy: safe_modifier
+  - id: system.generic.confirm
+    name: 收藏
+    required_slots:
+      - action
+    actions:
+      - 收藏
+    residue_policy: safe_modifier
+  - id: system.location.status
+    name: 位置和目的地查询
+    required_slots:
+      - target
+    targets:
+      - 目的地
+      - 现在目的地
+      - 当前目的地
+      - 还有多久到
+      - 还有多久
+    actions:
+      - 查询
+      - 看
+    residue_policy: safe_modifier
+  - id: system.camera.take
+    name: 拍照
+    required_slots:
+      - action
+    targets:
+      - 拍照
+      - 照片
+    actions:
+      - 拍照
+      - 拍个照
+      - 拍张照
+      - 拍一张
+      - 拍一个
+      - 自拍
+      - 录像
+      - 给自己拍一张
+    residue_policy: safe_modifier
+  - id: system.dvr.capture
+    name: 行车记录仪和DVR采集
+    required_slots:
+      - target
+    targets:
+      - 行车记录仪
+      - 行车影像
+      - DVR
+      - DVR视频
+      - DVR照片
+      - DVR录制时间
+      - 录音
+      - 视频
+      - 短视频
+      - 照片
+      - 抓拍
+      - 笑脸抓拍
+      - 延时摄影
+      - 延长摄影
+      - 行车影像录制时间
+    actions:
+      - 启动
+      - 开始
+      - 结束
+      - 录音
+      - 录制
+      - 拍摄
+      - 拍摄视频
+      - 拍照
+      - 抓拍
+      - 设置
+      - 调整为
+      - 设为
+      - 我要录音
+      - 录短视频
+    values:
+      literals:
+        - 一小时
+        - 1小时
+        - 10分钟
+        - 5分钟
+        - 1分钟
+        - 10秒
+    residue_policy: safe_modifier
+  - id: system.display.set
+    name: 屏幕显示和亮度设置
+    required_slots:
+      - target
+    targets:
+      - 中控屏
+      - 副驾屏
+      - 主驾屏
+      - 后排屏
+      - 副驾屏幕
+      - 主驾屏幕
+      - 所有屏幕
+      - 后排锁屏
+      - 后排解除锁屏
+      - 后排屏解锁
+      - 后排屏锁屏
+      - 后排屏锁定
+      - 后排屏角度
+      - 屏幕亮度
+      - 主驾屏幕亮度
+      - 副驾屏幕亮度
+      - 屏幕亮度自动调节
+      - 副驾屏幕的屏保
+      - 屏保
+      - 分屏
+      - 分屏显示
+      - 分屏应用
+      - 全屏
+      - 全屏模式
+      - 亮度
+      - 息屏
+      - 亮屏
+      - 娱乐屏
+    actions:
+      - 打开
+      - 关闭
+      - 开
+      - 关
+      - 开启
+      - 关掉
+      - 启动
+      - 解除
+      - 亮一点
+      - 暗一点
+      - 调亮
+      - 调暗
+      - 调大
+      - 调小
+      - 调到
+      - 自动调节
+      - 往上调
+      - 增加
+      - 减少
+      - 缩小
+      - 互换
+      - 交换
+      - 换一下
+      - 显示
+      - 全屏
+    values:
+      literals:
+        - 上一张
+        - 下一张
+        - '76.1'
+      patterns:
+        - \d+(?:\.\d+)?%?
+        - 百分之[零一二两三四五六七八九十百]+
+    residue_policy: safe_modifier
+  - id: system.hotspot.set
+    name: 车机热点设置
+    required_slots:
+      - target
+    targets:
+      - 热点
+      - 热点频段
+      - 热点频率
+    actions:
+      - 启动
+      - 打开
+      - 关闭
+      - 开
+      - 关
+      - 开启
+      - 关掉
+      - 切换
+      - 切换一下
+      - 换一个
+    residue_policy: safe_modifier
+  - id: system.time_format.set
+    name: 时间格式和时间设置
+    required_slots:
+      - target
+    targets:
+      - 时间格式
+      - 时间设置
+      - 时间设置界面
+      - 12小时制
+      - 24小时制
+    actions:
+      - 切换
+      - 换
+      - 换一下
+      - 换个
+      - 切成
+      - 换成
+      - 设置成
+      - 修改
+      - 进入
+    values:
+      literals:
+        - 12小时制
+        - 24小时制
+    residue_policy: safe_modifier
+  - id: system.language.set
+    name: 系统语言设置
+    required_slots:
+      - target
+    targets:
+      - 语言
+      - 系统语言
+    actions:
+      - 切换
+      - 更改
+      - 换
+      - 换到
+      - 换掉
+    values:
+      literals:
+        - 中文
+    residue_policy: safe_modifier
+  - id: system.theme.set
+    name: 主题壁纸和桌面设置
+    required_slots:
+      - target
+    targets:
+      - 主题
+      - 背景壁纸
+      - 背景图片
+      - 壁纸
+      - 桌面背景
+      - 主题形象
+      - 3D车控桌面
+      - 白天模式
+      - 夜间模式
+      - 夜晚模式
+      - 晚上模式
+    actions:
+      - 切换
+      - 换
+      - 换成
+      - 更换
+      - 更换为
+      - 切换成
+      - 切换为
+      - 调整为
+      - 启动
+      - 设置为
+    values:
+      literals:
+        - 上一个
+        - 下一个
+        - 上一张
+        - 下一张
+        - 默认形象
+        - 白天模式
+        - 夜间模式
+        - 夜晚模式
+        - 晚上模式
+        - 3D车控桌面
+    residue_policy: safe_modifier
+  - id: system.voice_package.set
+    name: 语音包音色和发音语言设置
+    required_slots:
+      - target
+    targets:
+      - 语音包
+      - 音色
+      - 发音语言
+      - 说话语种
+      - 发音人
+      - 订阅
+    actions:
+      - 设置
+      - 设置一下
+      - 设置下
+      - 换成
+      - 换为
+      - 调整
+      - 切换
+      - 订阅
+      - 加入
+      - 加
+      - 删除
+      - 用
+    values:
+      literals:
+        - 广东方言
+        - 上海方言
+        - 四川方言
+        - 中文男性
+        - 日语女性
+        - 默认音色
+        - 小团团语音包
+    residue_policy: safe_modifier

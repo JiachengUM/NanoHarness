@@ -1,0 +1,312 @@
+executor: 媒体
+description: 媒体规则只直接覆盖确定控制；开放音乐实体、歌单、风格和推荐检索交给 LLM fallback 判断。
+capabilities:
+  - id: system.volume.set
+    name: 音量调节
+    required_slots:
+      - action
+      - target
+    targets:
+      - 声音
+      - 音量
+      - 声
+      - 导航声音
+      - 导航音量
+      - 导航播报声音
+      - 导航播报音量
+      - 导航语音播报音量
+      - 视频声音
+      - 视频音量
+      - 副屏声音
+      - 副驾屏声音
+      - 腾讯视频声音
+      - 爱奇艺声音
+      - 静音
+    actions:
+      - 大点声
+      - 小点声
+      - 大声一点
+      - 小声一点
+      - 大声点
+      - 小声点
+      - 声音大一点
+      - 声音小一点
+      - 声音大点
+      - 声音小点
+      - 调大
+      - 调小
+      - 调低
+      - 调高
+      - 提高
+      - 加大
+      - 大一点
+      - 小一点
+      - 大点
+      - 小点
+      - 再大一点
+      - 再小一点
+      - 调到
+      - 调成
+      - 设为
+      - 静音
+    residue_policy: safe_modifier
+  - id: media.music.search
+    name: 音乐搜索
+    required_slots:
+      - action
+      - target
+    targets:
+      - 音乐
+      - 歌曲
+      - 歌
+      - QQ音乐
+      - 网易云
+      - 如果可以
+      - BGM
+      - bgm
+      - 背景音乐
+      - 插曲
+      - 舞曲
+      - 配乐
+      - 曲目
+      - 单曲
+      - 纯音
+      - 纯音乐
+      - 老歌
+      - 合唱
+      - 翻唱
+      - 现场版
+      - 原声
+    actions:
+      - 播放
+      - 播放一首
+      - 播一首
+      - 放一首
+      - 放首
+      - 放个
+      - 放首歌
+      - 放首音乐
+      - 放音乐
+      - 放歌
+      - 放点
+      - 搜索
+      - 搜下
+      - 搜
+      - 搜一下
+      - 找
+      - 找一下
+      - 给我找
+      - 我要听
+      - 我想听
+      - 想听
+      - 要听
+      - 听
+      - 听歌
+      - 听音乐
+      - 来一首
+      - 来首
+      - 来几首
+      - 来点
+    target_policy: open_after_action
+    route_policy: llm_fallback
+    intent_marker_policy: override_cross_executor
+    intent_markers:
+      - 音乐
+      - 歌
+      - 歌曲
+      - 曲
+      - 曲目
+      - 单曲
+      - 歌手
+      - 歌单
+      - 歌词
+      - 专辑
+      - 新歌
+      - 榜
+      - 排行
+      - BGM
+      - bgm
+      - 背景音乐
+      - 配乐
+      - 纯音
+      - 纯音乐
+      - 轻音乐
+      - 舞曲
+      - 主题曲
+      - 插曲
+      - 原声
+      - 翻唱
+      - 乐队
+      - 女声
+      - 男声
+      - 摇滚
+      - 流派
+      - 音质
+      - 音效
+      - 周杰伦
+      - 刘德华
+      - 陈奕迅
+      - 邓丽君
+    residue_policy: safe_modifier
+  - id: media.sound_field.set
+    name: 声场模式设置
+    required_slots:
+      - action
+      - target
+    targets:
+      - 声场模式
+    actions:
+      - 调节为
+      - 调节到
+      - 调成
+      - 调整为
+      - 调整成
+      - 调整到
+      - 设置成
+      - 设置到
+      - 设置为
+      - 设定成
+      - 设成
+      - 切换成
+      - 切换到
+      - 切换为
+      - 换成
+      - 换到
+      - 弄成
+      - 搞成
+      - 改成
+      - 变成
+      - 转变为
+    values:
+      literals:
+        - 全车
+        - 全车模式
+        - 全车状态
+        - 全车平衡
+        - 前排
+        - 后排
+    residue_policy: safe_modifier
+  - id: media.sound_effect.set
+    name: 音效模式设置
+    required_slots:
+      - action
+      - target
+    targets:
+      - 4D音效
+      - 随音悦动
+    actions:
+      - 打开
+      - 关闭
+      - 开
+      - 关
+      - 开启
+      - 关掉
+    residue_policy: safe_modifier
+  - id: media.music_app.set
+    name: 音乐应用开关
+    required_slots:
+      - action
+      - target
+    targets:
+      - 音乐应用
+    actions:
+      - 打开
+      - 关闭
+      - 开启
+      - 关
+      - 关掉
+      - 关了
+    residue_policy: safe_modifier
+  - id: media.video.set
+    name: 视频应用和播放
+    required_slots:
+      - target
+    targets:
+      - 视频
+      - 副驾视频
+      - 腾讯视频
+      - 爱奇艺
+      - 抖音
+    actions:
+      - 打开
+      - 关闭
+      - 看
+      - 播放
+      - 放个
+      - 刷
+      - 切换
+      - 上一个
+      - 下一个
+      - 上个
+      - 下个
+      - 下一条
+  - id: media.playback.seek
+    name: 播放进度控制
+    required_slots:
+      - action
+    targets:
+      - 播放
+      - 音乐
+      - 视频
+    actions:
+      - 快进
+      - 快退
+    residue_policy: safe_modifier
+  - id: media.radio.tune
+    name: 收音机调频
+    required_slots:
+      - target
+    targets:
+      - FM
+      - 收音机
+      - 电台
+    actions:
+      - 打开
+      - 播放
+      - 调到
+    residue_policy: safe_modifier
+  - id: media.playback.start
+    name: 开始播放
+    required_slots:
+      - action
+    targets:
+      - 音乐
+      - 歌
+      - 歌曲
+    actions:
+      - 播放
+      - 播放音乐
+      - 放音乐
+      - 放歌
+      - 听歌
+      - 听音乐
+      - 来点音乐
+    residue_policy: strict
+  - id: media.playback.continue
+    name: 继续播放
+    required_slots:
+      - action
+    targets:
+      - 音乐
+      - 播放
+      - 歌
+      - 歌曲
+    actions:
+      - 继续
+      - 继续播放
+      - 继续放歌
+      - 下一首
+      - 上一首
+      - 前一首
+      - 后一首
+      - 下一曲
+      - 上一曲
+      - 换一首
+      - 换首歌
+      - 切歌
+      - 重播
+      - 暂停
+      - 停止
+      - 停
+      - 不听
+    residue_policy: safe_modifier

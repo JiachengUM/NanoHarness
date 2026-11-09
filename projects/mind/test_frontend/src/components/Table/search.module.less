@@ -1,0 +1,28 @@
+.search {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+
+  .searchForm {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+
+    .searchItem {
+      margin-right: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      min-width: 220px;
+
+      :global(.ant-form-item-row) {
+        width: 100%;
+      }
+    }
+  }
+
+  .searchAction {
+    margin-bottom: 12px;
+  }
+}

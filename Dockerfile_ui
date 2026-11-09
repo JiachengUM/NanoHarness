@@ -1,0 +1,23 @@
+FROM python:3.12
+
+ARG APP_NAME=uiagent
+ENV APP_NAME=${APP_NAME}
+
+# 设置暴露的端口
+EXPOSE 9001
+# Create workspace and Set Time zone
+# 创建docker内部的项目目录, 设置工作目录为创建的目录
+
+WORKDIR /var/${APP_NAME}
+
+# 拷贝git仓库的内容到docker内部，同时安装python包。
+COPY requirements.txt .
+
+RUN pip install --extra-index-url https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+
+COPY . /var/${APP_NAME}
+
+RUN chmod +x /var/${APP_NAME}/entrypoint_ui.sh
+
+# 启动服务
+ENTRYPOINT ["bash", "entrypoint_ui.sh"]
